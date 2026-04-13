@@ -120,4 +120,5 @@ GEN_OPTS__QUOTED :=
 SUBDIRS := \
 . \
 BSP \
+Drive/OLED_Drv \
 

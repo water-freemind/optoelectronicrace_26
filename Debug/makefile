@@ -14,6 +14,7 @@ ORDERED_OBJS += \
 "./ti_msp_dl_config.o" \
 "./startup_mspm0g350x_ticlang.o" \
 "./BSP/delay.o" \
+"./Drive/OLED_Drv/OLED.o" \
 $(GEN_CMDS__FLAG) \
 -Wl,-ldevice.cmd.genlibs \
 -Wl,-llibc.a \
@@ -27,8 +28,10 @@ RMDIR := RMDIR /S/Q
 -include sources.mk
 -include subdir_vars.mk
 -include BSP/subdir_vars.mk
+-include Drive/OLED_Drv/subdir_vars.mk
 -include subdir_rules.mk
 -include BSP/subdir_rules.mk
+-include Drive/OLED_Drv/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -133,15 +136,15 @@ all: $(OBJS) $(GEN_CMDS)
 optoelectronicrace_26.out: $(OBJS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: Arm Linker'
-	"D:/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O2 -gdwarf-3 -Wall -Wl,-m"optoelectronicrace_26.map" -Wl,-i"D:/MSP-SDK/mspm0_sdk_2_10_00_04/source" -Wl,-i"D:/MSP-SDK/CCS_project/optoelectronicrace_26" -Wl,-i"D:/MSP-SDK/CCS_project/optoelectronicrace_26/Debug/syscfg" -Wl,-i"D:/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="optoelectronicrace_26_linkInfo.xml" -Wl,--rom_model -o "optoelectronicrace_26.out" $(ORDERED_OBJS)
+	"D:/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/bin/tiarmclang.exe" @"device.opt"  -march=thumbv6m -mcpu=cortex-m0plus -mfloat-abi=soft -mlittle-endian -mthumb -O0 -gdwarf-3 -Wall -Wl,-m"optoelectronicrace_26.map" -Wl,-i"D:/MSP-SDK/mspm0_sdk_2_10_00_04/source" -Wl,-i"D:/MSP-SDK/CCS_project/optoelectronicrace_26" -Wl,-i"D:/MSP-SDK/CCS_project/optoelectronicrace_26/Debug/syscfg" -Wl,-i"D:/CCS/ccs/tools/compiler/ti-cgt-armllvm_4.0.4.LTS/lib" -Wl,--diag_wrap=off -Wl,--display_error_number -Wl,--warn_sections -Wl,--xml_link_info="optoelectronicrace_26_linkInfo.xml" -Wl,--rom_model -o "optoelectronicrace_26.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: "$@"'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "BSP\delay.o" 
-	-$(RM) "main.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "BSP\delay.d" 
+	-$(RM) "main.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "BSP\delay.o" "Drive\OLED_Drv\OLED.o" 
+	-$(RM) "main.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "BSP\delay.d" "Drive\OLED_Drv\OLED.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

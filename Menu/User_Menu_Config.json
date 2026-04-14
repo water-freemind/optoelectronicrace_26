@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Home",
+    "type": "普通页面",
+    "properties": {
+      "以父级作为前缀": false,
+      "变量名": "home_page"
+    },
+    "children": [
+      {
+        "name": "PID",
+        "type": "普通页面",
+        "properties": {
+          "以父级作为前缀": false,
+          "变量名": "PID_page"
+        },
+        "children": [
+          {
+            "name": "kp",
+            "type": "文本条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "变量名": "kp",
+              "回调函数": false
+            }
+          }
+        ]
+      },
+      {
+        "name": "task_option",
+        "type": "普通页面",
+        "properties": {
+          "以父级作为前缀": false,
+          "变量名": "task_option_page"
+        },
+        "children": [
+          {
+            "name": "task1",
+            "type": "文本条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "变量名": "task1",
+              "回调函数": false
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

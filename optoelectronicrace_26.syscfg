@@ -39,7 +39,7 @@ SYSTICK.periodEnable      = true;
 SYSTICK.period            = 32000;
 SYSTICK.interruptEnable   = true;
 SYSTICK.systickEnable     = true;
-SYSTICK.interruptPriority = "0";
+SYSTICK.interruptPriority = "3";
 
 const ProjectConfig              = scripting.addModule("/ti/project_config/ProjectConfig", {}, false);
 ProjectConfig.migrationCondition = true;

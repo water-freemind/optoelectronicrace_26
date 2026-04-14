@@ -85,7 +85,8 @@ main.o: ../main.c \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv/OLED.h
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv/OLED.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h
 ti_msp_dl_config.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -171,3 +172,4 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv/OLED.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h:

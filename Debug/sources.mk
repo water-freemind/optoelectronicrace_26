@@ -121,4 +121,5 @@ SUBDIRS := \
 . \
 BSP \
 Drive/OLED_Drv \
+Menu \
 

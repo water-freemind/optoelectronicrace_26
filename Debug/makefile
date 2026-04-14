@@ -15,6 +15,11 @@ ORDERED_OBJS += \
 "./startup_mspm0g350x_ticlang.o" \
 "./BSP/delay.o" \
 "./Drive/OLED_Drv/OLED.o" \
+"./Menu/Easy_Menu.o" \
+"./Menu/Easy_Menu_Core.o" \
+"./Menu/Easy_Menu_Item.o" \
+"./Menu/Easy_Menu_Page.o" \
+"./Menu/Easy_Menu_User.o" \
 $(GEN_CMDS__FLAG) \
 -Wl,-ldevice.cmd.genlibs \
 -Wl,-llibc.a \
@@ -29,9 +34,11 @@ RMDIR := RMDIR /S/Q
 -include subdir_vars.mk
 -include BSP/subdir_vars.mk
 -include Drive/OLED_Drv/subdir_vars.mk
+-include Menu/subdir_vars.mk
 -include subdir_rules.mk
 -include BSP/subdir_rules.mk
 -include Drive/OLED_Drv/subdir_rules.mk
+-include Menu/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -143,8 +150,8 @@ optoelectronicrace_26.out: $(OBJS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "BSP\delay.o" "Drive\OLED_Drv\OLED.o" 
-	-$(RM) "main.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "BSP\delay.d" "Drive\OLED_Drv\OLED.d" 
+	-$(RM) "main.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "BSP\delay.o" "Drive\OLED_Drv\OLED.o" "Menu\Easy_Menu.o" "Menu\Easy_Menu_Core.o" "Menu\Easy_Menu_Item.o" "Menu\Easy_Menu_Page.o" "Menu\Easy_Menu_User.o" 
+	-$(RM) "main.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "BSP\delay.d" "Drive\OLED_Drv\OLED.d" "Menu\Easy_Menu.d" "Menu\Easy_Menu_Core.d" "Menu\Easy_Menu_Item.d" "Menu\Easy_Menu_Page.d" "Menu\Easy_Menu_User.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

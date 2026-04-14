@@ -1,4 +1,5 @@
 #include "OLED.h"
+#include "Easy_Menu.h"
 #include "oledfont.h"
 #include "delay.h"
 

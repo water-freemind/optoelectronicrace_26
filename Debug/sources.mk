@@ -120,6 +120,7 @@ GEN_OPTS__QUOTED :=
 SUBDIRS := \
 . \
 BSP \
+Drive/Knob \
 Drive/OLED_Drv \
 Menu \
 

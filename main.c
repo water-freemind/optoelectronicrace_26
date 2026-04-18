@@ -1,19 +1,21 @@
+#include "Drive/Knob/Knob_drv.h"
+#include "ti/devices/msp/m0p/mspm0g350x.h"
 #include "ti_msp_dl_config.h"
 #include "delay.h"
 #include "OLED.h"
 #include "Easy_Menu.h"
+#include "Knob_drv.h"
 #include <string.h>
 extern volatile unsigned int delay_times;
-
+extern volatile uint32_t g_SystemTick;
 int main(void)
 {
     SYSCFG_DL_init();
     OLED_Init();
-    // OLED_ShowString(0, 0, "123456789", 8);
-     Easy_Menu_Init(NULL, NULL, NULL, NULL);
-    // Easy_Menu_Display_Char(0, 0, 'U');
-    //Easy_Menu_Display_String(0, 3, "123456789");
+    Knob_Init();
+    Easy_Menu_Init(NULL, NULL, NULL, NULL);
     while (1) {
-        Easy_Menu_Display(delay_times);
+        Knob_get();
+        Easy_Menu_Display(g_SystemTick);
     }
 }

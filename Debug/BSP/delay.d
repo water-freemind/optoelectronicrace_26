@@ -83,7 +83,8 @@ BSP/delay.o: ../BSP/delay.c ../BSP/delay.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
- D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h
+ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h
 ../BSP/delay.h:
 ti_msp_dl_config.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
@@ -168,3 +169,4 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h:

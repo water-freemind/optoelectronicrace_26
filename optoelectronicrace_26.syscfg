@@ -11,6 +11,7 @@
  */
 const GPIO    = scripting.addModule("/ti/driverlib/GPIO", {}, false);
 const GPIO1   = GPIO.addInstance();
+const GPIO2   = GPIO.addInstance();
 const SYSCTL  = scripting.addModule("/ti/driverlib/SYSCTL");
 const SYSTICK = scripting.addModule("/ti/driverlib/SYSTICK");
 
@@ -29,8 +30,26 @@ GPIO1.associatedPins[1].$name        = "PIN_SDA";
 GPIO1.associatedPins[1].initialValue = "SET";
 GPIO1.associatedPins[1].ioStructure  = "OD";
 GPIO1.associatedPins[1].assignedPin  = "1";
+GPIO1.associatedPins[1].pin.$assign  = "PA1";
 
 const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
+
+GPIO2.port                                = "PORTB";
+GPIO2.$name                               = "GPIO_KNOB";
+GPIO2.associatedPins.create(3);
+GPIO2.associatedPins[0].$name             = "A";
+GPIO2.associatedPins[0].assignedPin       = "18";
+GPIO2.associatedPins[0].direction         = "INPUT";
+GPIO2.associatedPins[0].interruptEn       = true;
+GPIO2.associatedPins[0].polarity          = "FALL";
+GPIO2.associatedPins[0].interruptPriority = "2";
+GPIO2.associatedPins[1].$name             = "B";
+GPIO2.associatedPins[1].assignedPin       = "19";
+GPIO2.associatedPins[1].direction         = "INPUT";
+GPIO2.associatedPins[2].$name             = "S";
+GPIO2.associatedPins[2].direction         = "INPUT";
+GPIO2.associatedPins[2].assignedPin       = "20";
+GPIO2.associatedPins[2].interruptPriority = "2";
 
 SYSCTL.forceDefaultClkConfig = true;
 SYSCTL.clockTreeEn           = true;
@@ -49,7 +68,9 @@ ProjectConfig.migrationCondition = true;
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-GPIO1.associatedPins[1].pin.$suggestSolution = "PA1";
 Board.peripheral.$suggestSolution            = "DEBUGSS";
 Board.peripheral.swclkPin.$suggestSolution   = "PA20";
 Board.peripheral.swdioPin.$suggestSolution   = "PA19";
+GPIO2.associatedPins[0].pin.$suggestSolution = "PB18";
+GPIO2.associatedPins[1].pin.$suggestSolution = "PB19";
+GPIO2.associatedPins[2].pin.$suggestSolution = "PB20";

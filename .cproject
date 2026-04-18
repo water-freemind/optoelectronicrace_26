@@ -41,9 +41,9 @@
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_INSTALL_DIR}/source/third_party/CMSIS/Core/Include"/>
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_INSTALL_DIR}/source"/>
                                     <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP"/>
-                                    <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive"/>
                                     <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv"/>
                                     <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu"/>
+                                    <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob"/>
                                 </option>
                                 <option id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.DEFINE.1370478261" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.DEFINE" valueType="definedSymbols">
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_SYMBOLS}"/>
@@ -91,6 +91,31 @@
                                 <option id="com.ti.ccstudio.buildDefinitions.sysConfig.OUTPUT_DIR__MANUAL.1638238563" superClass="com.ti.ccstudio.buildDefinitions.sysConfig.OUTPUT_DIR__MANUAL" value="." valueType="string"/>
                                 <option id="com.ti.ccstudio.buildDefinitions.sysConfig.DIRECTORY_MODE.1607946922" superClass="com.ti.ccstudio.buildDefinitions.sysConfig.DIRECTORY_MODE" value="com.ti.ccstudio.buildDefinitions.sysConfig.DIRECTORY_MODE.manual" valueType="enumerated"/>
                             </tool>
+                        </toolChain>
+                    </folderInfo>
+                    <folderInfo id="com.ti.ccstudio.buildDefinitions.TMS470.Debug.1194816766.Drive/Knob" name="Knob" resourcePath="Drive/Knob">
+                        <toolChain id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.DebugToolchain.230447380" name="TI Build Tools" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.DebugToolchain" unusedChildren="">
+                            <option id="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS.1692934116.1393276436" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS.1692934116"/>
+                            <option id="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.761061836.1820440381" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_CODEGEN_VERSION.761061836"/>
+                            <targetPlatform id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.targetPlatformDebug" name="Platform" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.targetPlatformDebug"/>
+                            <tool id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.compilerDebug.1339546595" name="Arm Compiler" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.compilerDebug.1245643275">
+                                <option id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.INCLUDE_PATH.329260267" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.INCLUDE_PATH" valueType="includePath">
+                                    <listOptionValue value="${COM_TI_MSPM0_SDK_INCLUDE_PATH}"/>
+                                    <listOptionValue value="${SYSCONFIG_TOOL_INCLUDE_PATH}"/>
+                                    <listOptionValue value="${PROJECT_ROOT}"/>
+                                    <listOptionValue value="${PROJECT_ROOT}/${ConfigName}"/>
+                                    <listOptionValue value="${COM_TI_MSPM0_SDK_INSTALL_DIR}/source/third_party/CMSIS/Core/Include"/>
+                                    <listOptionValue value="${COM_TI_MSPM0_SDK_INSTALL_DIR}/source"/>
+                                    <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP"/>
+                                    <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv"/>
+                                    <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu"/>
+                                    <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob"/>
+                                </option>
+                            </tool>
+                            <tool id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.linkerDebug.449865031" name="Arm Linker" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.exe.linkerDebug.1518400577"/>
+                            <tool id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.hex.1478085533" name="Arm Hex Utility" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.hex.1612848153"/>
+                            <tool id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.objcopy.1889093822" name="Arm Objcopy Utility" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.objcopy.308258321"/>
+                            <tool id="com.ti.ccstudio.buildDefinitions.sysConfig.1302472522" name="SysConfig" superClass="com.ti.ccstudio.buildDefinitions.sysConfig.1454854145"/>
                         </toolChain>
                     </folderInfo>
                 </configuration>

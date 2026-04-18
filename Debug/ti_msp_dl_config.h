@@ -88,6 +88,22 @@ extern "C" {
 /* Defines for PIN_SDA: GPIOA.1 with pinCMx 2 on package pin 2 */
 #define GPIO_OLED_PIN_SDA_PIN                                    (DL_GPIO_PIN_1)
 #define GPIO_OLED_PIN_SDA_IOMUX                                   (IOMUX_PINCM2)
+/* Port definition for Pin Group GPIO_KNOB */
+#define GPIO_KNOB_PORT                                                   (GPIOB)
+
+/* Defines for A: GPIOB.18 with pinCMx 44 on package pin 37 */
+// pins affected by this interrupt request:["A"]
+#define GPIO_KNOB_INT_IRQN                                      (GPIOB_INT_IRQn)
+#define GPIO_KNOB_INT_IIDX                      (DL_INTERRUPT_GROUP1_IIDX_GPIOB)
+#define GPIO_KNOB_A_IIDX                                    (DL_GPIO_IIDX_DIO18)
+#define GPIO_KNOB_A_PIN                                         (DL_GPIO_PIN_18)
+#define GPIO_KNOB_A_IOMUX                                        (IOMUX_PINCM44)
+/* Defines for B: GPIOB.19 with pinCMx 45 on package pin 38 */
+#define GPIO_KNOB_B_PIN                                         (DL_GPIO_PIN_19)
+#define GPIO_KNOB_B_IOMUX                                        (IOMUX_PINCM45)
+/* Defines for S: GPIOB.20 with pinCMx 48 on package pin 41 */
+#define GPIO_KNOB_S_PIN                                         (DL_GPIO_PIN_20)
+#define GPIO_KNOB_S_IOMUX                                        (IOMUX_PINCM48)
 
 
 

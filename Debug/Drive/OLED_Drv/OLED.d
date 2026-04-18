@@ -85,6 +85,7 @@ Drive/OLED_Drv/OLED.o: ../Drive/OLED_Drv/OLED.c ../Drive/OLED_Drv/OLED.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h \
  ../Drive/OLED_Drv/oledfont.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h
 ../Drive/OLED_Drv/OLED.h:
@@ -172,5 +173,6 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h:
 ../Drive/OLED_Drv/oledfont.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h:

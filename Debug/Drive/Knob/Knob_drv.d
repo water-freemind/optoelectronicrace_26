@@ -1,7 +1,6 @@
 # FIXED
 
-Menu/Easy_Menu.o: ../Menu/Easy_Menu.c ../Menu/Easy_Menu.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h \
+Drive/Knob/Knob_drv.o: ../Drive/Knob/Knob_drv.c ../Drive/Knob/Knob_drv.h \
  ti_msp_dl_config.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
@@ -85,9 +84,10 @@ Menu/Easy_Menu.o: ../Menu/Easy_Menu.c ../Menu/Easy_Menu.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv/OLED.h
-../Menu/Easy_Menu.h:
-D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h:
+../Drive/Knob/Knob_drv.h:
 ti_msp_dl_config.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -171,4 +171,6 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv/OLED.h:

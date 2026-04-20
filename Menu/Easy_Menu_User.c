@@ -14,45 +14,64 @@ struct {
 };
 /* ============================================================== 页面、条目定义 ============================================================== */    
 Ordinary_Page home_page;
-    Goto_Item goto__PID_page;
-    Goto_Item goto__task_option_page;
-    Ordinary_Page PID_page;
-        Text_Item kp;
-    Ordinary_Page task_option_page;
-        Text_Item task1;
+    Goto_Item goto__show__2__page;
+    Goto_Item goto__ordinary__2__page;
+    Goto_Item goto__ordinary__3__page;
+    Show_Page show__2__page;
+    Ordinary_Page ordinary__2__page;
+        Text_Item ordinary__2__page__1__item;
+        Text_Item ordinary__2__page__2__item;
+    Ordinary_Page ordinary__3__page;
+        Text_Item ordinary__3__page__1__item;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
 /* No item callbacks */
 /* ============================================================== 回调函数（页面） ============================================================ */
-/* No page callbacks */
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE VALUE BEGIN */
+/* USER CODE VALUE END */
+/* Private function ----------------------------------------------------------*/
+void Show__2__Page_Period_Callback(void* temp, Easy_Menu_Input_TYPE user_input)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
 /* =========================================================== 设置列表（普通页面） =========================================================== */
-Item *home_page_items[2] = {
-    ITEM(goto__PID_page),
-    ITEM(goto__task_option_page)
+Item *home_page_items[3] = {
+    ITEM(goto__show__2__page),
+    ITEM(goto__ordinary__2__page),
+    ITEM(goto__ordinary__3__page)
 };
 
-Item *PID_page_items[1] = {
-    ITEM(kp)
+Item *ordinary__2__page_items[2] = {
+    ITEM(ordinary__2__page__1__item),
+    ITEM(ordinary__2__page__2__item)
 };
 
-Item *task_option_page_items[1] = {
-    ITEM(task1)
+Item *ordinary__3__page_items[1] = {
+    ITEM(ordinary__3__page__1__item)
 };
 
 /* ================================================================ 系统初始化 ================================================================ */
 void Easy_Menu_Ui_Init(void)
 {
 
-    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 2);
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__PID_page), "PID", PAGE(PID_page));
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__task_option_page), "task_option", PAGE(task_option_page));
+    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 3);
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__show__2__page), "START", PAGE(show__2__page));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__ordinary__2__page), "pid", PAGE(ordinary__2__page));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__ordinary__3__page), "tasks", PAGE(ordinary__3__page));
 
-    Ordinary_Page_Init(PAGE(home_page), PAGE(PID_page), "PID", PID_page_items, 1);
-        Text_Item_Init(PAGE(PID_page), ITEM(kp), "kp", NULL);
+    Show_Page_Init(PAGE(home_page), PAGE(show__2__page), "START", 100, NULL, Show__2__Page_Period_Callback, NULL);
 
-    Ordinary_Page_Init(PAGE(home_page), PAGE(task_option_page), "task_option", task_option_page_items, 1);
-        Text_Item_Init(PAGE(task_option_page), ITEM(task1), "task1", NULL);
+    Ordinary_Page_Init(PAGE(home_page), PAGE(ordinary__2__page), "pid", ordinary__2__page_items, 2);
+        Text_Item_Init(PAGE(ordinary__2__page), ITEM(ordinary__2__page__1__item), "kp", NULL);
+        Text_Item_Init(PAGE(ordinary__2__page), ITEM(ordinary__2__page__2__item), "ki", NULL);
+
+    Ordinary_Page_Init(PAGE(home_page), PAGE(ordinary__3__page), "tasks", ordinary__3__page_items, 1);
+        Text_Item_Init(PAGE(ordinary__3__page), ITEM(ordinary__3__page__1__item), "mission1", NULL);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

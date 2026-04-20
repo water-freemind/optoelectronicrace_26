@@ -199,7 +199,6 @@ void Easy_Menu_Area_Clear(unsigned char col_start, unsigned char col_end, unsign
 void Easy_Menu_Display_Char(unsigned char col, unsigned char line, char ch)
 {
     if(col >= EASY_MENU_COL_MAX_NUM || line >= EASY_MENU_LINE_MAX_NUM) return;
-    OLED_ShowChar(col * 8, line, ch, 8); 
     easy_menu.compare_buffer[line][col] = ch;
 }
 
@@ -233,3 +232,11 @@ void Easy_Menu_Printf(int col, unsigned char line, const char *format, ...)
     Easy_Menu_Display_String(col, line, temp_buffer);
 }
 
+void Display_Char(unsigned short int x, unsigned short int y, char ch, unsigned char reverse_flag)
+{
+    OLED_ShowChar((uint8_t)x, (uint8_t)y, (uint8_t)ch, 8);
+}
+void Display_Char_Line(unsigned short int x, unsigned char line, char ch, unsigned char reverse_flag)
+{
+    OLED_ShowChar((uint8_t)x, (uint8_t)line, (uint8_t)ch, 8);
+}

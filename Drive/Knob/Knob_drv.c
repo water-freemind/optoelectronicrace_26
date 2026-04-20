@@ -40,7 +40,7 @@ void Knob_Tick_1ms(void) {
     if (DL_GPIO_readPins(GPIO_KNOB_PORT, GPIO_KNOB_S_PIN) == 0) {
         s_press_cnt++; // 按下时直接开始累加时间
         
-        if (s_press_cnt >= 700 && !s_long_pressed) {
+        if (s_press_cnt >= 500 && !s_long_pressed) {
             g_KnobEvent = KNOB_EVENT_LONG_PRESS;
             s_long_pressed = true; // 标记已触发长按
         }
@@ -64,16 +64,17 @@ void Knob_get(void)
             Knob_Event_t current_event = g_KnobEvent;
             g_KnobEvent = KNOB_EVENT_NONE; 
             menu_move = EASY_MENU_NONE;
+            Easy_Menu_Input(menu_move);
             // 在主循环里刷屏幕，绝对安全！
             switch (current_event) {
                 case KNOB_EVENT_CW:
                     // 顺时针代码
-                    menu_move = EASY_MENU_UP;
+                    menu_move = EASY_MENU_DOWN;
                     Easy_Menu_Input(menu_move);
                     break;
                 case KNOB_EVENT_CCW:
                     // 逆时针代码
-                    menu_move = EASY_MENU_DOWN;
+                    menu_move = EASY_MENU_UP;
                     Easy_Menu_Input(menu_move);
                     break;
                 case KNOB_EVENT_SHORT_PRESS:

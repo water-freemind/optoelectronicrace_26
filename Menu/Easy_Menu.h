@@ -200,5 +200,7 @@ void Easy_Menu_Get_Current_Page_Text(char* str);
     * @notes  使用时需要以这样的形式使用：PAGE(target_page)
   */
 void Easy_Menu_Goto_Page(Page *target_page);
+void Display_Char_Line(unsigned short int x, unsigned char line, char ch, unsigned char reverse_flag);
+void Display_Char(unsigned short int x, unsigned short int y, char ch, unsigned char reverse_flag);
 
 #endif 

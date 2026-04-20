@@ -8,11 +8,23 @@
     },
     "children": [
       {
-        "name": "PID",
+        "name": "START",
+        "type": "展示页面",
+        "properties": {
+          "以父级作为前缀": false,
+          "变量名": "show__2__page",
+          "周期": "100",
+          "周期回调函数": true,
+          "进入回调函数": false,
+          "退出回调函数": false
+        }
+      },
+      {
+        "name": "pid",
         "type": "普通页面",
         "properties": {
           "以父级作为前缀": false,
-          "变量名": "PID_page"
+          "变量名": "ordinary__2__page"
         },
         "children": [
           {
@@ -20,26 +32,35 @@
             "type": "文本条目",
             "properties": {
               "以父级作为前缀": false,
-              "变量名": "kp",
+              "变量名": "ordinary__2__page__1__item",
+              "回调函数": false
+            }
+          },
+          {
+            "name": "ki",
+            "type": "文本条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "变量名": "ordinary__2__page__2__item",
               "回调函数": false
             }
           }
         ]
       },
       {
-        "name": "task_option",
+        "name": "tasks",
         "type": "普通页面",
         "properties": {
           "以父级作为前缀": false,
-          "变量名": "task_option_page"
+          "变量名": "ordinary__3__page"
         },
         "children": [
           {
-            "name": "task1",
+            "name": "mission1",
             "type": "文本条目",
             "properties": {
               "以父级作为前缀": false,
-              "变量名": "task1",
+              "变量名": "ordinary__3__page__1__item",
               "回调函数": false
             }
           }

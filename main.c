@@ -8,12 +8,14 @@
 #include <string.h>
 extern volatile unsigned int delay_times;
 extern volatile uint32_t g_SystemTick;
+
 int main(void)
 {
     SYSCFG_DL_init();
     OLED_Init();
     Knob_Init();
-    Easy_Menu_Init(NULL, NULL, NULL, NULL);
+    Easy_Menu_Init(Display_Char, Display_Char_Line, NULL, NULL);
+
     while (1) {
         Knob_get();
         Easy_Menu_Display(g_SystemTick);

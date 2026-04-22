@@ -8,41 +8,41 @@
     },
     "children": [
       {
-        "name": "START",
-        "type": "展示页面",
-        "properties": {
-          "以父级作为前缀": false,
-          "变量名": "show__2__page",
-          "周期": "100",
-          "周期回调函数": true,
-          "进入回调函数": false,
-          "退出回调函数": false
-        }
-      },
-      {
-        "name": "pid",
+        "name": "speed_pid",
         "type": "普通页面",
         "properties": {
           "以父级作为前缀": false,
-          "变量名": "ordinary__2__page"
+          "变量名": "speed_pid__page"
         },
         "children": [
           {
-            "name": "kp",
-            "type": "文本条目",
+            "name": "speed_kp",
+            "type": "数据条目",
             "properties": {
               "以父级作为前缀": false,
-              "变量名": "ordinary__2__page__1__item",
-              "回调函数": false
+              "初始值": "0",
+              "变量名": "speed_pid__kp_page",
+              "变量类型": "float_val",
+              "回调函数": true,
+              "数据变量名": "speed_pid__kp",
+              "最大值": "NULL",
+              "最小值": "NULL",
+              "步进": "0.1"
             }
           },
           {
-            "name": "ki",
-            "type": "文本条目",
+            "name": "speed__ki",
+            "type": "数据条目",
             "properties": {
               "以父级作为前缀": false,
-              "变量名": "ordinary__2__page__2__item",
-              "回调函数": false
+              "初始值": "0",
+              "变量名": "speed_pid__ki_page",
+              "变量类型": "float_val",
+              "回调函数": true,
+              "数据变量名": "speed_pid__ki",
+              "最大值": "NULL",
+              "最小值": "NULL",
+              "步进": "0.1"
             }
           }
         ]
@@ -52,16 +52,29 @@
         "type": "普通页面",
         "properties": {
           "以父级作为前缀": false,
-          "变量名": "ordinary__3__page"
+          "变量名": "tasks__page"
         },
         "children": [
           {
-            "name": "mission1",
-            "type": "文本条目",
+            "name": "task1",
+            "type": "开关条目",
             "properties": {
               "以父级作为前缀": false,
-              "变量名": "ordinary__3__page__1__item",
-              "回调函数": false
+              "初始值": "0",
+              "变量名": "task1_page",
+              "回调函数": true,
+              "数据变量名": "task1_flag"
+            }
+          },
+          {
+            "name": "task2",
+            "type": "开关条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "初始值": "0",
+              "变量名": "task2_page",
+              "回调函数": true,
+              "数据变量名": "task2_flag"
             }
           }
         ]

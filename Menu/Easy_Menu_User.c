@@ -10,68 +10,90 @@
 
 /* ================================================================= 占位变量 ================================================================= */
 struct {
+    float speed_pid__kp;
+    float speed_pid__ki;
+    unsigned char task1_flag;
+    unsigned char task2_flag;
 } Easy_Menu_Ui_Data = {
+    .speed_pid__kp = 0.0f,
+    .speed_pid__ki = 0.0f,
+    .task1_flag = 0,
+    .task2_flag = 0,
 };
 /* ============================================================== 页面、条目定义 ============================================================== */    
 Ordinary_Page home_page;
-    Goto_Item goto__show__2__page;
-    Goto_Item goto__ordinary__2__page;
-    Goto_Item goto__ordinary__3__page;
-    Show_Page show__2__page;
-    Ordinary_Page ordinary__2__page;
-        Text_Item ordinary__2__page__1__item;
-        Text_Item ordinary__2__page__2__item;
-    Ordinary_Page ordinary__3__page;
-        Text_Item ordinary__3__page__1__item;
+    Goto_Item goto__speed_pid__page;
+    Goto_Item goto__tasks__page;
+    Ordinary_Page speed_pid__page;
+        Data_Item speed_pid__kp_page;
+        Data_Item speed_pid__ki_page;
+    Ordinary_Page tasks__page;
+        Switch_Item task1_page;
+        Switch_Item task2_page;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
-/* No item callbacks */
-/* ============================================================== 回调函数（页面） ============================================================ */
-/* Private variables ---------------------------------------------------------*/
-/* USER CODE VALUE BEGIN */
-/* USER CODE VALUE END */
-/* Private function ----------------------------------------------------------*/
-void Show__2__Page_Period_Callback(void* temp, Easy_Menu_Input_TYPE user_input)
+void Speed_Pid__Kp_Page_Callback(void *data) // *((float*)data)
 {
     /* USER CODE BEGIN */
 
     /* USER CODE END */
 }
 
+void Speed_Pid__Ki_Page_Callback(void *data) // *((float*)data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
+void Task1_Page_Callback(unsigned char data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
+void Task2_Page_Callback(unsigned char data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
+/* ============================================================== 回调函数（页面） ============================================================ */
+/* No page callbacks */
 /* =========================================================== 设置列表（普通页面） =========================================================== */
-Item *home_page_items[3] = {
-    ITEM(goto__show__2__page),
-    ITEM(goto__ordinary__2__page),
-    ITEM(goto__ordinary__3__page)
+Item *home_page_items[2] = {
+    ITEM(goto__speed_pid__page),
+    ITEM(goto__tasks__page)
 };
 
-Item *ordinary__2__page_items[2] = {
-    ITEM(ordinary__2__page__1__item),
-    ITEM(ordinary__2__page__2__item)
+Item *speed_pid__page_items[2] = {
+    ITEM(speed_pid__kp_page),
+    ITEM(speed_pid__ki_page)
 };
 
-Item *ordinary__3__page_items[1] = {
-    ITEM(ordinary__3__page__1__item)
+Item *tasks__page_items[2] = {
+    ITEM(task1_page),
+    ITEM(task2_page)
 };
 
 /* ================================================================ 系统初始化 ================================================================ */
 void Easy_Menu_Ui_Init(void)
 {
 
-    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 3);
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__show__2__page), "START", PAGE(show__2__page));
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__ordinary__2__page), "pid", PAGE(ordinary__2__page));
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__ordinary__3__page), "tasks", PAGE(ordinary__3__page));
+    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 2);
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__speed_pid__page), "speed_pid", PAGE(speed_pid__page));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__tasks__page), "tasks", PAGE(tasks__page));
 
-    Show_Page_Init(PAGE(home_page), PAGE(show__2__page), "START", 100, NULL, Show__2__Page_Period_Callback, NULL);
+    Ordinary_Page_Init(PAGE(home_page), PAGE(speed_pid__page), "speed_pid", speed_pid__page_items, 2);
+        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__kp_page), "speed_kp", FLOAT, &Easy_Menu_Ui_Data.speed_pid__kp, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Kp_Page_Callback);
+        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__ki_page), "speed__ki", FLOAT, &Easy_Menu_Ui_Data.speed_pid__ki, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Ki_Page_Callback);
 
-    Ordinary_Page_Init(PAGE(home_page), PAGE(ordinary__2__page), "pid", ordinary__2__page_items, 2);
-        Text_Item_Init(PAGE(ordinary__2__page), ITEM(ordinary__2__page__1__item), "kp", NULL);
-        Text_Item_Init(PAGE(ordinary__2__page), ITEM(ordinary__2__page__2__item), "ki", NULL);
-
-    Ordinary_Page_Init(PAGE(home_page), PAGE(ordinary__3__page), "tasks", ordinary__3__page_items, 1);
-        Text_Item_Init(PAGE(ordinary__3__page), ITEM(ordinary__3__page__1__item), "mission1", NULL);
+    Ordinary_Page_Init(PAGE(home_page), PAGE(tasks__page), "tasks", tasks__page_items, 2);
+        Switch_Item_Init(PAGE(tasks__page), ITEM(task1_page), "task1", &Easy_Menu_Ui_Data.task1_flag, Task1_Page_Callback);
+        Switch_Item_Init(PAGE(tasks__page), ITEM(task2_page), "task2", &Easy_Menu_Ui_Data.task2_flag, Task2_Page_Callback);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

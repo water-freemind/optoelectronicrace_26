@@ -1,5 +1,6 @@
 #include "Easy_Menu.h"
 #include "OLED.h"
+#include <stdint.h>
 Easy_Menu easy_menu;
 /* =============================================================== 系统辅助函数 =============================================================== */
 unsigned char Compare_String(char *str1, char *str2, unsigned char len)
@@ -234,9 +235,9 @@ void Easy_Menu_Printf(int col, unsigned char line, const char *format, ...)
 
 void Display_Char(unsigned short int x, unsigned short int y, char ch, unsigned char reverse_flag)
 {
-    OLED_ShowChar((uint8_t)x, (uint8_t)y, (uint8_t)ch, 8);
+    OLED_ShowChar((uint8_t)x, (uint8_t)y, (uint8_t)ch, 16);
 }
 void Display_Char_Line(unsigned short int x, unsigned char line, char ch, unsigned char reverse_flag)
 {
-    OLED_ShowChar((uint8_t)x, (uint8_t)line, (uint8_t)ch, 8);
+    OLED_ShowChar((uint8_t)x, (uint8_t)line * 2, (uint8_t)ch, 16);    
 }

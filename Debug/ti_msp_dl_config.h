@@ -78,6 +78,61 @@ extern "C" {
 
 
 
+/* Defines for UART_UP */
+#define UART_UP_INST                                                       UART2
+#define UART_UP_INST_FREQUENCY                                           4000000
+#define UART_UP_INST_IRQHandler                                 UART2_IRQHandler
+#define UART_UP_INST_INT_IRQN                                     UART2_INT_IRQn
+#define GPIO_UART_UP_RX_PORT                                               GPIOA
+#define GPIO_UART_UP_TX_PORT                                               GPIOA
+#define GPIO_UART_UP_RX_PIN                                       DL_GPIO_PIN_22
+#define GPIO_UART_UP_TX_PIN                                       DL_GPIO_PIN_21
+#define GPIO_UART_UP_IOMUX_RX                                    (IOMUX_PINCM47)
+#define GPIO_UART_UP_IOMUX_TX                                    (IOMUX_PINCM46)
+#define GPIO_UART_UP_IOMUX_RX_FUNC                     IOMUX_PINCM47_PF_UART2_RX
+#define GPIO_UART_UP_IOMUX_TX_FUNC                     IOMUX_PINCM46_PF_UART2_TX
+#define UART_UP_BAUD_RATE                                               (115200)
+#define UART_UP_IBRD_4_MHZ_115200_BAUD                                       (2)
+#define UART_UP_FBRD_4_MHZ_115200_BAUD                                      (11)
+/* Defines for UART_0 */
+#define UART_0_INST                                                        UART0
+#define UART_0_INST_FREQUENCY                                           32000000
+#define UART_0_INST_IRQHandler                                  UART0_IRQHandler
+#define UART_0_INST_INT_IRQN                                      UART0_INT_IRQn
+#define GPIO_UART_0_RX_PORT                                                GPIOA
+#define GPIO_UART_0_TX_PORT                                                GPIOA
+#define GPIO_UART_0_RX_PIN                                        DL_GPIO_PIN_11
+#define GPIO_UART_0_TX_PIN                                        DL_GPIO_PIN_10
+#define GPIO_UART_0_IOMUX_RX                                     (IOMUX_PINCM22)
+#define GPIO_UART_0_IOMUX_TX                                     (IOMUX_PINCM21)
+#define GPIO_UART_0_IOMUX_RX_FUNC                      IOMUX_PINCM22_PF_UART0_RX
+#define GPIO_UART_0_IOMUX_TX_FUNC                      IOMUX_PINCM21_PF_UART0_TX
+#define UART_0_BAUD_RATE                                                (115200)
+#define UART_0_IBRD_32_MHZ_115200_BAUD                                      (17)
+#define UART_0_FBRD_32_MHZ_115200_BAUD                                      (23)
+
+
+
+
+
+/* Defines for ADC_line_detector */
+#define ADC_line_detector_INST                                              ADC1
+#define ADC_line_detector_INST_IRQHandler                         ADC1_IRQHandler
+#define ADC_line_detector_INST_INT_IRQN                          (ADC1_INT_IRQn)
+#define ADC_line_detector_ADCMEM_detector_out                      DL_ADC12_MEM_IDX_0
+#define ADC_line_detector_ADCMEM_detector_out_REF         DL_ADC12_REFERENCE_VOLTAGE_VDDA
+#define ADC_line_detector_ADCMEM_detector_out_REF_VOLTAGE_V                                     3.3
+#define GPIO_ADC_line_detector_C0_PORT                                     GPIOA
+#define GPIO_ADC_line_detector_C0_PIN                             DL_GPIO_PIN_15
+#define GPIO_ADC_line_detector_IOMUX_C0                          (IOMUX_PINCM37)
+#define GPIO_ADC_line_detector_IOMUX_C0_FUNC      (IOMUX_PINCM37_PF_UNCONNECTED)
+
+
+
+/* Defines for DMA_detector_out */
+#define DMA_detector_out_CHAN_ID                                             (0)
+#define ADC_line_detector_INST_DMA_TRIGGER            (DMA_ADC1_EVT_GEN_BD_TRIG)
+
 
 /* Port definition for Pin Group GPIO_OLED */
 #define GPIO_OLED_PORT                                                   (GPIOA)
@@ -104,6 +159,18 @@ extern "C" {
 /* Defines for S: GPIOB.20 with pinCMx 48 on package pin 41 */
 #define GPIO_KNOB_S_PIN                                         (DL_GPIO_PIN_20)
 #define GPIO_KNOB_S_IOMUX                                        (IOMUX_PINCM48)
+/* Port definition for Pin Group Gray_Address */
+#define Gray_Address_PORT                                                (GPIOA)
+
+/* Defines for AD0: GPIOA.24 with pinCMx 54 on package pin 44 */
+#define Gray_Address_AD0_PIN                                    (DL_GPIO_PIN_24)
+#define Gray_Address_AD0_IOMUX                                   (IOMUX_PINCM54)
+/* Defines for AD1: GPIOA.25 with pinCMx 55 on package pin 45 */
+#define Gray_Address_AD1_PIN                                    (DL_GPIO_PIN_25)
+#define Gray_Address_AD1_IOMUX                                   (IOMUX_PINCM55)
+/* Defines for AD2: GPIOA.26 with pinCMx 59 on package pin 46 */
+#define Gray_Address_AD2_PIN                                    (DL_GPIO_PIN_26)
+#define Gray_Address_AD2_IOMUX                                   (IOMUX_PINCM59)
 
 
 
@@ -114,9 +181,15 @@ void SYSCFG_DL_init(void);
 void SYSCFG_DL_initPower(void);
 void SYSCFG_DL_GPIO_init(void);
 void SYSCFG_DL_SYSCTL_init(void);
+void SYSCFG_DL_UART_UP_init(void);
+void SYSCFG_DL_UART_0_init(void);
+void SYSCFG_DL_ADC_line_detector_init(void);
+void SYSCFG_DL_DMA_init(void);
 
 void SYSCFG_DL_SYSTICK_init(void);
 
+bool SYSCFG_DL_saveConfiguration(void);
+bool SYSCFG_DL_restoreConfiguration(void);
 
 #ifdef __cplusplus
 }

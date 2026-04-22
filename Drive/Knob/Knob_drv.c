@@ -40,7 +40,7 @@ void Knob_Tick_1ms(void) {
     if (DL_GPIO_readPins(GPIO_KNOB_PORT, GPIO_KNOB_S_PIN) == 0) {
         s_press_cnt++; // 按下时直接开始累加时间
         
-        if (s_press_cnt >= 500 && !s_long_pressed) {
+        if (s_press_cnt >= 400 && !s_long_pressed) {
             g_KnobEvent = KNOB_EVENT_LONG_PRESS;
             s_long_pressed = true; // 标记已触发长按
         }

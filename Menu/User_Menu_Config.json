@@ -21,7 +21,7 @@
             "properties": {
               "以父级作为前缀": false,
               "初始值": "0",
-              "变量名": "speed_pid__kp_page",
+              "变量名": "speed_pid__kp",
               "变量类型": "float_val",
               "回调函数": true,
               "数据变量名": "speed_pid__kp",
@@ -36,7 +36,7 @@
             "properties": {
               "以父级作为前缀": false,
               "初始值": "0",
-              "变量名": "speed_pid__ki_page",
+              "变量名": "speed_pid__ki",
               "变量类型": "float_val",
               "回调函数": true,
               "数据变量名": "speed_pid__ki",
@@ -61,7 +61,7 @@
             "properties": {
               "以父级作为前缀": false,
               "初始值": "0",
-              "变量名": "task1_page",
+              "变量名": "task1",
               "回调函数": true,
               "数据变量名": "task1_flag"
             }
@@ -72,7 +72,7 @@
             "properties": {
               "以父级作为前缀": false,
               "初始值": "0",
-              "变量名": "task2_page",
+              "变量名": "task2",
               "回调函数": true,
               "数据变量名": "task2_flag"
             }

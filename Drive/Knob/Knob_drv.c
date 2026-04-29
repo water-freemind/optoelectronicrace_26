@@ -1,6 +1,7 @@
 #include "Knob_drv.h"
 #include "Easy_Menu.h"
 #include "OLED.h"
+#include "Motor.h"
 // 全局事件变量
 volatile Knob_Event_t g_KnobEvent = KNOB_EVENT_NONE;
 
@@ -100,6 +101,9 @@ void GROUP1_IRQHandler(void)//Group1的中断服务函数
     {
         case GPIO_KNOB_INT_IIDX:
             Knob_EXTI_Handler();
+        break;
+        case GPIO_ENCODER_B_INT_IIDX:
+            Motor_B_EncoderIRQHandler();
         break;
     }
 }

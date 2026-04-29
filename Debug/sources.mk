@@ -122,6 +122,7 @@ SUBDIRS := \
 BSP \
 Drive/Grayscale_Sensor \
 Drive/Knob \
+Drive/Motor \
 Drive/OLED_Drv \
 Menu \
 

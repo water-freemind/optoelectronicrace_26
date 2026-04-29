@@ -25,36 +25,36 @@ Ordinary_Page home_page;
     Goto_Item goto__speed_pid__page;
     Goto_Item goto__tasks__page;
     Ordinary_Page speed_pid__page;
-        Data_Item speed_pid__kp_page;
-        Data_Item speed_pid__ki_page;
+        Data_Item speed_pid__kp;
+        Data_Item speed_pid__ki;
     Ordinary_Page tasks__page;
-        Switch_Item task1_page;
-        Switch_Item task2_page;
+        Switch_Item task1;
+        Switch_Item task2;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
-void Speed_Pid__Kp_Page_Callback(void *data) // *((float*)data)
+void Speed_Pid__Kp_Callback(void *data) // *((float*)data)
 {
     /* USER CODE BEGIN */
 
     /* USER CODE END */
 }
 
-void Speed_Pid__Ki_Page_Callback(void *data) // *((float*)data)
+void Speed_Pid__Ki_Callback(void *data) // *((float*)data)
 {
     /* USER CODE BEGIN */
 
     /* USER CODE END */
 }
 
-void Task1_Page_Callback(unsigned char data)
+void Task1_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
-
+    
     /* USER CODE END */
 }
 
-void Task2_Page_Callback(unsigned char data)
+void Task2_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
 
@@ -70,13 +70,13 @@ Item *home_page_items[2] = {
 };
 
 Item *speed_pid__page_items[2] = {
-    ITEM(speed_pid__kp_page),
-    ITEM(speed_pid__ki_page)
+    ITEM(speed_pid__kp),
+    ITEM(speed_pid__ki)
 };
 
 Item *tasks__page_items[2] = {
-    ITEM(task1_page),
-    ITEM(task2_page)
+    ITEM(task1),
+    ITEM(task2)
 };
 
 /* ================================================================ 系统初始化 ================================================================ */
@@ -88,12 +88,12 @@ void Easy_Menu_Ui_Init(void)
         Goto_Item_Init(PAGE(home_page), ITEM(goto__tasks__page), "tasks", PAGE(tasks__page));
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(speed_pid__page), "speed_pid", speed_pid__page_items, 2);
-        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__kp_page), "speed_kp", FLOAT, &Easy_Menu_Ui_Data.speed_pid__kp, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Kp_Page_Callback);
-        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__ki_page), "speed__ki", FLOAT, &Easy_Menu_Ui_Data.speed_pid__ki, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Ki_Page_Callback);
+        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__kp), "speed_kp", FLOAT, &Easy_Menu_Ui_Data.speed_pid__kp, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Kp_Callback);
+        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__ki), "speed__ki", FLOAT, &Easy_Menu_Ui_Data.speed_pid__ki, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Ki_Callback);
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(tasks__page), "tasks", tasks__page_items, 2);
-        Switch_Item_Init(PAGE(tasks__page), ITEM(task1_page), "task1", &Easy_Menu_Ui_Data.task1_flag, Task1_Page_Callback);
-        Switch_Item_Init(PAGE(tasks__page), ITEM(task2_page), "task2", &Easy_Menu_Ui_Data.task2_flag, Task2_Page_Callback);
+        Switch_Item_Init(PAGE(tasks__page), ITEM(task1), "task1", &Easy_Menu_Ui_Data.task1_flag, Task1_Callback);
+        Switch_Item_Init(PAGE(tasks__page), ITEM(task2), "task2", &Easy_Menu_Ui_Data.task2_flag, Task2_Callback);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

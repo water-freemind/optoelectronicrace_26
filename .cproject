@@ -46,6 +46,7 @@
                                     <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob"/>
                                     <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor"/>
                                     <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor"/>
+                                    <listOptionValue value="D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP"/>
                                 </option>
                                 <option id="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.DEFINE.1370478261" superClass="com.ti.ccstudio.buildDefinitions.TMS470_TICLANG_4.0.compilerID.DEFINE" valueType="definedSymbols">
                                     <listOptionValue value="${COM_TI_MSPM0_SDK_SYMBOLS}"/>

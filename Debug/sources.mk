@@ -119,6 +119,7 @@ GEN_OPTS__QUOTED :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 . \
+APP \
 BSP \
 Drive/Grayscale_Sensor \
 Drive/Knob \

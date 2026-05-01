@@ -15,6 +15,7 @@ void Motor_Init(void)
     DL_TimerG_setCaptureCompareValue(PWM_0_INST, MOTOR_PWM_PERIOD, DL_TIMER_CC_0_INDEX);
     DL_TimerG_setCaptureCompareValue(PWM_0_INST, MOTOR_PWM_PERIOD, DL_TIMER_CC_1_INDEX);
     Motor_Coast();
+    Motor_B_EncoderInit();
 }
 
 void Motor_A_SetSpeed(int16_t speed)
@@ -72,7 +73,8 @@ void Motor_A_EncoderInit(void)
 
 int32_t Motor_A_GetEncoderCnt(void)
 {
-    return (int32_t)DL_TimerG_getTimerCount(QEI_0_INST);
+    int16_t raw = (int16_t)DL_TimerG_getTimerCount(QEI_0_INST);
+    return -(int32_t)raw / 2;
 }
 
 void Motor_A_ResetEncoder(void)
@@ -96,11 +98,17 @@ void Motor_B_EncoderIRQHandler(void)
         GPIO_ENCODER_B_PORT, GPIO_ENCODER_B_AE_PIN);
 
     if (status & GPIO_ENCODER_B_AE_PIN) {
-        if (DL_GPIO_readPins(GPIO_ENCODER_B_PORT, GPIO_ENCODER_B_BE_PIN)) {
-            g_encoderB_cnt++;
-        } else {
+        
+
+        bool state_A = (DL_GPIO_readPins(GPIO_ENCODER_B_PORT, GPIO_ENCODER_B_AE_PIN) != 0);
+        bool state_B = (DL_GPIO_readPins(GPIO_ENCODER_B_PORT, GPIO_ENCODER_B_BE_PIN) != 0);
+
+        if (state_A ^ state_B) { 
             g_encoderB_cnt--;
+        } else {
+            g_encoderB_cnt++;
         }
+        
         DL_GPIO_clearInterruptStatus(GPIO_ENCODER_B_PORT, GPIO_ENCODER_B_AE_PIN);
     }
 }

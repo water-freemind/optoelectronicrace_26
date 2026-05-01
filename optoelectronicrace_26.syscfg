@@ -42,6 +42,8 @@ ADC121.sampleTime0                       = "100us";
 ADC121.configureDMA                      = true;
 ADC121.sampCnt                           = 1;
 ADC121.enabledDMATriggers                = ["DL_ADC12_DMA_MEM0_RESULT_LOADED"];
+ADC121.peripheral.$assign                = "ADC0";
+ADC121.peripheral.adcPin0.$assign        = "PA27";
 ADC121.adcPin0Config.$name               = "ti_driverlib_gpio_GPIOPinGeneric0";
 ADC121.adcPin0Config.hideOutputInversion = scripting.forceWrite(false);
 ADC121.DMA_CHANNEL.$name                 = "DMA_detector_out";
@@ -129,7 +131,7 @@ GPIO6.associatedPins[0].direction         = "INPUT";
 GPIO6.associatedPins[0].internalResistor  = "PULL_DOWN";
 GPIO6.associatedPins[0].interruptEn       = true;
 GPIO6.associatedPins[0].interruptPriority = "2";
-GPIO6.associatedPins[0].polarity          = "RISE";
+GPIO6.associatedPins[0].polarity          = "RISE_FALL";
 GPIO6.associatedPins[0].pin.$assign       = "PA12";
 GPIO6.associatedPins[1].$name             = "BE";
 GPIO6.associatedPins[1].direction         = "INPUT";
@@ -150,11 +152,11 @@ PWM1.ccp1PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric6";
 
 QEI1.$name                      = "QEI_0";
 QEI1.timerStartTimer            = true;
-QEI1.ccp0PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric7";
-QEI1.ccp1PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric8";
 QEI1.peripheral.$assign         = "TIMG8";
 QEI1.peripheral.ccp0Pin.$assign = "PB6";
 QEI1.peripheral.ccp1Pin.$assign = "PB7";
+QEI1.ccp0PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric7";
+QEI1.ccp1PinConfig.$name        = "ti_driverlib_gpio_GPIOPinGeneric8";
 
 SYSCTL.forceDefaultClkConfig = true;
 SYSCTL.clockTreeEn           = true;
@@ -205,8 +207,6 @@ ProjectConfig.migrationCondition = true;
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-ADC121.peripheral.$suggestSolution           = "ADC0";
-ADC121.peripheral.adcPin0.$suggestSolution   = "PA27";
 Board.peripheral.$suggestSolution            = "DEBUGSS";
 Board.peripheral.swclkPin.$suggestSolution   = "PA20";
 Board.peripheral.swdioPin.$suggestSolution   = "PA19";

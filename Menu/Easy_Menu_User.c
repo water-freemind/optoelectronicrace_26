@@ -10,43 +10,29 @@
 
 /* ================================================================= 占位变量 ================================================================= */
 struct {
-    float speed_pid__kp;
-    float speed_pid__ki;
     unsigned char task1_flag;
     unsigned char task2_flag;
+    float speed_pid__kp;
+    float speed_pid__ki;
 } Easy_Menu_Ui_Data = {
-    .speed_pid__kp = 0.0f,
-    .speed_pid__ki = 0.0f,
     .task1_flag = 0,
     .task2_flag = 0,
+    .speed_pid__kp = 0.0f,
+    .speed_pid__ki = 0.0f,
 };
 /* ============================================================== 页面、条目定义 ============================================================== */    
 Ordinary_Page home_page;
-    Goto_Item goto__speed_pid__page;
     Goto_Item goto__tasks__page;
-    Ordinary_Page speed_pid__page;
-        Data_Item speed_pid__kp;
-        Data_Item speed_pid__ki;
+    Goto_Item goto__trackline_pid__page;
     Ordinary_Page tasks__page;
         Switch_Item task1;
         Switch_Item task2;
+    Ordinary_Page trackline_pid__page;
+        Data_Item track_pid__kp;
+        Data_Item track_pid__kd;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
-void Speed_Pid__Kp_Callback(void *data) // *((float*)data)
-{
-    /* USER CODE BEGIN */
-
-    /* USER CODE END */
-}
-
-void Speed_Pid__Ki_Callback(void *data) // *((float*)data)
-{
-    /* USER CODE BEGIN */
-
-    /* USER CODE END */
-}
-
 void Task1_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
@@ -61,17 +47,26 @@ void Task2_Callback(unsigned char data)
     /* USER CODE END */
 }
 
+void Track_Pid__Kp_Callback(void *data) // *((float*)data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
+void Track_Pid__Kd_Callback(void *data) // *((float*)data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
 /* ============================================================== 回调函数（页面） ============================================================ */
 /* No page callbacks */
 /* =========================================================== 设置列表（普通页面） =========================================================== */
 Item *home_page_items[2] = {
-    ITEM(goto__speed_pid__page),
-    ITEM(goto__tasks__page)
-};
-
-Item *speed_pid__page_items[2] = {
-    ITEM(speed_pid__kp),
-    ITEM(speed_pid__ki)
+    ITEM(goto__tasks__page),
+    ITEM(goto__trackline_pid__page)
 };
 
 Item *tasks__page_items[2] = {
@@ -79,21 +74,26 @@ Item *tasks__page_items[2] = {
     ITEM(task2)
 };
 
+Item *trackline_pid__page_items[2] = {
+    ITEM(track_pid__kp),
+    ITEM(track_pid__kd)
+};
+
 /* ================================================================ 系统初始化 ================================================================ */
 void Easy_Menu_Ui_Init(void)
 {
 
     Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 2);
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__speed_pid__page), "speed_pid", PAGE(speed_pid__page));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__tasks__page), "tasks", PAGE(tasks__page));
-
-    Ordinary_Page_Init(PAGE(home_page), PAGE(speed_pid__page), "speed_pid", speed_pid__page_items, 2);
-        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__kp), "speed_kp", FLOAT, &Easy_Menu_Ui_Data.speed_pid__kp, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Kp_Callback);
-        Data_Item_Init(PAGE(speed_pid__page), ITEM(speed_pid__ki), "speed__ki", FLOAT, &Easy_Menu_Ui_Data.speed_pid__ki, FLOAT_VAL(0.1), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Speed_Pid__Ki_Callback);
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__trackline_pid__page), "trackline_pid", PAGE(trackline_pid__page));
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(tasks__page), "tasks", tasks__page_items, 2);
         Switch_Item_Init(PAGE(tasks__page), ITEM(task1), "task1", &Easy_Menu_Ui_Data.task1_flag, Task1_Callback);
         Switch_Item_Init(PAGE(tasks__page), ITEM(task2), "task2", &Easy_Menu_Ui_Data.task2_flag, Task2_Callback);
+
+    Ordinary_Page_Init(PAGE(home_page), PAGE(trackline_pid__page), "trackline_pid", trackline_pid__page_items, 2);
+        Data_Item_Init(PAGE(trackline_pid__page), ITEM(track_pid__kp), "track_kp", FLOAT, &Easy_Menu_Ui_Data.speed_pid__kp, FLOAT_VAL(0.02), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Track_Pid__Kp_Callback);
+        Data_Item_Init(PAGE(trackline_pid__page), ITEM(track_pid__kd), "track_kd", FLOAT, &Easy_Menu_Ui_Data.speed_pid__ki, FLOAT_VAL(0.02), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Track_Pid__Kd_Callback);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

@@ -8,46 +8,6 @@
     },
     "children": [
       {
-        "name": "speed_pid",
-        "type": "普通页面",
-        "properties": {
-          "以父级作为前缀": false,
-          "变量名": "speed_pid__page"
-        },
-        "children": [
-          {
-            "name": "speed_kp",
-            "type": "数据条目",
-            "properties": {
-              "以父级作为前缀": false,
-              "初始值": "0",
-              "变量名": "speed_pid__kp",
-              "变量类型": "float_val",
-              "回调函数": true,
-              "数据变量名": "speed_pid__kp",
-              "最大值": "NULL",
-              "最小值": "NULL",
-              "步进": "0.1"
-            }
-          },
-          {
-            "name": "speed__ki",
-            "type": "数据条目",
-            "properties": {
-              "以父级作为前缀": false,
-              "初始值": "0",
-              "变量名": "speed_pid__ki",
-              "变量类型": "float_val",
-              "回调函数": true,
-              "数据变量名": "speed_pid__ki",
-              "最大值": "NULL",
-              "最小值": "NULL",
-              "步进": "0.1"
-            }
-          }
-        ]
-      },
-      {
         "name": "tasks",
         "type": "普通页面",
         "properties": {
@@ -75,6 +35,46 @@
               "变量名": "task2",
               "回调函数": true,
               "数据变量名": "task2_flag"
+            }
+          }
+        ]
+      },
+      {
+        "name": "trackline_pid",
+        "type": "普通页面",
+        "properties": {
+          "以父级作为前缀": false,
+          "变量名": "trackline_pid__page"
+        },
+        "children": [
+          {
+            "name": "track_kp",
+            "type": "数据条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "初始值": "0",
+              "变量名": "track_pid__kp",
+              "变量类型": "float_val",
+              "回调函数": true,
+              "数据变量名": "speed_pid__kp",
+              "最大值": "NULL",
+              "最小值": "NULL",
+              "步进": "0.02"
+            }
+          },
+          {
+            "name": "track_kd",
+            "type": "数据条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "初始值": "0",
+              "变量名": "track_pid__kd",
+              "变量类型": "float_val",
+              "回调函数": true,
+              "数据变量名": "speed_pid__ki",
+              "最大值": "NULL",
+              "最小值": "NULL",
+              "步进": "0.02"
             }
           }
         ]

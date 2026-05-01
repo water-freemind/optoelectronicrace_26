@@ -121,6 +121,7 @@ SUBDIRS := \
 . \
 APP \
 BSP \
+Drive/Beep \
 Drive/Grayscale_Sensor \
 Drive/Knob \
 Drive/Motor \

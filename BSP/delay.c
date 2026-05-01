@@ -1,5 +1,6 @@
 #include "delay.h"
 #include "Knob_drv.h"
+#include "Beep.h"
 volatile unsigned int delay_times = 0;
 volatile uint32_t g_SystemTick = 0;
 //搭配滴答定时器实现的精确ms延时
@@ -14,6 +15,7 @@ void SysTick_Handler(void)
 {
     g_SystemTick++;
     Knob_Tick_1ms();
+    Beep_Tick_1ms();
     if( delay_times != 0 )
     {
         delay_times--;

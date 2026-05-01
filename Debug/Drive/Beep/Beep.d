@@ -1,6 +1,6 @@
 # FIXED
 
-main.o: ../main.c \
+Drive/Beep/Beep.o: ../Drive/Beep/Beep.c ../Drive/Beep/Beep.h \
  ti_msp_dl_config.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
@@ -84,12 +84,8 @@ main.o: ../main.c \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv/OLED.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h \
- ../Drive/Knob/Knob_drv.h ../Drive/Motor/Motor.h ../APP/Trackline.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Beep/Beep.h
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h
+../Drive/Beep/Beep.h:
 ti_msp_dl_config.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -174,10 +170,3 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h:
-D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/OLED_Drv/OLED.h:
-D:/MSP-SDK/CCS_project/optoelectronicrace_26/Menu/Easy_Menu.h:
-D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Knob/Knob_drv.h:
-../Drive/Knob/Knob_drv.h:
-../Drive/Motor/Motor.h:
-../APP/Trackline.h:
-D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Beep/Beep.h:

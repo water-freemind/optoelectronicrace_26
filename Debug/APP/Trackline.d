@@ -1,6 +1,7 @@
 # FIXED
 
 APP/Trackline.o: ../APP/Trackline.c ../APP/Trackline.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h \
  ti_msp_dl_config.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h \
@@ -89,6 +90,7 @@ APP/Trackline.o: ../APP/Trackline.c ../APP/Trackline.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/Uart.h
 ../APP/Trackline.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h:
 ti_msp_dl_config.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:

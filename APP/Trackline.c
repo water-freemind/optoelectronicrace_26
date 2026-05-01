@@ -16,6 +16,16 @@ static unsigned char rx_buff[256] = {0};
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
 
+static const int16_t WEIGHTS[8] = {-350, -250, -150, -50, 50, 150, 250, 350};
+
+Trackline_Controller_t g_Trackline = {
+    .base_speed = 500,
+    .max_correction = 500,
+    .pid = { .Kp = 0.4f, .Ki = 0.0f, .Kd = 0.0f },
+    .last_error = 0,
+    .integral = 0
+};
+
 void Trackline_Init(void)
 {
     No_MCU_Ganv_Sensor_Init(&sensor, white, black);
@@ -26,7 +36,7 @@ void Trackline_Init(void)
     DL_ADC12_startConversion(ADC_line_detector_INST);
 }
 
-void Trackline_Task(void)
+void Trackline_Sensor_Test(void)
 {
     No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
 
@@ -55,4 +65,49 @@ void Trackline_Task(void)
     }
 
     delay_ms(1);
+}
+
+void Trackline_Task(void)
+{
+    No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
+
+    if (!Get_Normalize_For_User(&sensor, Normal))
+        return;
+
+    int32_t numerator = 0;
+    int32_t denominator = 0;
+    for (int i = 0; i < 8; i++) {
+        numerator += (int32_t)Normal[i] * WEIGHTS[i];
+        denominator += Normal[i];
+    }
+
+    int16_t error;
+    if (denominator != 0)
+        error = (int16_t)(numerator / denominator);
+    else
+        error = g_Trackline.last_error;
+
+    int16_t P = (int16_t)(g_Trackline.pid.Kp * error);
+    g_Trackline.integral += error;
+    if (g_Trackline.integral > 5000)  g_Trackline.integral = 5000;
+    if (g_Trackline.integral < -5000) g_Trackline.integral = -5000;
+    int16_t I = (int16_t)(g_Trackline.pid.Ki * g_Trackline.integral);
+    int16_t D = (int16_t)(g_Trackline.pid.Kd * (error - g_Trackline.last_error));
+    g_Trackline.last_error = error;
+
+    int16_t correction = P + I + D;
+    if (correction > g_Trackline.max_correction)
+        correction = g_Trackline.max_correction;
+    if (correction < -g_Trackline.max_correction)
+        correction = -g_Trackline.max_correction;
+
+    int16_t speedL = g_Trackline.base_speed - correction;
+    int16_t speedR = g_Trackline.base_speed + correction;
+
+    if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
+    if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
+    if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
+    if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
+
+    Motor_SetSpeed(speedL, speedR);
 }

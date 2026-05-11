@@ -6,55 +6,88 @@
 
 /* USER CODE PUBLIC BEGIN */
 
+#include "Trackline.h"
+
 /* USER CODE PUBLIC END */
 
 /* ================================================================= 占位变量 ================================================================= */
 struct {
-    unsigned char task1_flag;
-    unsigned char task2_flag;
+    unsigned char Cal_white_flag;
+    unsigned char Cal_black_flag;
     float speed_pid__kp;
     float speed_pid__ki;
+    unsigned char trackline__start_flag;
+    unsigned char trackline__round;
 } Easy_Menu_Ui_Data = {
-    .task1_flag = 0,
-    .task2_flag = 0,
+    .Cal_white_flag = 0,
+    .Cal_black_flag = 0,
     .speed_pid__kp = 0.0f,
     .speed_pid__ki = 0.0f,
+    .trackline__start_flag = 0,
+    .trackline__round = 1,
 };
 /* ============================================================== 页面、条目定义 ============================================================== */    
 Ordinary_Page home_page;
-    Goto_Item goto__tasks__page;
+    Goto_Item goto__Cal_page;
     Goto_Item goto__trackline_pid__page;
-    Ordinary_Page tasks__page;
-        Switch_Item task1;
-        Switch_Item task2;
+    Goto_Item goto__Tasks;
+    Ordinary_Page Cal_page;
+        Switch_Item Cal_white;
+        Switch_Item Cal_black;
     Ordinary_Page trackline_pid__page;
         Data_Item track_pid__kp;
         Data_Item track_pid__kd;
+    Ordinary_Page Tasks;
+        Goto_Item goto__trackline;
+        Ordinary_Page trackline;
+            Switch_Item trackline_start;
+            Data_Item trackline__round;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
-void Task1_Callback(unsigned char data)
+void Cal_White_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
-    
+    if (data) {
+        Trackline_Calibrate_White();
+        Easy_Menu_Ui_Data.Cal_white_flag = 0;
+    }
     /* USER CODE END */
 }
 
-void Task2_Callback(unsigned char data)
+void Cal_Black_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
-
+    if (data) {
+        Trackline_Calibrate_Black();
+        Easy_Menu_Ui_Data.Cal_black_flag = 0;
+    }
     /* USER CODE END */
 }
 
 void Track_Pid__Kp_Callback(void *data) // *((float*)data)
 {
     /* USER CODE BEGIN */
-
+    g_Trackline.pid.Kp = *(float*)data;
     /* USER CODE END */
 }
 
 void Track_Pid__Kd_Callback(void *data) // *((float*)data)
+{
+    /* USER CODE BEGIN */
+    g_Trackline.pid.Kd = *(float*)data;
+    /* USER CODE END */
+}
+
+void Trackline_Start_Callback(unsigned char data)
+{
+    /* USER CODE BEGIN */
+    if (!data)
+        Motor_SetSpeed(0, 0);
+    /* USER CODE END */
+}
+
+void Trackline__Round_Callback(void *data) // *((unsigned char*)data)
 {
     /* USER CODE BEGIN */
 
@@ -64,14 +97,15 @@ void Track_Pid__Kd_Callback(void *data) // *((float*)data)
 /* ============================================================== 回调函数（页面） ============================================================ */
 /* No page callbacks */
 /* =========================================================== 设置列表（普通页面） =========================================================== */
-Item *home_page_items[2] = {
-    ITEM(goto__tasks__page),
-    ITEM(goto__trackline_pid__page)
+Item *home_page_items[3] = {
+    ITEM(goto__Cal_page),
+    ITEM(goto__trackline_pid__page),
+    ITEM(goto__Tasks)
 };
 
-Item *tasks__page_items[2] = {
-    ITEM(task1),
-    ITEM(task2)
+Item *Cal_page_items[2] = {
+    ITEM(Cal_white),
+    ITEM(Cal_black)
 };
 
 Item *trackline_pid__page_items[2] = {
@@ -79,21 +113,38 @@ Item *trackline_pid__page_items[2] = {
     ITEM(track_pid__kd)
 };
 
+Item *Tasks_items[1] = {
+    ITEM(goto__trackline)
+};
+
+Item *trackline_items[2] = {
+    ITEM(trackline_start),
+    ITEM(trackline__round)
+};
+
 /* ================================================================ 系统初始化 ================================================================ */
 void Easy_Menu_Ui_Init(void)
 {
 
-    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 2);
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__tasks__page), "tasks", PAGE(tasks__page));
+    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 3);
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__Cal_page), "Cal_sensor", PAGE(Cal_page));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__trackline_pid__page), "trackline_pid", PAGE(trackline_pid__page));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__Tasks), "tasks__page", PAGE(Tasks));
 
-    Ordinary_Page_Init(PAGE(home_page), PAGE(tasks__page), "tasks", tasks__page_items, 2);
-        Switch_Item_Init(PAGE(tasks__page), ITEM(task1), "task1", &Easy_Menu_Ui_Data.task1_flag, Task1_Callback);
-        Switch_Item_Init(PAGE(tasks__page), ITEM(task2), "task2", &Easy_Menu_Ui_Data.task2_flag, Task2_Callback);
+    Ordinary_Page_Init(PAGE(home_page), PAGE(Cal_page), "Cal_sensor", Cal_page_items, 2);
+        Switch_Item_Init(PAGE(Cal_page), ITEM(Cal_white), "Cal_white", &Easy_Menu_Ui_Data.Cal_white_flag, Cal_White_Callback);
+        Switch_Item_Init(PAGE(Cal_page), ITEM(Cal_black), "Cal_black", &Easy_Menu_Ui_Data.Cal_black_flag, Cal_Black_Callback);
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(trackline_pid__page), "trackline_pid", trackline_pid__page_items, 2);
         Data_Item_Init(PAGE(trackline_pid__page), ITEM(track_pid__kp), "track_kp", FLOAT, &Easy_Menu_Ui_Data.speed_pid__kp, FLOAT_VAL(0.02), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Track_Pid__Kp_Callback);
         Data_Item_Init(PAGE(trackline_pid__page), ITEM(track_pid__kd), "track_kd", FLOAT, &Easy_Menu_Ui_Data.speed_pid__ki, FLOAT_VAL(0.02), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Track_Pid__Kd_Callback);
+
+    Ordinary_Page_Init(PAGE(home_page), PAGE(Tasks), "tasks__page", Tasks_items, 1);
+        Goto_Item_Init(PAGE(Tasks), ITEM(goto__trackline), "trackline", PAGE(trackline));
+
+    Ordinary_Page_Init(PAGE(Tasks), PAGE(trackline), "trackline", trackline_items, 2);
+        Switch_Item_Init(PAGE(trackline), ITEM(trackline_start), "track_start", &Easy_Menu_Ui_Data.trackline__start_flag, Trackline_Start_Callback);
+        Data_Item_Init(PAGE(trackline), ITEM(trackline__round), "round", UNSIGNED_CHAR, &Easy_Menu_Ui_Data.trackline__round, UNSIGNED_CHAR_VAL(1), 1, UNSIGNED_CHAR_VAL(0), 0, UNSIGNED_CHAR_VAL(5), 1, Trackline__Round_Callback);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

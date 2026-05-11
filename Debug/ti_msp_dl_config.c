@@ -203,7 +203,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
     DL_GPIO_setLowerPinsPolarity(GPIOA, DL_GPIO_PIN_12_EDGE_RISE_FALL);
     DL_GPIO_clearInterruptStatus(GPIOA, GPIO_ENCODER_B_AE_PIN);
     DL_GPIO_enableInterrupt(GPIOA, GPIO_ENCODER_B_AE_PIN);
-    DL_GPIO_setUpperPinsPolarity(GPIO_KNOB_PORT, DL_GPIO_PIN_20_EDGE_FALL);
+    DL_GPIO_setUpperPinsPolarity(GPIO_KNOB_PORT, DL_GPIO_PIN_20_EDGE_RISE);
     DL_GPIO_clearInterruptStatus(GPIO_KNOB_PORT, GPIO_KNOB_A_PIN);
     DL_GPIO_enableInterrupt(GPIO_KNOB_PORT, GPIO_KNOB_A_PIN);
 

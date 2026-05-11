@@ -86,7 +86,9 @@ Menu/Easy_Menu_User.o: ../Menu/Easy_Menu_User.c ../Menu/Easy_Menu_User.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- ../Menu/Easy_Menu_Item.h
+ ../Menu/Easy_Menu_Item.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Trackline.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h
 ../Menu/Easy_Menu_User.h:
 ../Menu/Easy_Menu_Core.h:
 ../Menu/Easy_Menu_Page.h:
@@ -176,3 +178,5 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
 ../Menu/Easy_Menu_Item.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Trackline.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h:

@@ -6,12 +6,14 @@
 #include <stdio.h>
 #include <string.h>
 #include "delay.h"
+#include "Beep.h"
 
 static unsigned short Anolog[8] = {0};
 static unsigned short white[8] = {1800, 1800, 1800, 1800, 1800, 1800, 1800, 1800};
 static unsigned short black[8] = {300, 300, 300, 300, 300, 300, 300, 300};
 static unsigned short Normal[8];
 static unsigned char rx_buff[256] = {0};
+
 
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
@@ -20,8 +22,8 @@ static const int16_t WEIGHTS[8] = {-350, -250, -150, -50, 50, 150, 250, 350};
 
 Trackline_Controller_t g_Trackline = {
     .base_speed = 500,
-    .max_correction = 500,
-    .pid = { .Kp = 0.4f, .Ki = 0.0f, .Kd = 0.0f },
+    .max_correction = 1100,
+    .pid = { .Kp = 0.6f, .Ki = 0.0f, .Kd = 0.0f },
     .last_error = 0,
     .integral = 0
 };
@@ -65,6 +67,28 @@ void Trackline_Sensor_Test(void)
     }
 
     delay_ms(1);
+}
+
+void Trackline_Calibrate_White(void)
+{
+    Beep_Trigger(BEEP_MODE_TRIPLE);
+    delay_ms(500);
+    No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
+    Get_Anolog_Value(&sensor, Anolog);
+    for (int i = 0; i < 8; i++)
+        white[i] = Anolog[i];
+}
+
+void Trackline_Calibrate_Black(void)
+{
+    Beep_Trigger(BEEP_MODE_TRIPLE);
+    delay_ms(500);
+    No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
+    Get_Anolog_Value(&sensor, Anolog);
+    for (int i = 0; i < 8; i++)
+        black[i] = Anolog[i];
+    No_MCU_Ganv_Sensor_Init(&sensor, white, black);
+    Beep_Trigger(BEEP_MODE_LONG);
 }
 
 void Trackline_Task(void)

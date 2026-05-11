@@ -88,7 +88,8 @@ APP/Trackline.o: ../APP/Trackline.c ../APP/Trackline.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/No_Mcu_Ganv_Grayscale_Sensor_Config.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/ADC.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/Uart.h
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/Uart.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Beep/Beep.h
 ../APP/Trackline.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h:
 ti_msp_dl_config.h:
@@ -178,3 +179,4 @@ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/No_Mcu_Ganv_
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/ADC.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/Uart.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Beep/Beep.h:

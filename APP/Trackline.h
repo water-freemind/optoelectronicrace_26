@@ -23,5 +23,7 @@ extern Trackline_Controller_t g_Trackline;
 void Trackline_Init(void);
 void Trackline_Task(void);
 void Trackline_Sensor_Test(void);
+void Trackline_Calibrate_White(void);
+void Trackline_Calibrate_Black(void);
 
 #endif

@@ -6,6 +6,16 @@
 #include "Drive/Motor/Motor.h"
 #include "APP/Trackline.h"
 #include "Beep.h"
+
+extern struct {
+    unsigned char Cal_white_flag;
+    unsigned char Cal_black_flag;
+    float speed_pid__kp;
+    float speed_pid__ki;
+    unsigned char trackline__start_flag;
+    unsigned char trackline__round;
+} Easy_Menu_Ui_Data;
+
 int main(void)
 {
     SYSCFG_DL_init();
@@ -18,6 +28,7 @@ int main(void)
     while (1) {
         Knob_get();
         Easy_Menu_Display(g_SystemTick);
-        Trackline_Task();
+        if (Easy_Menu_Ui_Data.trackline__start_flag)
+            Trackline_Task();
     }
 }

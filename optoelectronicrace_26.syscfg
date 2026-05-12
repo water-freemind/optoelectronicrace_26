@@ -11,6 +11,7 @@
  */
 const ADC12   = scripting.addModule("/ti/driverlib/ADC12", {}, false);
 const ADC121  = ADC12.addInstance();
+const Board   = scripting.addModule("/ti/driverlib/Board");
 const GPIO    = scripting.addModule("/ti/driverlib/GPIO", {}, false);
 const GPIO1   = GPIO.addInstance();
 const GPIO2   = GPIO.addInstance();
@@ -54,7 +55,9 @@ ADC121.DMA_CHANNEL.transferMode          = "FULL_CH_REPEAT_SINGLE";
 ADC121.DMA_CHANNEL.interruptPriority     = "1";
 ADC121.DMA_CHANNEL.peripheral.$assign    = "DMA_CH0";
 
-const Board = scripting.addModule("/ti/driverlib/Board", {}, false);
+Board.peripheral.$assign          = "DEBUGSS";
+Board.peripheral.swclkPin.$assign = "PA20";
+Board.peripheral.swdioPin.$assign = "PA19";
 
 GPIO1.$name                          = "GPIO_OLED";
 GPIO1.port                           = "PORTA";
@@ -207,9 +210,6 @@ ProjectConfig.migrationCondition = true;
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-Board.peripheral.$suggestSolution            = "DEBUGSS";
-Board.peripheral.swclkPin.$suggestSolution   = "PA20";
-Board.peripheral.swdioPin.$suggestSolution   = "PA19";
 GPIO2.associatedPins[0].pin.$suggestSolution = "PB20";
 GPIO2.associatedPins[1].pin.$suggestSolution = "PB19";
 GPIO2.associatedPins[2].pin.$suggestSolution = "PB18";

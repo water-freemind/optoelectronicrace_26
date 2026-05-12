@@ -21,9 +21,9 @@ static unsigned char Digtal;
 static const int16_t WEIGHTS[8] = {-350, -250, -150, -50, 50, 150, 250, 350};
 
 Trackline_Controller_t g_Trackline = {
-    .base_speed = 500,
-    .max_correction = 1100,
-    .pid = { .Kp = 0.6f, .Ki = 0.0f, .Kd = 0.0f },
+    .base_speed = 700,
+    .max_correction = 1750,
+    .pid = { .Kp = 1.25f, .Ki = 0.0f, .Kd = 0.0f },
     .last_error = 0,
     .integral = 0
 };

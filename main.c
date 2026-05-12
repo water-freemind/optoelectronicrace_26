@@ -28,7 +28,8 @@ int main(void)
     while (1) {
         Knob_get();
         Easy_Menu_Display(g_SystemTick);
-        if (Easy_Menu_Ui_Data.trackline__start_flag)
+        if (Easy_Menu_Ui_Data.trackline__start_flag){
             Trackline_Task();
+        }            
     }
 }

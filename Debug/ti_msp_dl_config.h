@@ -138,15 +138,31 @@ extern "C" {
 #define UART_0_INST_INT_IRQN                                      UART0_INT_IRQn
 #define GPIO_UART_0_RX_PORT                                                GPIOA
 #define GPIO_UART_0_TX_PORT                                                GPIOA
-#define GPIO_UART_0_RX_PIN                                        DL_GPIO_PIN_11
-#define GPIO_UART_0_TX_PIN                                        DL_GPIO_PIN_10
-#define GPIO_UART_0_IOMUX_RX                                     (IOMUX_PINCM22)
-#define GPIO_UART_0_IOMUX_TX                                     (IOMUX_PINCM21)
-#define GPIO_UART_0_IOMUX_RX_FUNC                      IOMUX_PINCM22_PF_UART0_RX
-#define GPIO_UART_0_IOMUX_TX_FUNC                      IOMUX_PINCM21_PF_UART0_TX
+#define GPIO_UART_0_RX_PIN                                        DL_GPIO_PIN_31
+#define GPIO_UART_0_TX_PIN                                        DL_GPIO_PIN_28
+#define GPIO_UART_0_IOMUX_RX                                      (IOMUX_PINCM6)
+#define GPIO_UART_0_IOMUX_TX                                      (IOMUX_PINCM3)
+#define GPIO_UART_0_IOMUX_RX_FUNC                       IOMUX_PINCM6_PF_UART0_RX
+#define GPIO_UART_0_IOMUX_TX_FUNC                       IOMUX_PINCM3_PF_UART0_TX
 #define UART_0_BAUD_RATE                                                (115200)
 #define UART_0_IBRD_32_MHZ_115200_BAUD                                      (17)
 #define UART_0_FBRD_32_MHZ_115200_BAUD                                      (23)
+/* Defines for UART_JY62 */
+#define UART_JY62_INST                                                     UART1
+#define UART_JY62_INST_FREQUENCY                                        32000000
+#define UART_JY62_INST_IRQHandler                               UART1_IRQHandler
+#define UART_JY62_INST_INT_IRQN                                   UART1_INT_IRQn
+#define GPIO_UART_JY62_RX_PORT                                             GPIOA
+#define GPIO_UART_JY62_TX_PORT                                             GPIOA
+#define GPIO_UART_JY62_RX_PIN                                      DL_GPIO_PIN_9
+#define GPIO_UART_JY62_TX_PIN                                      DL_GPIO_PIN_8
+#define GPIO_UART_JY62_IOMUX_RX                                  (IOMUX_PINCM20)
+#define GPIO_UART_JY62_IOMUX_TX                                  (IOMUX_PINCM19)
+#define GPIO_UART_JY62_IOMUX_RX_FUNC                   IOMUX_PINCM20_PF_UART1_RX
+#define GPIO_UART_JY62_IOMUX_TX_FUNC                   IOMUX_PINCM19_PF_UART1_TX
+#define UART_JY62_BAUD_RATE                                               (9600)
+#define UART_JY62_IBRD_32_MHZ_9600_BAUD                                    (208)
+#define UART_JY62_FBRD_32_MHZ_9600_BAUD                                     (21)
 
 
 
@@ -169,6 +185,9 @@ extern "C" {
 /* Defines for DMA_detector_out */
 #define DMA_detector_out_CHAN_ID                                             (0)
 #define ADC_line_detector_INST_DMA_TRIGGER            (DMA_ADC0_EVT_GEN_BD_TRIG)
+/* Defines for DMA_CH0 */
+#define DMA_CH0_CHAN_ID                                                      (1)
+#define UART_0_INST_DMA_TRIGGER                              (DMA_UART0_RX_TRIG)
 
 
 /* Port definition for Pin Group GPIO_BEEP */
@@ -256,6 +275,7 @@ void SYSCFG_DL_PWM_0_init(void);
 void SYSCFG_DL_QEI_0_init(void);
 void SYSCFG_DL_UART_UP_init(void);
 void SYSCFG_DL_UART_0_init(void);
+void SYSCFG_DL_UART_JY62_init(void);
 void SYSCFG_DL_ADC_line_detector_init(void);
 void SYSCFG_DL_DMA_init(void);
 

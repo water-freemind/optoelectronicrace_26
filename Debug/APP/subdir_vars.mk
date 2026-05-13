@@ -6,21 +6,33 @@ SHELL = cmd.exe
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../APP/Trackline.c 
+../APP/JY62.c \
+../APP/Trackline.c \
+../APP/gimbal.c 
 
 C_DEPS += \
-./APP/Trackline.d 
+./APP/JY62.d \
+./APP/Trackline.d \
+./APP/gimbal.d 
 
 OBJS += \
-./APP/Trackline.o 
+./APP/JY62.o \
+./APP/Trackline.o \
+./APP/gimbal.o 
 
 OBJS__QUOTED += \
-"APP\Trackline.o" 
+"APP\JY62.o" \
+"APP\Trackline.o" \
+"APP\gimbal.o" 
 
 C_DEPS__QUOTED += \
-"APP\Trackline.d" 
+"APP\JY62.d" \
+"APP\Trackline.d" \
+"APP\gimbal.d" 
 
 C_SRCS__QUOTED += \
-"../APP/Trackline.c" 
+"../APP/JY62.c" \
+"../APP/Trackline.c" \
+"../APP/gimbal.c" 
 
 

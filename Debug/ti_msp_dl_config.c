@@ -56,6 +56,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_init(void)
     SYSCFG_DL_QEI_0_init();
     SYSCFG_DL_UART_UP_init();
     SYSCFG_DL_UART_0_init();
+    SYSCFG_DL_UART_JY62_init();
     SYSCFG_DL_ADC_line_detector_init();
     SYSCFG_DL_DMA_init();
     SYSCFG_DL_SYSTICK_init();
@@ -96,6 +97,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_TimerG_reset(QEI_0_INST);
     DL_UART_Main_reset(UART_UP_INST);
     DL_UART_Main_reset(UART_0_INST);
+    DL_UART_Main_reset(UART_JY62_INST);
     DL_ADC12_reset(ADC_line_detector_INST);
 
 
@@ -106,6 +108,7 @@ SYSCONFIG_WEAK void SYSCFG_DL_initPower(void)
     DL_TimerG_enablePower(QEI_0_INST);
     DL_UART_Main_enablePower(UART_UP_INST);
     DL_UART_Main_enablePower(UART_0_INST);
+    DL_UART_Main_enablePower(UART_JY62_INST);
     DL_ADC12_enablePower(ADC_line_detector_INST);
 
 
@@ -131,6 +134,10 @@ SYSCONFIG_WEAK void SYSCFG_DL_GPIO_init(void)
         GPIO_UART_0_IOMUX_TX, GPIO_UART_0_IOMUX_TX_FUNC);
     DL_GPIO_initPeripheralInputFunction(
         GPIO_UART_0_IOMUX_RX, GPIO_UART_0_IOMUX_RX_FUNC);
+    DL_GPIO_initPeripheralOutputFunction(
+        GPIO_UART_JY62_IOMUX_TX, GPIO_UART_JY62_IOMUX_TX_FUNC);
+    DL_GPIO_initPeripheralInputFunction(
+        GPIO_UART_JY62_IOMUX_RX, GPIO_UART_JY62_IOMUX_RX_FUNC);
 
     DL_GPIO_initDigitalOutputFeatures(GPIO_BEEP_PIN_IOMUX,
 		 DL_GPIO_INVERSION_DISABLE, DL_GPIO_RESISTOR_PULL_UP,
@@ -365,8 +372,41 @@ SYSCONFIG_WEAK void SYSCFG_DL_UART_0_init(void)
     DL_UART_Main_setBaudRateDivisor(UART_0_INST, UART_0_IBRD_32_MHZ_115200_BAUD, UART_0_FBRD_32_MHZ_115200_BAUD);
 
 
+    /* Configure DMA Receive Event */
+    DL_UART_Main_enableDMAReceiveEvent(UART_0_INST, DL_UART_DMA_INTERRUPT_RX);
 
     DL_UART_Main_enable(UART_0_INST);
+}
+static const DL_UART_Main_ClockConfig gUART_JY62ClockConfig = {
+    .clockSel    = DL_UART_MAIN_CLOCK_BUSCLK,
+    .divideRatio = DL_UART_MAIN_CLOCK_DIVIDE_RATIO_1
+};
+
+static const DL_UART_Main_Config gUART_JY62Config = {
+    .mode        = DL_UART_MAIN_MODE_NORMAL,
+    .direction   = DL_UART_MAIN_DIRECTION_TX_RX,
+    .flowControl = DL_UART_MAIN_FLOW_CONTROL_NONE,
+    .parity      = DL_UART_MAIN_PARITY_NONE,
+    .wordLength  = DL_UART_MAIN_WORD_LENGTH_8_BITS,
+    .stopBits    = DL_UART_MAIN_STOP_BITS_ONE
+};
+
+SYSCONFIG_WEAK void SYSCFG_DL_UART_JY62_init(void)
+{
+    DL_UART_Main_setClockConfig(UART_JY62_INST, (DL_UART_Main_ClockConfig *) &gUART_JY62ClockConfig);
+
+    DL_UART_Main_init(UART_JY62_INST, (DL_UART_Main_Config *) &gUART_JY62Config);
+    /*
+     * Configure baud rate by setting oversampling and baud rate divisors.
+     *  Target baud rate: 9600
+     *  Actual baud rate: 9600.24
+     */
+    DL_UART_Main_setOversampling(UART_JY62_INST, DL_UART_OVERSAMPLING_RATE_16X);
+    DL_UART_Main_setBaudRateDivisor(UART_JY62_INST, UART_JY62_IBRD_32_MHZ_9600_BAUD, UART_JY62_FBRD_32_MHZ_9600_BAUD);
+
+
+
+    DL_UART_Main_enable(UART_JY62_INST);
 }
 
 /* ADC_line_detector Initialization */
@@ -407,8 +447,24 @@ SYSCONFIG_WEAK void SYSCFG_DL_DMA_detector_out_init(void)
     DL_DMA_setTransferSize(DMA, DMA_detector_out_CHAN_ID, 1);
     DL_DMA_initChannel(DMA, DMA_detector_out_CHAN_ID , (DL_DMA_Config *) &gDMA_detector_outConfig);
 }
+static const DL_DMA_Config gDMA_CH0Config = {
+    .transferMode   = DL_DMA_SINGLE_TRANSFER_MODE,
+    .extendedMode   = DL_DMA_NORMAL_MODE,
+    .destIncrement  = DL_DMA_ADDR_UNCHANGED,
+    .srcIncrement   = DL_DMA_ADDR_UNCHANGED,
+    .destWidth      = DL_DMA_WIDTH_WORD,
+    .srcWidth       = DL_DMA_WIDTH_WORD,
+    .trigger        = UART_0_INST_DMA_TRIGGER,
+    .triggerType    = DL_DMA_TRIGGER_TYPE_EXTERNAL,
+};
+
+SYSCONFIG_WEAK void SYSCFG_DL_DMA_CH0_init(void)
+{
+    DL_DMA_initChannel(DMA, DMA_CH0_CHAN_ID , (DL_DMA_Config *) &gDMA_CH0Config);
+}
 SYSCONFIG_WEAK void SYSCFG_DL_DMA_init(void){
     SYSCFG_DL_DMA_detector_out_init();
+    SYSCFG_DL_DMA_CH0_init();
 }
 
 

@@ -5,7 +5,9 @@
 #include "Drive/Knob/Knob_drv.h"
 #include "Drive/Motor/Motor.h"
 #include "APP/Trackline.h"
+#include "APP/JY62.h"
 #include "Beep.h"
+#include <stdint.h>
 
 extern struct {
     unsigned char Cal_white_flag;
@@ -14,6 +16,8 @@ extern struct {
     float speed_pid__ki;
     unsigned char trackline__start_flag;
     unsigned char trackline__round;
+    float jy62_yaw_data;
+    unsigned char jy62_yaw_acc_data;
 } Easy_Menu_Ui_Data;
 
 int main(void)
@@ -23,10 +27,12 @@ int main(void)
     Knob_Init();
     Easy_Menu_Init(Display_Char, Display_Char_Line, NULL, NULL);
     Motor_Init();
+    JY62_Init();
     Trackline_Init();
 
     while (1) {
         Knob_get();
+        JY62_Task();
         Easy_Menu_Display(g_SystemTick);
         if (Easy_Menu_Ui_Data.trackline__start_flag){
             Trackline_Task();

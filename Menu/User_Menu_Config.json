@@ -124,6 +124,42 @@
             ]
           }
         ]
+      },
+      {
+        "name": "JY62",
+        "type": "普通页面",
+        "properties": {
+          "以父级作为前缀": false,
+          "变量名": "JY62_page"
+        },
+        "children": [
+          {
+            "name": "yaw",
+            "type": "展示条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "初始值": "0",
+              "变量名": "jy62_yaw",
+              "变量类型": "float_val",
+              "周期": "100",
+              "回调函数": true,
+              "数据变量名": "jy62_yaw_data"
+            }
+          },
+          {
+            "name": "yaw_acc",
+            "type": "展示条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "初始值": "0",
+              "变量名": "jy62_yaw_acc",
+              "变量类型": "float_val",
+              "周期": "100",
+              "回调函数": true,
+              "数据变量名": "jy62_yaw_acc_data"
+            }
+          }
+        ]
       }
     ]
   }

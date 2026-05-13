@@ -7,6 +7,7 @@
 /* USER CODE PUBLIC BEGIN */
 
 #include "Trackline.h"
+#include "JY62.h"
 
 /* USER CODE PUBLIC END */
 
@@ -18,6 +19,8 @@ struct {
     float speed_pid__ki;
     unsigned char trackline__start_flag;
     unsigned char trackline__round;
+    float jy62_yaw_data;
+    float jy62_yaw_acc_data;
 } Easy_Menu_Ui_Data = {
     .Cal_white_flag = 0,
     .Cal_black_flag = 0,
@@ -25,12 +28,15 @@ struct {
     .speed_pid__ki = 0.0f,
     .trackline__start_flag = 0,
     .trackline__round = 1,
+    .jy62_yaw_data = 0.0f,
+    .jy62_yaw_acc_data = 0.0f,
 };
 /* ============================================================== 页面、条目定义 ============================================================== */    
 Ordinary_Page home_page;
     Goto_Item goto__Cal_page;
     Goto_Item goto__trackline_pid__page;
     Goto_Item goto__Tasks;
+    Goto_Item goto__JY62_page;
     Ordinary_Page Cal_page;
         Switch_Item Cal_white;
         Switch_Item Cal_black;
@@ -42,6 +48,9 @@ Ordinary_Page home_page;
         Ordinary_Page trackline;
             Switch_Item trackline_start;
             Data_Item trackline__round;
+    Ordinary_Page JY62_page;
+        Show_Item jy62_yaw;
+        Show_Item jy62_yaw_acc;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
@@ -94,13 +103,29 @@ void Trackline__Round_Callback(void *data) // *((unsigned char*)data)
     /* USER CODE END */
 }
 
+void Jy62_Yaw_Callback(void)
+{
+    /* USER CODE BEGIN */
+    Easy_Menu_Ui_Data.jy62_yaw_data = yaw_angle;
+    /* USER CODE END */
+}
+
+void Jy62_Yaw_Acc_Callback(void)
+{
+    /* USER CODE BEGIN */
+    float acc_sum = (ax > 0 ? ax : -ax) + (ay > 0 ? ay : -ay) + (az > 0 ? az : -az);
+    Easy_Menu_Ui_Data.jy62_yaw_acc_data = (uint8_t)(acc_sum * 16.0f);
+    /* USER CODE END */
+}
+
 /* ============================================================== 回调函数（页面） ============================================================ */
 /* No page callbacks */
 /* =========================================================== 设置列表（普通页面） =========================================================== */
-Item *home_page_items[3] = {
+Item *home_page_items[4] = {
     ITEM(goto__Cal_page),
     ITEM(goto__trackline_pid__page),
-    ITEM(goto__Tasks)
+    ITEM(goto__Tasks),
+    ITEM(goto__JY62_page)
 };
 
 Item *Cal_page_items[2] = {
@@ -122,14 +147,20 @@ Item *trackline_items[2] = {
     ITEM(trackline__round)
 };
 
+Item *JY62_page_items[2] = {
+    ITEM(jy62_yaw),
+    ITEM(jy62_yaw_acc)
+};
+
 /* ================================================================ 系统初始化 ================================================================ */
 void Easy_Menu_Ui_Init(void)
 {
 
-    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 3);
+    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 4);
         Goto_Item_Init(PAGE(home_page), ITEM(goto__Cal_page), "Cal_sensor", PAGE(Cal_page));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__trackline_pid__page), "trackline_pid", PAGE(trackline_pid__page));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__Tasks), "tasks__page", PAGE(Tasks));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__JY62_page), "JY62", PAGE(JY62_page));
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(Cal_page), "Cal_sensor", Cal_page_items, 2);
         Switch_Item_Init(PAGE(Cal_page), ITEM(Cal_white), "Cal_white", &Easy_Menu_Ui_Data.Cal_white_flag, Cal_White_Callback);
@@ -145,6 +176,10 @@ void Easy_Menu_Ui_Init(void)
     Ordinary_Page_Init(PAGE(Tasks), PAGE(trackline), "trackline", trackline_items, 2);
         Switch_Item_Init(PAGE(trackline), ITEM(trackline_start), "track_start", &Easy_Menu_Ui_Data.trackline__start_flag, Trackline_Start_Callback);
         Data_Item_Init(PAGE(trackline), ITEM(trackline__round), "round", UNSIGNED_CHAR, &Easy_Menu_Ui_Data.trackline__round, UNSIGNED_CHAR_VAL(1), 1, UNSIGNED_CHAR_VAL(0), 0, UNSIGNED_CHAR_VAL(5), 1, Trackline__Round_Callback);
+
+    Ordinary_Page_Init(PAGE(home_page), PAGE(JY62_page), "JY62", JY62_page_items, 2);
+        Show_Item_Init(PAGE(JY62_page), ITEM(jy62_yaw), "yaw", FLOAT, &Easy_Menu_Ui_Data.jy62_yaw_data, 100, Jy62_Yaw_Callback);
+        Show_Item_Init(PAGE(JY62_page), ITEM(jy62_yaw_acc), "yaw_acc", FLOAT, &Easy_Menu_Ui_Data.jy62_yaw_acc_data, 100, Jy62_Yaw_Acc_Callback);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

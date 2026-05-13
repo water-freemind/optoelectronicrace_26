@@ -20,10 +20,20 @@ static unsigned char Digtal;
 
 static const int16_t WEIGHTS[8] = {-350, -250, -150, -50, 50, 150, 250, 350};
 
+/* Right‑angle turn state machine (square track, CCW → left turns only) */
+typedef enum {
+    TURN_NONE = 0,
+    TURN_LEFT
+} TurnState_t;
+
+static TurnState_t g_turnState   = TURN_NONE;
+static uint16_t    g_turnTimer   = 0;
+static uint8_t     g_sharpLeftCnt = 0;  /* consecutive frames with error << 0 */
+
 Trackline_Controller_t g_Trackline = {
     .base_speed = 700,
     .max_correction = 1750,
-    .pid = { .Kp = 1.25f, .Ki = 0.0f, .Kd = 0.0f },
+    .pid = { .Kp = 1.25f, .Ki = 0.0f, .Kd = 0.2f },
     .last_error = 0,
     .integral = 0
 };
@@ -98,6 +108,38 @@ void Trackline_Task(void)
     if (!Get_Normalize_For_User(&sensor, Normal))
         return;
 
+    Digtal = Get_Digtal_For_User(&sensor);
+
+    uint8_t center = ((Digtal >> 2) & 0x01) + ((Digtal >> 3) & 0x01) +
+                     ((Digtal >> 4) & 0x01) + ((Digtal >> 5) & 0x01);
+
+    /* ------------------------------------------------------------------
+     *  State 1: Forced left turn — pivot until centre sees line again
+     * ------------------------------------------------------------------ */
+    if (g_turnState != TURN_NONE) {
+        int16_t turnSpeed = g_Trackline.base_speed * 2 / 3;
+        Motor_SetSpeed(-turnSpeed, turnSpeed);
+
+        if (center >= 2) {
+            g_turnState = TURN_NONE;
+            g_turnTimer = 0;
+            Motor_SetSpeed(0, 0);
+            delay_ms(50);
+            Beep_Stop();
+            return;
+        }
+
+        g_turnTimer++;
+        if (g_turnTimer > 3000) {
+            g_turnState = TURN_NONE;
+            g_turnTimer = 0;
+            Motor_SetSpeed(0, 0);
+            Beep_Stop();
+        }
+        return;
+    }
+
+    /* --- Normal PID tracking --- */
     int32_t numerator = 0;
     int32_t denominator = 0;
     for (int i = 0; i < 8; i++) {
@@ -110,6 +152,25 @@ void Trackline_Task(void)
         error = (int16_t)(numerator / denominator);
     else
         error = g_Trackline.last_error;
+
+    /* ------------------------------------------------------------------
+     *  Detect 90° left turn (square track, CCW only)
+     *  → line trapped on far-left edge → PID can't recover
+     * ------------------------------------------------------------------ */
+    if (error < -250) {
+        g_sharpLeftCnt++;
+        if (g_sharpLeftCnt > 15) {
+            g_turnState = TURN_LEFT;
+            g_turnTimer = 0;
+            Beep_Trigger(BEEP_MODE_CONTINUOUS);
+            /* start turning immediately this loop */
+            int16_t turnSpeed = g_Trackline.base_speed * 2 / 3;
+            Motor_SetSpeed(-turnSpeed, turnSpeed);
+            return;
+        }
+    } else {
+        g_sharpLeftCnt = 0;
+    }
 
     int16_t P = (int16_t)(g_Trackline.pid.Kp * error);
     g_Trackline.integral += error;

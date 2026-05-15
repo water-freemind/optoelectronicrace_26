@@ -36,6 +36,7 @@ int main(void)
         Easy_Menu_Display(g_SystemTick);
         if (Easy_Menu_Ui_Data.trackline__start_flag){
             Trackline_Task();
+            //Trackline_Sensor_Test();
         }            
     }
 }

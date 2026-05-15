@@ -10,7 +10,7 @@
 
 static unsigned short Anolog[8] = {0};
 static unsigned short white[8] = {1800, 1800, 1800, 1800, 1800, 1800, 1800, 1800};
-static unsigned short black[8] = {300, 300, 300, 300, 300, 300, 300, 300};
+static unsigned short black[8] = {350, 350, 350, 350, 350, 350, 350, 350};
 static unsigned short Normal[8];
 static unsigned char rx_buff[256] = {0};
 
@@ -18,22 +18,31 @@ static unsigned char rx_buff[256] = {0};
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
 
-static const int16_t WEIGHTS[8] = {-350, -250, -150, -50, 50, 150, 250, 350};
+static const int16_t WEIGHTS[8] = {-600, -400, -250, -50, 50, 250, 400, 600};
 
-/* Right‑angle turn state machine (square track, CCW → left turns only) */
+/* Right‑angle turn state machine */
 typedef enum {
     TURN_NONE = 0,
-    TURN_LEFT
+    TURN_LEFT,
+    TURN_RIGHT
 } TurnState_t;
 
+/* Turn execution state machine */
 static TurnState_t g_turnState   = TURN_NONE;
 static uint16_t    g_turnTimer   = 0;
-static uint8_t     g_sharpLeftCnt = 0;  /* consecutive frames with error << 0 */
+
+/* Turn detection state machine */
+typedef enum {
+    DETECT_IDLE,
+    DETECT_WATCH_LEFT,
+    DETECT_WATCH_RIGHT
+} DetectState_t;
+static DetectState_t g_detectState = DETECT_IDLE;
 
 Trackline_Controller_t g_Trackline = {
-    .base_speed = 700,
-    .max_correction = 1750,
-    .pid = { .Kp = 1.25f, .Ki = 0.0f, .Kd = 0.2f },
+    .base_speed = 750,
+    .max_correction = 500,
+    .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.2f },
     .last_error = 0,
     .integral = 0
 };
@@ -114,23 +123,31 @@ void Trackline_Task(void)
                      ((Digtal >> 4) & 0x01) + ((Digtal >> 5) & 0x01);
 
     /* ------------------------------------------------------------------
-     *  State 1: Forced left turn — pivot until centre sees line again
+     *  State 1: Active turn — pivot until line reaches sensor 4
+     *  Exit: turnTimer > 5 && sensor 4 sees black
      * ------------------------------------------------------------------ */
     if (g_turnState != TURN_NONE) {
-        int16_t turnSpeed = g_Trackline.base_speed * 2 / 3;
-        Motor_SetSpeed(-turnSpeed, turnSpeed);
+        int16_t turnSpeed = g_Trackline.base_speed - g_Trackline.base_speed / 10;
+        if (g_turnState == TURN_LEFT)
+            Motor_SetSpeed(-turnSpeed, turnSpeed);
+        else
+            Motor_SetSpeed(turnSpeed, -turnSpeed);
 
-        if (center >= 2) {
+        g_turnTimer++;
+        if (g_turnTimer > 5 && (Digtal & 0x10) == 0x00) {
+            g_detectState = DETECT_IDLE;
             g_turnState = TURN_NONE;
             g_turnTimer = 0;
+            g_Trackline.integral = 0;
+            g_Trackline.last_error = 0;
             Motor_SetSpeed(0, 0);
             delay_ms(50);
             Beep_Stop();
             return;
         }
 
-        g_turnTimer++;
         if (g_turnTimer > 3000) {
+            g_detectState = DETECT_IDLE;
             g_turnState = TURN_NONE;
             g_turnTimer = 0;
             Motor_SetSpeed(0, 0);
@@ -154,22 +171,69 @@ void Trackline_Task(void)
         error = g_Trackline.last_error;
 
     /* ------------------------------------------------------------------
-     *  Detect 90° left turn (square track, CCW only)
-     *  → line trapped on far-left edge → PID can't recover
+     *  Two‑phase turn detection state machine
+     *  Phase 1: line pinned on edge → enter WATCH
+     *  Phase 2: line completely lost → trigger turn
+     *  If line returns to centre during WATCH → cancel (false alarm)
      * ------------------------------------------------------------------ */
-    if (error < -250) {
-        g_sharpLeftCnt++;
-        if (g_sharpLeftCnt > 15) {
-            g_turnState = TURN_LEFT;
-            g_turnTimer = 0;
-            Beep_Trigger(BEEP_MODE_CONTINUOUS);
-            /* start turning immediately this loop */
-            int16_t turnSpeed = g_Trackline.base_speed * 2 / 3;
-            Motor_SetSpeed(-turnSpeed, turnSpeed);
-            return;
+    switch (g_detectState) {
+
+    case DETECT_IDLE:
+        /* Fallback: line lost while clearly tracking left/right */
+        if (Digtal == 0xFF) {
+            if (g_Trackline.last_error > 60) {
+                g_turnState = TURN_LEFT;
+                break;  /* fall through to turn entry */
+            }
+            if (g_Trackline.last_error < -60) {
+                g_turnState = TURN_RIGHT;
+                break;
+            }
         }
-    } else {
-        g_sharpLeftCnt = 0;
+
+        /* Line pinned on left → start watching for loss */
+        if ((Digtal & 0xFC) == 0xFC && (Digtal & 0x03) != 0x03) {
+            g_detectState = DETECT_WATCH_LEFT;
+        }
+        /* Line pinned on right → start watching for loss */
+        else if ((Digtal & 0x1F) == 0x1F && (Digtal & 0xE0) != 0xE0) {
+            g_detectState = DETECT_WATCH_RIGHT;
+        }
+        break;
+
+    case DETECT_WATCH_LEFT:
+        if (Digtal == 0xFF) {
+            g_turnState = TURN_LEFT;
+            break;
+        }
+        /* Line returned to centre → false alarm */
+        if (center >= 2 && (Digtal & 0x18) == 0x00) {
+            g_detectState = DETECT_IDLE;
+        }
+        break;
+
+    case DETECT_WATCH_RIGHT:
+        if (Digtal == 0xFF) {
+            g_turnState = TURN_RIGHT;
+            break;
+        }
+        if (center >= 2 && (Digtal & 0x18) == 0x00) {
+            g_detectState = DETECT_IDLE;
+        }
+        break;
+    }
+
+    /* If a turn was requested by the state machine, enter turn now */
+    if (g_turnState != TURN_NONE) {
+        g_turnTimer = 0;
+        g_detectState = DETECT_IDLE;
+        Beep_Trigger(BEEP_MODE_CONTINUOUS);
+        int16_t turnSpeed = g_Trackline.base_speed - g_Trackline.base_speed / 10;
+        if (g_turnState == TURN_LEFT)
+            Motor_SetSpeed(-turnSpeed, turnSpeed);
+        else
+            Motor_SetSpeed(turnSpeed, -turnSpeed);
+        return;
     }
 
     int16_t P = (int16_t)(g_Trackline.pid.Kp * error);

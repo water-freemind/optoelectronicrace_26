@@ -30,6 +30,9 @@ int main(void)
     JY62_Init();
     Trackline_Init();
 
+    Easy_Menu_Ui_Data.speed_pid__kp = g_Trackline.pid.Kp;
+    Easy_Menu_Ui_Data.speed_pid__ki = g_Trackline.pid.Kd;
+
     while (1) {
         Knob_get();
         JY62_Task();

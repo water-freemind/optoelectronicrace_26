@@ -24,8 +24,8 @@ struct {
 } Easy_Menu_Ui_Data = {
     .Cal_white_flag = 0,
     .Cal_black_flag = 0,
-    .speed_pid__kp = 0.0f,
-    .speed_pid__ki = 0.0f,
+    .speed_pid__kp = 2.0f,  // matches g_Trackline.pid.Kp
+    .speed_pid__ki = 0.25f, // matches g_Trackline.pid.Kd
     .trackline__start_flag = 0,
     .trackline__round = 1,
     .jy62_yaw_data = 0.0f,

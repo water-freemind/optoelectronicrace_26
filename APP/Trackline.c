@@ -18,7 +18,7 @@ static unsigned char rx_buff[256] = {0};
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
 
-static const int16_t WEIGHTS[8] = {-600, -400, -250, -50, 50, 250, 400, 600};
+static const int16_t WEIGHTS[8] = {-400, -300, -200, -50, 50, 200, 300, 400};
 
 /* Right‑angle turn state machine */
 typedef enum {
@@ -40,9 +40,9 @@ typedef enum {
 static DetectState_t g_detectState = DETECT_IDLE;
 
 Trackline_Controller_t g_Trackline = {
-    .base_speed = 750,
+    .base_speed = 550,//负载750，空载550
     .max_correction = 500,
-    .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.2f },
+    .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.25f },
     .last_error = 0,
     .integral = 0
 };

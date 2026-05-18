@@ -19,7 +19,7 @@ static unsigned char rx_buff[256] = {0};
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
 
-static const int16_t WEIGHTS[8] = {0, -300, -200, -50, 50, 200, 300, 0};
+static const int16_t WEIGHTS[8] = {0, -400, -250, -50, 50, 250, 400, 0};
 
 /* ---------- 用户可调参数（直角转弯） ---------- */
 #define APPROACH_PULSES   397    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
@@ -100,28 +100,75 @@ void Trackline_Calibrate_Black(void)
     Beep_Trigger(BEEP_MODE_LONG);
 }
 
-enum { PHASE_TRACK = 0, PHASE_STOP, PHASE_APPROACH, PHASE_PIVOT, PHASE_DONE };
+enum { PHASE_TRACK = 0, PHASE_STOP, PHASE_APPROACH, PHASE_PIVOT, PHASE_YAW_STRAIGHT, PHASE_DONE };
 
-static uint8_t  g_phase          = PHASE_TRACK;
-static int16_t  g_approachPulses = 0;
-static float    g_initialYaw     = 0.0f;
+static uint8_t  g_phase             = PHASE_TRACK;
+static int16_t  g_approachPulses    = 0;
+static float    g_initialYaw        = 0.0f;
+static float    g_straightTargetYaw = 0.0f;
+static uint8_t  g_cornerCount       = 0;
+static uint8_t  g_lineDebounce      = 0;
 
 void Trackline_Reset(void)
 {
-    g_phase          = PHASE_TRACK;
-    g_approachPulses = 0;
-    g_turnDir        = 0;
-    g_Trackline.integral   = 0;
-    g_Trackline.last_error = 0;
-    g_initialYaw     = yaw_angle;   /* 记录启动时的偏航角作为90°基准 */
+    g_phase             = PHASE_TRACK;
+    g_approachPulses    = 0;
+    g_turnDir           = 0;
+    g_Trackline.integral     = 0;
+    g_Trackline.last_error   = 0;
+    g_initialYaw        = yaw_angle;
+    g_straightTargetYaw = g_initialYaw;
+    g_cornerCount       = 0;
+    g_lineDebounce      = 0;
     Motor_SetSpeed(0, 0);
 }
 
 void Trackline_Task(void)
 {
-    /* ==================== 阶段4：完成停车 ==================== */
+    /* ==================== 阶段5：完成停车 ==================== */
     if (g_phase == PHASE_DONE) {
         Motor_SetSpeed(0, 0);
+        return;
+    }
+
+    /* ==================== 阶段4：yaw-hold直行过空白段 ==================== */
+    if (g_phase == PHASE_YAW_STRAIGHT) {
+        No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
+        if (Get_Normalize_For_User(&sensor, Normal)) {
+            Digtal = Get_Digtal_For_User(&sensor);
+            uint8_t line_mask = ~Digtal;
+
+            float yawError = g_straightTargetYaw - yaw_angle;
+            while (yawError > 180.0f) yawError -= 360.0f;
+            while (yawError < -180.0f) yawError += 360.0f;
+            if (yawError > -YAW_HOLD_DEADBAND && yawError < YAW_HOLD_DEADBAND)
+                yawError = 0.0f;
+            int16_t yawCorr = (int16_t)(yawError * 11.0f);
+            int16_t speedL = APPROACH_SPEED - yawCorr;
+            int16_t speedR = APPROACH_SPEED + yawCorr;
+            if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
+            if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
+            if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
+            if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
+            Motor_SpeedControl(speedL, speedR);
+
+            /* 检测下一个弯（仅左转） */
+            if ((line_mask & 0x01) && (line_mask & 0x18)) {
+                g_turnDir = 1; Beep_Trigger(BEEP_MODE_SINGLE);
+                g_phase = PHASE_STOP; return;
+            }
+            /* 中间传感器见线 → 切回PID */
+            if (line_mask & 0x18) {
+                if (++g_lineDebounce >= 5) {
+                    g_phase = PHASE_TRACK;
+                    g_lineDebounce = 0;
+                    g_Trackline.integral = 0;
+                    g_Trackline.last_error = 0;
+                }
+            } else {
+                g_lineDebounce = 0;
+            }
+        }
         return;
     }
 
@@ -130,8 +177,19 @@ void Trackline_Task(void)
         Motor_YawControl(PIVOT_SPEED);
         if (Motor_YawIsAtTarget()) {
             Motor_Brake();
-            delay_ms(30);
-            g_phase = PHASE_DONE;
+            delay_ms(50);
+            if (g_cornerCount >= 5) {
+                g_phase = PHASE_DONE;
+            } else if (g_cornerCount == 2 || g_cornerCount == 4) {
+                g_Trackline.integral = 0;
+                g_Trackline.last_error = 0;
+                g_phase = PHASE_TRACK;
+            } else {
+                Motor_A_ResetEncoder();
+                Motor_B_ResetEncoder();
+                Motor_ResetSpeedControl();
+                g_phase = PHASE_YAW_STRAIGHT;
+            }
         }
         return;
     }
@@ -160,13 +218,14 @@ void Trackline_Task(void)
 
     /* ==================== 阶段1：刚检测到直角，主动刹车稳住车身 ==================== */
     if (g_phase == PHASE_STOP) {
+        g_cornerCount++;
         Motor_SetSpeed(0, 0);
         delay_ms(80);
         g_approachTargetYaw = yaw_angle;
-        float targetYaw = g_initialYaw + ((g_turnDir == 1) ? 90.0f : -90.0f);
-        while (targetYaw > 180.0f) targetYaw -= 360.0f;
-        while (targetYaw < -180.0f) targetYaw += 360.0f;
-        Motor_YawSetTarget(targetYaw);
+        g_straightTargetYaw += ((g_turnDir == 1) ? 90.0f : -90.0f);
+        while (g_straightTargetYaw > 180.0f) g_straightTargetYaw -= 360.0f;
+        while (g_straightTargetYaw < -180.0f) g_straightTargetYaw += 360.0f;
+        Motor_YawSetTarget(g_straightTargetYaw);
         Motor_A_ResetEncoder();
         Motor_B_ResetEncoder();
         Motor_ResetSpeedControl();
@@ -217,16 +276,9 @@ void Trackline_Task(void)
     if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
     if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
 
-    /* ==================== 直角特征识别 ==================== */
-    /*  最外侧传感器(s0/s7) + 中心(s3/s4) 同时黑线 → 确认直角 */
+    /* ==================== 直角特征识别（仅左转） ==================== */
     if ((line_mask & 0x01) && (line_mask & 0x18)) {
         g_turnDir = 1;
-        Beep_Trigger(BEEP_MODE_SINGLE);
-        g_phase = PHASE_STOP;
-        return;
-    }
-    if ((line_mask & 0x80) && (line_mask & 0x18)) {
-        g_turnDir = 2;
         Beep_Trigger(BEEP_MODE_SINGLE);
         g_phase = PHASE_STOP;
         return;

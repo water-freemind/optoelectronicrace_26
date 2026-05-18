@@ -33,4 +33,14 @@ int32_t Motor_B_GetEncoderCnt(void);
 void    Motor_B_ResetEncoder(void);
 void    Motor_B_EncoderIRQHandler(void);   /* 放入 GPIOA 所在 GROUP 的 IRQHandler */
 
+/* ---------- 编码器速度环 ---------- */
+void Motor_SpeedControl(int16_t targetA, int16_t targetB);
+void Motor_ResetSpeedControl(void);
+
+/* ---------- yaw角度环 ---------- */
+void    Motor_YawReset(void);
+void    Motor_YawSetTarget(float target);
+void    Motor_YawControl(int16_t maxSpeed);
+uint8_t Motor_YawIsAtTarget(void);
+
 #endif

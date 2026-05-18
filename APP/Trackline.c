@@ -7,6 +7,7 @@
 #include <string.h>
 #include "delay.h"
 #include "Beep.h"
+#include "JY62.h"
 
 static unsigned short Anolog[8] = {0};
 static unsigned short white[8] = {1800, 1800, 1800, 1800, 1800, 1800, 1800, 1800};
@@ -18,29 +19,18 @@ static unsigned char rx_buff[256] = {0};
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
 
-static const int16_t WEIGHTS[8] = {-400, -300, -200, -50, 50, 200, 300, 400};
+static const int16_t WEIGHTS[8] = {0, -300, -200, -50, 50, 200, 300, 0};
 
-/* Right‑angle turn state machine */
-typedef enum {
-    TURN_NONE = 0,
-    TURN_LEFT,
-    TURN_RIGHT
-} TurnState_t;
+/* ---------- 用户可调参数（直角转弯） ---------- */
+#define APPROACH_PULSES   397    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
+#define APPROACH_SPEED    250    /* 直行靠近速度 */
+#define PIVOT_SPEED       1500   /* 原地旋转最高速度（角度环maxSpeed） */
 
-/* Turn execution state machine */
-static TurnState_t g_turnState   = TURN_NONE;
-static uint16_t    g_turnTimer   = 0;
-
-/* Turn detection state machine */
-typedef enum {
-    DETECT_IDLE,
-    DETECT_WATCH_LEFT,
-    DETECT_WATCH_RIGHT
-} DetectState_t;
-static DetectState_t g_detectState = DETECT_IDLE;
+static uint8_t     g_turnDir   = 0;     /* 1=左转, 2=右转 */
+static float       g_approachTargetYaw = 0.0f;/* 靠近阶段目标yaw */
 
 Trackline_Controller_t g_Trackline = {
-    .base_speed = 550,//负载750，空载550
+    .base_speed = 650,//负载750，空载650
     .max_correction = 500,
     .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.25f },
     .last_error = 0,
@@ -110,53 +100,90 @@ void Trackline_Calibrate_Black(void)
     Beep_Trigger(BEEP_MODE_LONG);
 }
 
+enum { PHASE_TRACK = 0, PHASE_STOP, PHASE_APPROACH, PHASE_PIVOT, PHASE_DONE };
+
+static uint8_t  g_phase          = PHASE_TRACK;
+static int16_t  g_approachPulses = 0;
+static float    g_initialYaw     = 0.0f;
+
+void Trackline_Reset(void)
+{
+    g_phase          = PHASE_TRACK;
+    g_approachPulses = 0;
+    g_turnDir        = 0;
+    g_Trackline.integral   = 0;
+    g_Trackline.last_error = 0;
+    g_initialYaw     = yaw_angle;   /* 记录启动时的偏航角作为90°基准 */
+    Motor_SetSpeed(0, 0);
+}
+
 void Trackline_Task(void)
 {
+    /* ==================== 阶段4：完成停车 ==================== */
+    if (g_phase == PHASE_DONE) {
+        Motor_SetSpeed(0, 0);
+        return;
+    }
+
+    /* ==================== 阶段3：yaw闭环原地旋转90° ==================== */
+    if (g_phase == PHASE_PIVOT) {
+        Motor_YawControl(PIVOT_SPEED);
+        if (Motor_YawIsAtTarget()) {
+            Motor_Brake();
+            delay_ms(30);
+            g_phase = PHASE_DONE;
+        }
+        return;
+    }
+
+    /* ==================== 阶段2：yaw航向保持直行120mm ==================== */
+    if (g_phase == PHASE_APPROACH) {
+        float yawError = yaw_angle - g_approachTargetYaw;
+        if (yawError > -YAW_HOLD_DEADBAND && yawError < YAW_HOLD_DEADBAND)
+            yawError = 0.0f;
+        int16_t yawCorr = (int16_t)(yawError * YAW_HOLD_KP);
+        int16_t speedL = APPROACH_SPEED - yawCorr;
+        int16_t speedR = APPROACH_SPEED + yawCorr;
+        if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
+        if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
+        if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
+        if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
+        Motor_SpeedControl(speedL, speedR);
+        if (Motor_A_GetEncoderCnt() >= g_approachPulses) {
+            Motor_SetSpeed(0, 0);
+            delay_ms(50);
+            Motor_ResetSpeedControl();
+            g_phase = PHASE_PIVOT;
+        }
+        return;
+    }
+
+    /* ==================== 阶段1：刚检测到直角，主动刹车稳住车身 ==================== */
+    if (g_phase == PHASE_STOP) {
+        Motor_SetSpeed(0, 0);
+        delay_ms(80);
+        g_approachTargetYaw = yaw_angle;
+        float targetYaw = g_initialYaw + ((g_turnDir == 1) ? 90.0f : -90.0f);
+        while (targetYaw > 180.0f) targetYaw -= 360.0f;
+        while (targetYaw < -180.0f) targetYaw += 360.0f;
+        Motor_YawSetTarget(targetYaw);
+        Motor_A_ResetEncoder();
+        Motor_B_ResetEncoder();
+        Motor_ResetSpeedControl();
+        g_approachPulses = APPROACH_PULSES;
+        g_phase = PHASE_APPROACH;
+        return;
+    }
+
+    /* ==================== 阶段0：正常8传感器PID巡线 ==================== */
     No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
 
     if (!Get_Normalize_For_User(&sensor, Normal))
         return;
 
     Digtal = Get_Digtal_For_User(&sensor);
+    uint8_t line_mask = ~Digtal;
 
-    uint8_t center = ((Digtal >> 2) & 0x01) + ((Digtal >> 3) & 0x01) +
-                     ((Digtal >> 4) & 0x01) + ((Digtal >> 5) & 0x01);
-
-    /* ------------------------------------------------------------------
-     *  State 1: Active turn — pivot until line reaches sensor 4
-     *  Exit: turnTimer > 5 && sensor 4 sees black
-     * ------------------------------------------------------------------ */
-    if (g_turnState != TURN_NONE) {
-        int16_t turnSpeed = g_Trackline.base_speed - g_Trackline.base_speed / 10;
-        if (g_turnState == TURN_LEFT)
-            Motor_SetSpeed(-turnSpeed, turnSpeed);
-        else
-            Motor_SetSpeed(turnSpeed, -turnSpeed);
-
-        g_turnTimer++;
-        if (g_turnTimer > 5 && (Digtal & 0x10) == 0x00) {
-            g_detectState = DETECT_IDLE;
-            g_turnState = TURN_NONE;
-            g_turnTimer = 0;
-            g_Trackline.integral = 0;
-            g_Trackline.last_error = 0;
-            Motor_SetSpeed(0, 0);
-            delay_ms(50);
-            Beep_Stop();
-            return;
-        }
-
-        if (g_turnTimer > 3000) {
-            g_detectState = DETECT_IDLE;
-            g_turnState = TURN_NONE;
-            g_turnTimer = 0;
-            Motor_SetSpeed(0, 0);
-            Beep_Stop();
-        }
-        return;
-    }
-
-    /* --- Normal PID tracking --- */
     int32_t numerator = 0;
     int32_t denominator = 0;
     for (int i = 0; i < 8; i++) {
@@ -170,72 +197,6 @@ void Trackline_Task(void)
     else
         error = g_Trackline.last_error;
 
-    /* ------------------------------------------------------------------
-     *  Two‑phase turn detection state machine
-     *  Phase 1: line pinned on edge → enter WATCH
-     *  Phase 2: line completely lost → trigger turn
-     *  If line returns to centre during WATCH → cancel (false alarm)
-     * ------------------------------------------------------------------ */
-    switch (g_detectState) {
-
-    case DETECT_IDLE:
-        /* Fallback: line lost while clearly tracking left/right */
-        if (Digtal == 0xFF) {
-            if (g_Trackline.last_error > 60) {
-                g_turnState = TURN_LEFT;
-                break;  /* fall through to turn entry */
-            }
-            if (g_Trackline.last_error < -60) {
-                g_turnState = TURN_RIGHT;
-                break;
-            }
-        }
-
-        /* Line pinned on left → start watching for loss */
-        if ((Digtal & 0xFC) == 0xFC && (Digtal & 0x03) != 0x03) {
-            g_detectState = DETECT_WATCH_LEFT;
-        }
-        /* Line pinned on right → start watching for loss */
-        else if ((Digtal & 0x1F) == 0x1F && (Digtal & 0xE0) != 0xE0) {
-            g_detectState = DETECT_WATCH_RIGHT;
-        }
-        break;
-
-    case DETECT_WATCH_LEFT:
-        if (Digtal == 0xFF) {
-            g_turnState = TURN_LEFT;
-            break;
-        }
-        /* Line returned to centre → false alarm */
-        if (center >= 2 && (Digtal & 0x18) == 0x00) {
-            g_detectState = DETECT_IDLE;
-        }
-        break;
-
-    case DETECT_WATCH_RIGHT:
-        if (Digtal == 0xFF) {
-            g_turnState = TURN_RIGHT;
-            break;
-        }
-        if (center >= 2 && (Digtal & 0x18) == 0x00) {
-            g_detectState = DETECT_IDLE;
-        }
-        break;
-    }
-
-    /* If a turn was requested by the state machine, enter turn now */
-    if (g_turnState != TURN_NONE) {
-        g_turnTimer = 0;
-        g_detectState = DETECT_IDLE;
-        Beep_Trigger(BEEP_MODE_CONTINUOUS);
-        int16_t turnSpeed = g_Trackline.base_speed - g_Trackline.base_speed / 10;
-        if (g_turnState == TURN_LEFT)
-            Motor_SetSpeed(-turnSpeed, turnSpeed);
-        else
-            Motor_SetSpeed(turnSpeed, -turnSpeed);
-        return;
-    }
-
     int16_t P = (int16_t)(g_Trackline.pid.Kp * error);
     g_Trackline.integral += error;
     if (g_Trackline.integral > 5000)  g_Trackline.integral = 5000;
@@ -245,10 +206,8 @@ void Trackline_Task(void)
     g_Trackline.last_error = error;
 
     int16_t correction = P + I + D;
-    if (correction > g_Trackline.max_correction)
-        correction = g_Trackline.max_correction;
-    if (correction < -g_Trackline.max_correction)
-        correction = -g_Trackline.max_correction;
+    if (correction > g_Trackline.max_correction) correction = g_Trackline.max_correction;
+    if (correction < -g_Trackline.max_correction) correction = -g_Trackline.max_correction;
 
     int16_t speedL = g_Trackline.base_speed - correction;
     int16_t speedR = g_Trackline.base_speed + correction;
@@ -257,6 +216,21 @@ void Trackline_Task(void)
     if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
     if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
     if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
+
+    /* ==================== 直角特征识别 ==================== */
+    /*  最外侧传感器(s0/s7) + 中心(s3/s4) 同时黑线 → 确认直角 */
+    if ((line_mask & 0x01) && (line_mask & 0x18)) {
+        g_turnDir = 1;
+        Beep_Trigger(BEEP_MODE_SINGLE);
+        g_phase = PHASE_STOP;
+        return;
+    }
+    if ((line_mask & 0x80) && (line_mask & 0x18)) {
+        g_turnDir = 2;
+        Beep_Trigger(BEEP_MODE_SINGLE);
+        g_phase = PHASE_STOP;
+        return;
+    }
 
     Motor_SetSpeed(speedL, speedR);
 }

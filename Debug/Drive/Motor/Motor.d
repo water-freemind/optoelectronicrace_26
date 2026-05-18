@@ -83,7 +83,8 @@ Drive/Motor/Motor.o: ../Drive/Motor/Motor.c ../Drive/Motor/Motor.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
- D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h
+ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/JY62.h
 ../Drive/Motor/Motor.h:
 ti_msp_dl_config.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
@@ -168,3 +169,4 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/JY62.h:

@@ -8,6 +8,7 @@ volatile Knob_Event_t g_KnobEvent = KNOB_EVENT_NONE;
 // 按键计时器内部变量
 static uint16_t s_press_cnt = 0;
 static bool s_long_pressed = false;
+static uint8_t  s_debounce_cnt = 0;   /* 旋钮去抖计数器 */
 Easy_Menu_Input_TYPE menu_move = EASY_MENU_NONE;
 // 初始化
 void Knob_Init(void) {
@@ -15,7 +16,7 @@ void Knob_Init(void) {
     NVIC_EnableIRQ(GPIO_KNOB_INT_IRQN);
 }
 
-// 外部中断处理函数 (处理旋转，极简逻辑)
+// 外部中断处理函数 (处理旋转，含去抖)
 void Knob_EXTI_Handler(void) {
     // 获取 A 相中断状态
     uint32_t status = DL_GPIO_getEnabledInterruptStatus(GPIO_KNOB_PORT, GPIO_KNOB_A_PIN);
@@ -23,11 +24,14 @@ void Knob_EXTI_Handler(void) {
     // 只要 A 相发生下降沿中断
     if (status & GPIO_KNOB_A_PIN) {
         
-        // 直接读取 B 相的电平，判断方向 (无需任何延时防抖)
-        if (DL_GPIO_readPins(GPIO_KNOB_PORT, GPIO_KNOB_B_PIN) != 0) {
-            g_KnobEvent = KNOB_EVENT_CCW;  // B为高电平，顺时针
-        } else {
-            g_KnobEvent = KNOB_EVENT_CW; // B为低电平，逆时针
+        if (s_debounce_cnt == 0) {  /* 去抖期内不处理 */
+            // 直接读取 B 相的电平，判断方向
+            if (DL_GPIO_readPins(GPIO_KNOB_PORT, GPIO_KNOB_B_PIN) != 0) {
+                g_KnobEvent = KNOB_EVENT_CCW;  // B为高电平，顺时针
+            } else {
+                g_KnobEvent = KNOB_EVENT_CW; // B为低电平，逆时针
+            }
+            s_debounce_cnt = 5;  /* 锁定5ms去抖 */
         }
         
         // 清除中断标志位
@@ -35,8 +39,11 @@ void Knob_EXTI_Handler(void) {
     }
 }
 
-// 1ms 滴答函数 (仅用于区分长短按)
+// 1ms 滴答函数 (按键长短按 + 旋钮去抖)
 void Knob_Tick_1ms(void) {
+    /* 旋钮去抖递减 */
+    if (s_debounce_cnt > 0) s_debounce_cnt--;
+
     // 直接读取 S 相按键状态 (按下为低电平 0)
     if (DL_GPIO_readPins(GPIO_KNOB_PORT, GPIO_KNOB_S_PIN) == 0) {
         s_press_cnt++; // 按下时直接开始累加时间

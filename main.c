@@ -22,6 +22,8 @@ extern struct {
 
 int main(void)
 {
+    static uint8_t last_start = 0;
+
     SYSCFG_DL_init();
     OLED_Init();
     Knob_Init();
@@ -38,8 +40,11 @@ int main(void)
         JY62_Task();
         Easy_Menu_Display(g_SystemTick);
         if (Easy_Menu_Ui_Data.trackline__start_flag){
+            if (!last_start) { Trackline_Reset(); }
+            last_start = 1;
             Trackline_Task();
-            //Trackline_Sensor_Test();
-        }            
+        } else {
+            last_start = 0;
+        }
     }
 }

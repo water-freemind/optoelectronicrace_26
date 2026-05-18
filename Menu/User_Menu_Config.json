@@ -96,7 +96,7 @@
             },
             "children": [
               {
-                "name": "track_start",
+                "name": "start",
                 "type": "开关条目",
                 "properties": {
                   "以父级作为前缀": false,
@@ -157,6 +157,32 @@
               "周期": "100",
               "回调函数": true,
               "数据变量名": "jy62_yaw_acc_data"
+            }
+          },
+          {
+            "name": "Lspeed",
+            "type": "展示条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "初始值": "0",
+              "变量名": "Lspeed",
+              "变量类型": "int16_val",
+              "周期": "100",
+              "回调函数": true,
+              "数据变量名": "Lspeed"
+            }
+          },
+          {
+            "name": "Rspeed",
+            "type": "展示条目",
+            "properties": {
+              "以父级作为前缀": false,
+              "初始值": "0",
+              "变量名": "Rspeed",
+              "变量类型": "int16_val",
+              "周期": "100",
+              "回调函数": true,
+              "数据变量名": "Rspeed"
             }
           }
         ]

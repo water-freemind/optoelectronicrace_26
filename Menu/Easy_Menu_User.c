@@ -21,15 +21,19 @@ struct {
     unsigned char trackline__round;
     float jy62_yaw_data;
     float jy62_yaw_acc_data;
+    signed short int Lspeed;
+    signed short int Rspeed;
 } Easy_Menu_Ui_Data = {
     .Cal_white_flag = 0,
     .Cal_black_flag = 0,
-    .speed_pid__kp = 2.0f,  // matches g_Trackline.pid.Kp
-    .speed_pid__ki = 0.25f, // matches g_Trackline.pid.Kd
+    .speed_pid__kp = 0.0f,
+    .speed_pid__ki = 0.0f,
     .trackline__start_flag = 0,
     .trackline__round = 1,
     .jy62_yaw_data = 0.0f,
     .jy62_yaw_acc_data = 0.0f,
+    .Lspeed = 0,
+    .Rspeed = 0,
 };
 /* ============================================================== 页面、条目定义 ============================================================== */    
 Ordinary_Page home_page;
@@ -51,6 +55,8 @@ Ordinary_Page home_page;
     Ordinary_Page JY62_page;
         Show_Item jy62_yaw;
         Show_Item jy62_yaw_acc;
+        Show_Item Lspeed;
+        Show_Item Rspeed;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
@@ -118,6 +124,26 @@ void Jy62_Yaw_Acc_Callback(void)
     /* USER CODE END */
 }
 
+void Lspeed_Callback(void)
+{
+    /* USER CODE BEGIN */
+    static int32_t lastEncA = 0;
+    int32_t encA = Motor_A_GetEncoderCnt();
+    Easy_Menu_Ui_Data.Lspeed = (int16_t)(encA - lastEncA);
+    lastEncA = encA;
+    /* USER CODE END */
+}
+
+void Rspeed_Callback(void)
+{
+    /* USER CODE BEGIN */
+    static int32_t lastEncB = 0;
+    int32_t encB = Motor_B_GetEncoderCnt();
+    Easy_Menu_Ui_Data.Rspeed = (int16_t)(encB - lastEncB);
+    lastEncB = encB;
+    /* USER CODE END */
+}
+
 /* ============================================================== 回调函数（页面） ============================================================ */
 /* No page callbacks */
 /* =========================================================== 设置列表（普通页面） =========================================================== */
@@ -147,9 +173,11 @@ Item *trackline_items[2] = {
     ITEM(trackline__round)
 };
 
-Item *JY62_page_items[2] = {
+Item *JY62_page_items[4] = {
     ITEM(jy62_yaw),
-    ITEM(jy62_yaw_acc)
+    ITEM(jy62_yaw_acc),
+    ITEM(Lspeed),
+    ITEM(Rspeed)
 };
 
 /* ================================================================ 系统初始化 ================================================================ */
@@ -174,12 +202,14 @@ void Easy_Menu_Ui_Init(void)
         Goto_Item_Init(PAGE(Tasks), ITEM(goto__trackline), "trackline", PAGE(trackline));
 
     Ordinary_Page_Init(PAGE(Tasks), PAGE(trackline), "trackline", trackline_items, 2);
-        Switch_Item_Init(PAGE(trackline), ITEM(trackline_start), "track_start", &Easy_Menu_Ui_Data.trackline__start_flag, Trackline_Start_Callback);
+        Switch_Item_Init(PAGE(trackline), ITEM(trackline_start), "start", &Easy_Menu_Ui_Data.trackline__start_flag, Trackline_Start_Callback);
         Data_Item_Init(PAGE(trackline), ITEM(trackline__round), "round", UNSIGNED_CHAR, &Easy_Menu_Ui_Data.trackline__round, UNSIGNED_CHAR_VAL(1), 1, UNSIGNED_CHAR_VAL(0), 0, UNSIGNED_CHAR_VAL(5), 1, Trackline__Round_Callback);
 
-    Ordinary_Page_Init(PAGE(home_page), PAGE(JY62_page), "JY62", JY62_page_items, 2);
+    Ordinary_Page_Init(PAGE(home_page), PAGE(JY62_page), "JY62", JY62_page_items, 4);
         Show_Item_Init(PAGE(JY62_page), ITEM(jy62_yaw), "yaw", FLOAT, &Easy_Menu_Ui_Data.jy62_yaw_data, 100, Jy62_Yaw_Callback);
         Show_Item_Init(PAGE(JY62_page), ITEM(jy62_yaw_acc), "yaw_acc", FLOAT, &Easy_Menu_Ui_Data.jy62_yaw_acc_data, 100, Jy62_Yaw_Acc_Callback);
+        Show_Item_Init(PAGE(JY62_page), ITEM(Lspeed), "Lspeed", SIGNED_SHORT_INT, &Easy_Menu_Ui_Data.Lspeed, 100, Lspeed_Callback);
+        Show_Item_Init(PAGE(JY62_page), ITEM(Rspeed), "Rspeed", SIGNED_SHORT_INT, &Easy_Menu_Ui_Data.Rspeed, 100, Rspeed_Callback);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

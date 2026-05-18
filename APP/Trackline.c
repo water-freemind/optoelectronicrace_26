@@ -19,10 +19,10 @@ static unsigned char rx_buff[256] = {0};
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
 
-static const int16_t WEIGHTS[8] = {0, -400, -250, -50, 50, 250, 400, 0};
+static const int16_t WEIGHTS[8] = {-400, -250, -150, -50, 50, 150, 250, 400};
 
 /* ---------- 用户可调参数（直角转弯） ---------- */
-#define APPROACH_PULSES   397    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
+#define APPROACH_PULSES   425    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
 #define APPROACH_SPEED    250    /* 直行靠近速度 */
 #define PIVOT_SPEED       1500   /* 原地旋转最高速度（角度环maxSpeed） */
 
@@ -32,7 +32,7 @@ static float       g_approachTargetYaw = 0.0f;/* 靠近阶段目标yaw */
 Trackline_Controller_t g_Trackline = {
     .base_speed = 650,//负载750，空载650
     .max_correction = 500,
-    .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.25f },
+    .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.26f },
     .last_error = 0,
     .integral = 0
 };
@@ -210,6 +210,7 @@ void Trackline_Task(void)
         if (Motor_A_GetEncoderCnt() >= g_approachPulses) {
             Motor_SetSpeed(0, 0);
             delay_ms(50);
+            
             Motor_ResetSpeedControl();
             g_phase = PHASE_PIVOT;
         }

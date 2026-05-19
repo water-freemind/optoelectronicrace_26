@@ -30,6 +30,7 @@ typedef struct {
 } Trackline_Controller_t;
 
 extern Trackline_Controller_t g_Trackline;
+extern uint8_t g_laps;
 
 void Trackline_Init(void);
 void Trackline_Reset(void);

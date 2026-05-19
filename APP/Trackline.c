@@ -27,6 +27,8 @@ static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 #define PIVOT_SPEED          1500   /* 原地旋转最高速度（角度环maxSpeed） */
 #define LINE_NORM_TRESHOLD   2400     /* 归一化中线判断阈值 0~4096，<此值视为黑线 */
 
+uint8_t g_laps = 1;
+
 static uint8_t     g_turnDir   = 0;     /* 1=左转, 2=右转 */
 static float       g_approachTargetYaw = 0.0f;/* 靠近阶段目标yaw */
 
@@ -165,6 +167,12 @@ void Trackline_Task(void)
 
             /* 检测下一个弯（仅左转） */
             if ((line_mask & 0x01) && (line_mask & 0x18)) {
+                if (g_cornerCount >= g_laps * 4) {
+                    Motor_SetSpeed(0, 0);
+                    Beep_Trigger(BEEP_MODE_LONG);
+                    g_phase = PHASE_DONE;
+                    return;
+                }
                 g_turnDir = 1; Beep_Trigger(BEEP_MODE_SINGLE);
                 g_phase = PHASE_STOP; return;
             }
@@ -187,43 +195,46 @@ void Trackline_Task(void)
     if (g_phase == PHASE_PIVOT) {
         Motor_YawControl(PIVOT_SPEED);
 
-        /* 弯道2/4：传感器引导旋转，中间传感器见线即停 */
-        if (g_cornerCount == 2 || g_cornerCount == 4) {
-            No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
-            if (Get_Normalize_For_User(&sensor, Normal)) {
-                uint8_t line_mask = line_mask_from_normal(Normal);
-                if (line_mask & 0x18) {
+        /* 弯道2/4（每圈第2、4个弯）：传感器引导旋转，中间传感器见线即停 */
+        {
+            uint8_t pos = (g_cornerCount - 1) % 5 + 1;
+            if (pos == 2 || pos == 4) {
+                No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
+                if (Get_Normalize_For_User(&sensor, Normal)) {
+                    uint8_t line_mask = line_mask_from_normal(Normal);
+                    if (line_mask & 0x18) {
+                        Motor_Brake();
+                        delay_ms(50);
+                        g_Trackline.integral = 0;
+                        g_Trackline.last_error = 0;
+                        g_phase = PHASE_TRACK;
+                        return;
+                    }
+                }
+                /* 兜底：±10°内仍未找到线，切到YAW_STRAIGHT盲行 */
+                float yawErr = g_straightTargetYaw - yaw_angle;
+                while (yawErr > 180.0f) yawErr -= 360.0f;
+                while (yawErr < -180.0f) yawErr += 360.0f;
+                float absYawErr = yawErr > 0 ? yawErr : -yawErr;
+                if (absYawErr < 10.0f) {
                     Motor_Brake();
                     delay_ms(50);
                     g_Trackline.integral = 0;
                     g_Trackline.last_error = 0;
-                    g_phase = PHASE_TRACK;
-                    return;
+                    Motor_A_ResetEncoder();
+                    Motor_B_ResetEncoder();
+                    Motor_ResetSpeedControl();
+                    g_phase = PHASE_YAW_STRAIGHT;
                 }
+                return;
             }
-            /* 兜底：±10°内仍未找到线，切到YAW_STRAIGHT盲行 */
-            float yawErr = g_straightTargetYaw - yaw_angle;
-            while (yawErr > 180.0f) yawErr -= 360.0f;
-            while (yawErr < -180.0f) yawErr += 360.0f;
-            float absYawErr = yawErr > 0 ? yawErr : -yawErr;
-            if (absYawErr < 10.0f) {
-                Motor_Brake();
-                delay_ms(50);
-                g_Trackline.integral = 0;
-                g_Trackline.last_error = 0;
-                Motor_A_ResetEncoder();
-                Motor_B_ResetEncoder();
-                Motor_ResetSpeedControl();
-                g_phase = PHASE_YAW_STRAIGHT;
-            }
-            return;
         }
 
         /* 弯道1/3/5：yaw闭环旋转到目标角度 */
         if (Motor_YawIsAtTarget()) {
             Motor_Brake();
             delay_ms(50);
-            if (g_cornerCount >= 5) {
+            if (g_cornerCount >= (g_laps * 4 + 1)) {
                 g_phase = PHASE_DONE;
             } else {
                 Motor_A_ResetEncoder();
@@ -319,6 +330,12 @@ void Trackline_Task(void)
 
     /* ==================== 直角特征识别（仅左转） ==================== */
     if ((line_mask & 0x01) && (line_mask & 0x18)) {
+        if (g_cornerCount >= g_laps * 4) {
+            Motor_SetSpeed(0, 0);
+            Beep_Trigger(BEEP_MODE_LONG);
+            g_phase = PHASE_DONE;
+            return;
+        }
         g_turnDir = 1;
         Beep_Trigger(BEEP_MODE_SINGLE);
         g_phase = PHASE_STOP;

@@ -105,7 +105,8 @@ void Trackline_Start_Callback(unsigned char data)
 void Trackline__Round_Callback(void *data) // *((unsigned char*)data)
 {
     /* USER CODE BEGIN */
-
+    g_laps = Easy_Menu_Ui_Data.trackline__round;
+    if (g_laps < 1) g_laps = 1;
     /* USER CODE END */
 }
 

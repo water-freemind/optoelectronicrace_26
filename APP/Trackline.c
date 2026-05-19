@@ -22,9 +22,10 @@ static unsigned char Digtal;
 static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 
 /* ---------- 用户可调参数（直角转弯） ---------- */
-#define APPROACH_PULSES   410    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
+#define APPROACH_PULSES   425    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
 #define APPROACH_SPEED    250    /* 直行靠近速度 */
-#define PIVOT_SPEED       1500   /* 原地旋转最高速度（角度环maxSpeed） */
+#define PIVOT_SPEED          1500   /* 原地旋转最高速度（角度环maxSpeed） */
+#define LINE_NORM_TRESHOLD   2400     /* 归一化中线判断阈值 0~4096，<此值视为黑线 */
 
 static uint8_t     g_turnDir   = 0;     /* 1=左转, 2=右转 */
 static float       g_approachTargetYaw = 0.0f;/* 靠近阶段目标yaw */
@@ -123,6 +124,17 @@ void Trackline_Reset(void)
     Motor_SetSpeed(0, 0);
 }
 
+static uint8_t line_mask_from_normal(unsigned short *normal)
+{
+    uint8_t mask = 0;
+    int i;
+    for (i = 0; i < 8; i++) {
+        if (normal[i] < LINE_NORM_TRESHOLD)
+            mask |= (1 << i);
+    }
+    return mask;
+}
+
 void Trackline_Task(void)
 {
     /* ==================== 阶段5：完成停车 ==================== */
@@ -135,8 +147,7 @@ void Trackline_Task(void)
     if (g_phase == PHASE_YAW_STRAIGHT) {
         No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
         if (Get_Normalize_For_User(&sensor, Normal)) {
-            Digtal = Get_Digtal_For_User(&sensor);
-            uint8_t line_mask = ~Digtal;
+            uint8_t line_mask = line_mask_from_normal(Normal);
 
             float yawError = g_straightTargetYaw - yaw_angle;
             while (yawError > 180.0f) yawError -= 360.0f;
@@ -180,8 +191,7 @@ void Trackline_Task(void)
         if (g_cornerCount == 2 || g_cornerCount == 4) {
             No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
             if (Get_Normalize_For_User(&sensor, Normal)) {
-                Digtal = Get_Digtal_For_User(&sensor);
-                uint8_t line_mask = ~Digtal;
+                uint8_t line_mask = line_mask_from_normal(Normal);
                 if (line_mask & 0x18) {
                     Motor_Brake();
                     delay_ms(50);
@@ -272,8 +282,7 @@ void Trackline_Task(void)
     if (!Get_Normalize_For_User(&sensor, Normal))
         return;
 
-    Digtal = Get_Digtal_For_User(&sensor);
-    uint8_t line_mask = ~Digtal;
+    uint8_t line_mask = line_mask_from_normal(Normal);
 
     int32_t numerator = 0;
     int32_t denominator = 0;

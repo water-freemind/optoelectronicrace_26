@@ -19,10 +19,10 @@ static unsigned char rx_buff[256] = {0};
 static No_MCU_Sensor sensor;
 static unsigned char Digtal;
 
-static const int16_t WEIGHTS[8] = {-400, -250, -150, -50, 50, 150, 250, 400};
+static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 
 /* ---------- 用户可调参数（直角转弯） ---------- */
-#define APPROACH_PULSES   425    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
+#define APPROACH_PULSES   410    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
 #define APPROACH_SPEED    250    /* 直行靠近速度 */
 #define PIVOT_SPEED       1500   /* 原地旋转最高速度（角度环maxSpeed） */
 
@@ -32,8 +32,8 @@ static float       g_approachTargetYaw = 0.0f;/* 靠近阶段目标yaw */
 Trackline_Controller_t g_Trackline = {
     .base_speed = 650,//负载750，空载650
     .max_correction = 500,
-    .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.26f },
-    .last_error = 0,
+    .pid = { .Kp = 2.0f, .Ki = 0.01f, .Kd = 0.25f },
+    .last_error = 0,   
     .integral = 0
 };
 
@@ -172,18 +172,49 @@ void Trackline_Task(void)
         return;
     }
 
-    /* ==================== 阶段3：yaw闭环原地旋转90° ==================== */
+    /* ==================== 阶段3：yaw闭环原地旋转 ==================== */
     if (g_phase == PHASE_PIVOT) {
         Motor_YawControl(PIVOT_SPEED);
+
+        /* 弯道2/4：传感器引导旋转，中间传感器见线即停 */
+        if (g_cornerCount == 2 || g_cornerCount == 4) {
+            No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
+            if (Get_Normalize_For_User(&sensor, Normal)) {
+                Digtal = Get_Digtal_For_User(&sensor);
+                uint8_t line_mask = ~Digtal;
+                if (line_mask & 0x18) {
+                    Motor_Brake();
+                    delay_ms(50);
+                    g_Trackline.integral = 0;
+                    g_Trackline.last_error = 0;
+                    g_phase = PHASE_TRACK;
+                    return;
+                }
+            }
+            /* 兜底：±10°内仍未找到线，切到YAW_STRAIGHT盲行 */
+            float yawErr = g_straightTargetYaw - yaw_angle;
+            while (yawErr > 180.0f) yawErr -= 360.0f;
+            while (yawErr < -180.0f) yawErr += 360.0f;
+            float absYawErr = yawErr > 0 ? yawErr : -yawErr;
+            if (absYawErr < 10.0f) {
+                Motor_Brake();
+                delay_ms(50);
+                g_Trackline.integral = 0;
+                g_Trackline.last_error = 0;
+                Motor_A_ResetEncoder();
+                Motor_B_ResetEncoder();
+                Motor_ResetSpeedControl();
+                g_phase = PHASE_YAW_STRAIGHT;
+            }
+            return;
+        }
+
+        /* 弯道1/3/5：yaw闭环旋转到目标角度 */
         if (Motor_YawIsAtTarget()) {
             Motor_Brake();
             delay_ms(50);
             if (g_cornerCount >= 5) {
                 g_phase = PHASE_DONE;
-            } else if (g_cornerCount == 2 || g_cornerCount == 4) {
-                g_Trackline.integral = 0;
-                g_Trackline.last_error = 0;
-                g_phase = PHASE_TRACK;
             } else {
                 Motor_A_ResetEncoder();
                 Motor_B_ResetEncoder();

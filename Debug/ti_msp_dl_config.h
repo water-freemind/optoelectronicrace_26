@@ -196,6 +196,12 @@ extern "C" {
 /* Defines for PIN: GPIOA.7 with pinCMx 14 on package pin 13 */
 #define GPIO_BEEP_PIN_PIN                                        (DL_GPIO_PIN_7)
 #define GPIO_BEEP_PIN_IOMUX                                      (IOMUX_PINCM14)
+/* Port definition for Pin Group GPIO_Laser */
+#define GPIO_Laser_PORT                                                  (GPIOB)
+
+/* Defines for ctrl: GPIOB.9 with pinCMx 26 on package pin 23 */
+#define GPIO_Laser_ctrl_PIN                                      (DL_GPIO_PIN_9)
+#define GPIO_Laser_ctrl_IOMUX                                    (IOMUX_PINCM26)
 /* Port definition for Pin Group GPIO_OLED */
 #define GPIO_OLED_PORT                                                   (GPIOA)
 

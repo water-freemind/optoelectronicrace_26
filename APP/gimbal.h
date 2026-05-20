@@ -48,6 +48,13 @@ void Gimbal_Gozero(uint8_t addr, bool sync);
 void Gimbal_MovePosition(uint8_t addr, int32_t pos, uint16_t speed, uint8_t acc, bool sync);
 void Gimbal_Stop(uint8_t addr);
 
+/* ========== 命令超时 ========== */
+#define GIMBAL_CMD_TIMEOUT_MS  1000
+bool Gimbal_CheckTimeout(uint32_t timeout_ms);
+
+/* ========== 方向判断 ========== */
+int8_t Gimbal_GetPanDirection(void);
+
 /* ========== 应用层接口 ========== */
 void Gimbal_Enable_All(void);
 void Gimbal_Gozero_All(void);

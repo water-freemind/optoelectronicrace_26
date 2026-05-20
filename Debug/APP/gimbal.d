@@ -85,7 +85,7 @@ APP/gimbal.o: ../APP/gimbal.c ../APP/gimbal.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h \
  D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h
+ ../APP/JY62.h D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h
 ../APP/gimbal.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/Uart.h:
 ti_msp_dl_config.h:
@@ -171,4 +171,5 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_vref.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/dl_wwdt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_interrupt.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
+../APP/JY62.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/BSP/delay.h:

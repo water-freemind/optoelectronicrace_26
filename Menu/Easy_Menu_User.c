@@ -8,6 +8,8 @@
 
 #include "Trackline.h"
 #include "JY62.h"
+#include "gimbal.h"
+#include "Laser.h"
 
 /* USER CODE PUBLIC END */
 
@@ -15,10 +17,14 @@
 struct {
     unsigned char Cal_white_flag;
     unsigned char Cal_black_flag;
-    float speed_pid__kp;
-    float speed_pid__ki;
     unsigned char trackline__start_flag;
     unsigned char trackline__round;
+    unsigned char still_aim;
+    unsigned char still_aim_draw_Rectangle__data;
+    unsigned char move_aim_center_round;
+    unsigned char centeraim__start__data;
+    float speed_pid__kp;
+    float speed_pid__ki;
     float jy62_yaw_data;
     float jy62_yaw_acc_data;
     signed short int Lspeed;
@@ -26,10 +32,14 @@ struct {
 } Easy_Menu_Ui_Data = {
     .Cal_white_flag = 0,
     .Cal_black_flag = 0,
-    .speed_pid__kp = 0.0f,
-    .speed_pid__ki = 0.0f,
     .trackline__start_flag = 0,
     .trackline__round = 1,
+    .still_aim = 0,
+    .still_aim_draw_Rectangle__data = 0,
+    .move_aim_center_round = 0,
+    .centeraim__start__data = 0,
+    .speed_pid__kp = 0.0f,
+    .speed_pid__ki = 0.0f,
     .jy62_yaw_data = 0.0f,
     .jy62_yaw_acc_data = 0.0f,
     .Lspeed = 0,
@@ -38,20 +48,28 @@ struct {
 /* ============================================================== 页面、条目定义 ============================================================== */    
 Ordinary_Page home_page;
     Goto_Item goto__Cal_page;
+    Goto_Item goto__trackline;
+    Goto_Item goto__still_aim_task;
+    Goto_Item goto__mov_aim;
     Goto_Item goto__trackline_pid__page;
-    Goto_Item goto__Tasks;
     Goto_Item goto__JY62_page;
     Ordinary_Page Cal_page;
         Switch_Item Cal_white;
         Switch_Item Cal_black;
+    Ordinary_Page trackline;
+        Switch_Item trackline_start;
+        Data_Item trackline__round;
+    Ordinary_Page still_aim_task;
+        Switch_Item still_aim;
+        Switch_Item still_aim_draw_Rectangle;
+    Ordinary_Page mov_aim;
+        Goto_Item goto__centeraim;
+        Ordinary_Page centeraim;
+            Data_Item center_aim_round;
+            Switch_Item centeraim__start;
     Ordinary_Page trackline_pid__page;
         Data_Item track_pid__kp;
         Data_Item track_pid__kd;
-    Ordinary_Page Tasks;
-        Goto_Item goto__trackline;
-        Ordinary_Page trackline;
-            Switch_Item trackline_start;
-            Data_Item trackline__round;
     Ordinary_Page JY62_page;
         Show_Item jy62_yaw;
         Show_Item jy62_yaw_acc;
@@ -80,20 +98,6 @@ void Cal_Black_Callback(unsigned char data)
     /* USER CODE END */
 }
 
-void Track_Pid__Kp_Callback(void *data) // *((float*)data)
-{
-    /* USER CODE BEGIN */
-    g_Trackline.pid.Kp = *(float*)data;
-    /* USER CODE END */
-}
-
-void Track_Pid__Kd_Callback(void *data) // *((float*)data)
-{
-    /* USER CODE BEGIN */
-    g_Trackline.pid.Kd = *(float*)data;
-    /* USER CODE END */
-}
-
 void Trackline_Start_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
@@ -107,6 +111,51 @@ void Trackline__Round_Callback(void *data) // *((unsigned char*)data)
     /* USER CODE BEGIN */
     g_laps = Easy_Menu_Ui_Data.trackline__round;
     if (g_laps < 1) g_laps = 1;
+    /* USER CODE END */
+}
+
+void Still_Aim_Callback(unsigned char data)
+{
+    /* USER CODE BEGIN */
+    if (!data) return;
+    int8_t dir = Gimbal_GetPanDirection();
+    if (dir == 0) return;
+    Gimbal_MovePosition(GIMBAL_ADDR_X, dir * 20000, 800, 50, false);
+    /* USER CODE END */
+}
+
+void Still_Aim_Draw_Rectangle_Callback(unsigned char data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
+void Center_Aim_Round_Callback(void *data) // *((unsigned char*)data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
+void Centeraim__Start_Callback(unsigned char data)
+{
+    /* USER CODE BEGIN */
+
+    /* USER CODE END */
+}
+
+void Track_Pid__Kp_Callback(void *data) // *((float*)data)
+{
+    /* USER CODE BEGIN */
+    g_Trackline.pid.Kp = *(float*)data;
+    /* USER CODE END */
+}
+
+void Track_Pid__Kd_Callback(void *data) // *((float*)data)
+{
+    /* USER CODE BEGIN */
+    g_Trackline.pid.Kd = *(float*)data;
     /* USER CODE END */
 }
 
@@ -148,10 +197,12 @@ void Rspeed_Callback(void)
 /* ============================================================== 回调函数（页面） ============================================================ */
 /* No page callbacks */
 /* =========================================================== 设置列表（普通页面） =========================================================== */
-Item *home_page_items[4] = {
+Item *home_page_items[6] = {
     ITEM(goto__Cal_page),
+    ITEM(goto__trackline),
+    ITEM(goto__still_aim_task),
+    ITEM(goto__mov_aim),
     ITEM(goto__trackline_pid__page),
-    ITEM(goto__Tasks),
     ITEM(goto__JY62_page)
 };
 
@@ -160,18 +211,28 @@ Item *Cal_page_items[2] = {
     ITEM(Cal_black)
 };
 
-Item *trackline_pid__page_items[2] = {
-    ITEM(track_pid__kp),
-    ITEM(track_pid__kd)
-};
-
-Item *Tasks_items[1] = {
-    ITEM(goto__trackline)
-};
-
 Item *trackline_items[2] = {
     ITEM(trackline_start),
     ITEM(trackline__round)
+};
+
+Item *still_aim_task_items[2] = {
+    ITEM(still_aim),
+    ITEM(still_aim_draw_Rectangle)
+};
+
+Item *mov_aim_items[1] = {
+    ITEM(goto__centeraim)
+};
+
+Item *centeraim_items[2] = {
+    ITEM(center_aim_round),
+    ITEM(centeraim__start)
+};
+
+Item *trackline_pid__page_items[2] = {
+    ITEM(track_pid__kp),
+    ITEM(track_pid__kd)
 };
 
 Item *JY62_page_items[4] = {
@@ -185,26 +246,36 @@ Item *JY62_page_items[4] = {
 void Easy_Menu_Ui_Init(void)
 {
 
-    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 4);
+    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 6);
         Goto_Item_Init(PAGE(home_page), ITEM(goto__Cal_page), "Cal_sensor", PAGE(Cal_page));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__trackline), "trackline", PAGE(trackline));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__still_aim_task), "still_aim", PAGE(still_aim_task));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__mov_aim), "mov_aim", PAGE(mov_aim));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__trackline_pid__page), "trackline_pid", PAGE(trackline_pid__page));
-        Goto_Item_Init(PAGE(home_page), ITEM(goto__Tasks), "tasks__page", PAGE(Tasks));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__JY62_page), "JY62", PAGE(JY62_page));
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(Cal_page), "Cal_sensor", Cal_page_items, 2);
         Switch_Item_Init(PAGE(Cal_page), ITEM(Cal_white), "Cal_white", &Easy_Menu_Ui_Data.Cal_white_flag, Cal_White_Callback);
         Switch_Item_Init(PAGE(Cal_page), ITEM(Cal_black), "Cal_black", &Easy_Menu_Ui_Data.Cal_black_flag, Cal_Black_Callback);
 
+    Ordinary_Page_Init(PAGE(home_page), PAGE(trackline), "trackline", trackline_items, 2);
+        Switch_Item_Init(PAGE(trackline), ITEM(trackline_start), "start", &Easy_Menu_Ui_Data.trackline__start_flag, Trackline_Start_Callback);
+        Data_Item_Init(PAGE(trackline), ITEM(trackline__round), "round", UNSIGNED_CHAR, &Easy_Menu_Ui_Data.trackline__round, UNSIGNED_CHAR_VAL(1), 1, UNSIGNED_CHAR_VAL(0), 0, UNSIGNED_CHAR_VAL(5), 1, Trackline__Round_Callback);
+
+    Ordinary_Page_Init(PAGE(home_page), PAGE(still_aim_task), "still_aim", still_aim_task_items, 2);
+        Switch_Item_Init(PAGE(still_aim_task), ITEM(still_aim), "still_aim", &Easy_Menu_Ui_Data.still_aim, Still_Aim_Callback);
+        Switch_Item_Init(PAGE(still_aim_task), ITEM(still_aim_draw_Rectangle), "draw_Rectangle", &Easy_Menu_Ui_Data.still_aim_draw_Rectangle__data, Still_Aim_Draw_Rectangle_Callback);
+
+    Ordinary_Page_Init(PAGE(home_page), PAGE(mov_aim), "mov_aim", mov_aim_items, 1);
+        Goto_Item_Init(PAGE(mov_aim), ITEM(goto__centeraim), "centeraim", PAGE(centeraim));
+
+    Ordinary_Page_Init(PAGE(mov_aim), PAGE(centeraim), "centeraim", centeraim_items, 2);
+        Data_Item_Init(PAGE(centeraim), ITEM(center_aim_round), "round", UNSIGNED_CHAR, &Easy_Menu_Ui_Data.move_aim_center_round, UNSIGNED_CHAR_VAL(1), 1, UNSIGNED_CHAR_VAL(0), 1, UNSIGNED_CHAR_VAL(5), 1, Center_Aim_Round_Callback);
+        Switch_Item_Init(PAGE(centeraim), ITEM(centeraim__start), "start", &Easy_Menu_Ui_Data.centeraim__start__data, Centeraim__Start_Callback);
+
     Ordinary_Page_Init(PAGE(home_page), PAGE(trackline_pid__page), "trackline_pid", trackline_pid__page_items, 2);
         Data_Item_Init(PAGE(trackline_pid__page), ITEM(track_pid__kp), "track_kp", FLOAT, &Easy_Menu_Ui_Data.speed_pid__kp, FLOAT_VAL(0.02), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Track_Pid__Kp_Callback);
         Data_Item_Init(PAGE(trackline_pid__page), ITEM(track_pid__kd), "track_kd", FLOAT, &Easy_Menu_Ui_Data.speed_pid__ki, FLOAT_VAL(0.02), 1, FLOAT_VAL(0), 0, FLOAT_VAL(0), 0, Track_Pid__Kd_Callback);
-
-    Ordinary_Page_Init(PAGE(home_page), PAGE(Tasks), "tasks__page", Tasks_items, 1);
-        Goto_Item_Init(PAGE(Tasks), ITEM(goto__trackline), "trackline", PAGE(trackline));
-
-    Ordinary_Page_Init(PAGE(Tasks), PAGE(trackline), "trackline", trackline_items, 2);
-        Switch_Item_Init(PAGE(trackline), ITEM(trackline_start), "start", &Easy_Menu_Ui_Data.trackline__start_flag, Trackline_Start_Callback);
-        Data_Item_Init(PAGE(trackline), ITEM(trackline__round), "round", UNSIGNED_CHAR, &Easy_Menu_Ui_Data.trackline__round, UNSIGNED_CHAR_VAL(1), 1, UNSIGNED_CHAR_VAL(0), 0, UNSIGNED_CHAR_VAL(5), 1, Trackline__Round_Callback);
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(JY62_page), "JY62", JY62_page_items, 4);
         Show_Item_Init(PAGE(JY62_page), ITEM(jy62_yaw), "yaw", FLOAT, &Easy_Menu_Ui_Data.jy62_yaw_data, 100, Jy62_Yaw_Callback);

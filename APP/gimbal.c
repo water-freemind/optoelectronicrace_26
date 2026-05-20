@@ -1,5 +1,6 @@
 #include "gimbal.h"
 #include "Uart.h"
+#include "JY62.h"
 #include "delay.h"
 #include <string.h>
 
@@ -10,6 +11,7 @@ volatile bool g_gimbal_y_done = false;
 /* ======================== DMA RX 状态 ====================== */
 static uint8_t  g_rx_buf[32];
 static volatile bool g_rx_capturing;
+static volatile uint32_t g_rx_start_tick;
 
 /* ======================== 私有函数声明 ===================== */
 static void gimbal_send_frame(uint8_t addr, const uint8_t *data, uint8_t len);
@@ -74,6 +76,7 @@ static void gimbal_start_rx_capture(void)
                            sizeof(g_rx_buf));
     DL_DMA_enableChannel(DMA, GIMBAL_UART_RX_DMA_CHAN);
     g_rx_capturing = true;
+    g_rx_start_tick = g_SystemTick;
 }
 
 /* ================= 解析电机应答帧 ========================== */
@@ -95,6 +98,7 @@ static void gimbal_parse_response(void)
         g_gimbal_y_done = true;
     }
     g_rx_capturing = false;
+    g_rx_start_tick = 0;
 }
 
 /* ==================== UART0中断（RX超时）=================== */
@@ -192,6 +196,31 @@ void Gimbal_Stop(uint8_t addr)
     uart0_send_char(GIMBAL_FRAME_END);
     delay_ms(2);
     gimbal_start_rx_capture();
+}
+
+/* ==================== 命令超时保护 ========================== */
+bool Gimbal_CheckTimeout(uint32_t timeout_ms)
+{
+    if (!g_rx_capturing) return false;
+    if ((g_SystemTick - g_rx_start_tick) < timeout_ms) return false;
+
+    DL_DMA_disableChannel(DMA, GIMBAL_UART_RX_DMA_CHAN);
+    gimbal_flush_rx();
+    g_rx_capturing = false;
+    g_rx_start_tick = 0;
+    return true;
+}
+
+/* ==================== 方向判断 ========================== */
+int8_t Gimbal_GetPanDirection(void)
+{
+    float err = 0.0f - yaw_angle;
+    while (err > 180.0f) err -= 360.0f;
+    while (err < -180.0f) err += 360.0f;
+
+    if (err > 1.0f)  return 1;
+    if (err < -1.0f) return -1;
+    return 0;
 }
 
 /* ==================== 应用层接口 ========================== */

@@ -89,7 +89,9 @@ Menu/Easy_Menu_User.o: ../Menu/Easy_Menu_User.c ../Menu/Easy_Menu_User.h \
  ../Menu/Easy_Menu_Item.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Trackline.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/JY62.h
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/JY62.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/gimbal.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Laser.h
 ../Menu/Easy_Menu_User.h:
 ../Menu/Easy_Menu_Core.h:
 ../Menu/Easy_Menu_Page.h:
@@ -182,3 +184,5 @@ D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/driverlib/m0p/dl_systick.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Trackline.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/JY62.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/gimbal.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Laser.h:

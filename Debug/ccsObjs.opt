@@ -2,6 +2,7 @@
 "./ti_msp_dl_config.o"
 "./startup_mspm0g350x_ticlang.o"
 "./APP/JY62.o"
+"./APP/Laser.o"
 "./APP/Trackline.o"
 "./APP/gimbal.o"
 "./BSP/Uart.o"

@@ -6,18 +6,23 @@
 #include "Drive/Motor/Motor.h"
 #include "APP/Trackline.h"
 #include "APP/JY62.h"
+#include "APP/Laser.h"
+#include "APP/gimbal.h"
 #include "Beep.h"
 #include <stdint.h>
 
 extern struct {
     unsigned char Cal_white_flag;
     unsigned char Cal_black_flag;
-    float speed_pid__kp;
-    float speed_pid__ki;
     unsigned char trackline__start_flag;
     unsigned char trackline__round;
+    unsigned char still_aim;
+    float speed_pid__kp;
+    float speed_pid__ki;
     float jy62_yaw_data;
-    unsigned char jy62_yaw_acc_data;
+    float jy62_yaw_acc_data;
+    signed short int Lspeed;
+    signed short int Rspeed;
 } Easy_Menu_Ui_Data;
 
 int main(void)
@@ -31,6 +36,8 @@ int main(void)
     Motor_Init();
     JY62_Init();
     Trackline_Init();
+    Laser_Init();
+    Gimbal_Init();
 
     Easy_Menu_Ui_Data.speed_pid__kp = g_Trackline.pid.Kp;
     Easy_Menu_Ui_Data.speed_pid__ki = g_Trackline.pid.Kd;

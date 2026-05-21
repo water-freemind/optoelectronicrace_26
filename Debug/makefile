@@ -17,6 +17,7 @@ ORDERED_OBJS += \
 "./APP/Laser.o" \
 "./APP/Trackline.o" \
 "./APP/gimbal.o" \
+"./APP/k230_track.o" \
 "./BSP/Uart.o" \
 "./BSP/delay.o" \
 "./Drive/Beep/Beep.o" \
@@ -170,8 +171,8 @@ optoelectronicrace_26.out: $(OBJS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "APP\JY62.o" "APP\Laser.o" "APP\Trackline.o" "APP\gimbal.o" "BSP\Uart.o" "BSP\delay.o" "Drive\Beep\Beep.o" "Drive\Grayscale_Sensor\ADC.o" "Drive\Grayscale_Sensor\No_Mcu_Ganv_Grayscale_Sensor.o" "Drive\Knob\Knob_drv.o" "Drive\Motor\Motor.o" "Drive\OLED_Drv\OLED.o" "Menu\Easy_Menu.o" "Menu\Easy_Menu_Core.o" "Menu\Easy_Menu_Item.o" "Menu\Easy_Menu_Page.o" "Menu\Easy_Menu_User.o" 
-	-$(RM) "main.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "APP\JY62.d" "APP\Laser.d" "APP\Trackline.d" "APP\gimbal.d" "BSP\Uart.d" "BSP\delay.d" "Drive\Beep\Beep.d" "Drive\Grayscale_Sensor\ADC.d" "Drive\Grayscale_Sensor\No_Mcu_Ganv_Grayscale_Sensor.d" "Drive\Knob\Knob_drv.d" "Drive\Motor\Motor.d" "Drive\OLED_Drv\OLED.d" "Menu\Easy_Menu.d" "Menu\Easy_Menu_Core.d" "Menu\Easy_Menu_Item.d" "Menu\Easy_Menu_Page.d" "Menu\Easy_Menu_User.d" 
+	-$(RM) "main.o" "ti_msp_dl_config.o" "startup_mspm0g350x_ticlang.o" "APP\JY62.o" "APP\Laser.o" "APP\Trackline.o" "APP\gimbal.o" "APP\k230_track.o" "BSP\Uart.o" "BSP\delay.o" "Drive\Beep\Beep.o" "Drive\Grayscale_Sensor\ADC.o" "Drive\Grayscale_Sensor\No_Mcu_Ganv_Grayscale_Sensor.o" "Drive\Knob\Knob_drv.o" "Drive\Motor\Motor.o" "Drive\OLED_Drv\OLED.o" "Menu\Easy_Menu.o" "Menu\Easy_Menu_Core.o" "Menu\Easy_Menu_Item.o" "Menu\Easy_Menu_Page.o" "Menu\Easy_Menu_User.o" 
+	-$(RM) "main.d" "ti_msp_dl_config.d" "startup_mspm0g350x_ticlang.d" "APP\JY62.d" "APP\Laser.d" "APP\Trackline.d" "APP\gimbal.d" "APP\k230_track.d" "BSP\Uart.d" "BSP\delay.d" "Drive\Beep\Beep.d" "Drive\Grayscale_Sensor\ADC.d" "Drive\Grayscale_Sensor\No_Mcu_Ganv_Grayscale_Sensor.d" "Drive\Knob\Knob_drv.d" "Drive\Motor\Motor.d" "Drive\OLED_Drv\OLED.d" "Menu\Easy_Menu.d" "Menu\Easy_Menu_Core.d" "Menu\Easy_Menu_Item.d" "Menu\Easy_Menu_Page.d" "Menu\Easy_Menu_User.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

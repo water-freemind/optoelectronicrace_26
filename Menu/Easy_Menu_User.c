@@ -10,6 +10,7 @@
 #include "JY62.h"
 #include "gimbal.h"
 #include "Laser.h"
+#include "k230_track.h"
 
 /* USER CODE PUBLIC END */
 
@@ -117,10 +118,12 @@ void Trackline__Round_Callback(void *data) // *((unsigned char*)data)
 void Still_Aim_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
-    if (!data) return;
-    int8_t dir = Gimbal_GetPanDirection();
-    if (dir == 0) return;
-    Gimbal_MovePosition(GIMBAL_ADDR_X, dir * 20000, 800, 50, false);
+    if (!data) {
+        Gimbal_Stop(GIMBAL_ADDR_X);
+        Gimbal_Stop(GIMBAL_ADDR_Y);
+        Laser_Off();
+        K230_Aim_Reset();
+    }
     /* USER CODE END */
 }
 

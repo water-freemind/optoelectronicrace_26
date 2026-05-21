@@ -7,7 +7,7 @@
 #include "APP/Trackline.h"
 #include "APP/JY62.h"
 #include "APP/Laser.h"
-#include "APP/gimbal.h"
+#include "APP/k230_track.h"
 #include "Beep.h"
 #include <stdint.h>
 
@@ -30,14 +30,14 @@ int main(void)
     static uint8_t last_start = 0;
 
     SYSCFG_DL_init();
+    JY62_Init();
     OLED_Init();
     Knob_Init();
     Easy_Menu_Init(Display_Char, Display_Char_Line, NULL, NULL);
     Motor_Init();
-    JY62_Init();
     Trackline_Init();
     Laser_Init();
-    Gimbal_Init();
+    K230_Track_Init();
 
     Easy_Menu_Ui_Data.speed_pid__kp = g_Trackline.pid.Kp;
     Easy_Menu_Ui_Data.speed_pid__ki = g_Trackline.pid.Kd;
@@ -52,6 +52,9 @@ int main(void)
             Trackline_Task();
         } else {
             last_start = 0;
+        }
+        if (Easy_Menu_Ui_Data.still_aim) {
+            K230_Aim_Task();
         }
     }
 }

@@ -91,7 +91,8 @@ Menu/Easy_Menu_User.o: ../Menu/Easy_Menu_User.c ../Menu/Easy_Menu_User.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/JY62.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/gimbal.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Laser.h
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Laser.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/k230_track.h
 ../Menu/Easy_Menu_User.h:
 ../Menu/Easy_Menu_Core.h:
 ../Menu/Easy_Menu_Page.h:
@@ -186,3 +187,4 @@ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/JY62.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/gimbal.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/Laser.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/APP/k230_track.h:

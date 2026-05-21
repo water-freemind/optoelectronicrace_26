@@ -19,24 +19,8 @@
 /* 帧结尾 */
 #define GIMBAL_FRAME_END     0x6B
 
-/* 脉冲参数 (256细分, 1.8°步进电机: 200步/圈 × 256 = 51200脉冲/圈) */
-#define PULSE_PER_REV      51200.0f
-#define PULSE_PER_MM_XY    (PULSE_PER_REV / 84.0f)   /* 丝杆导程84mm */
-#define ZDT_STRETCH_MAX_PULSE 133200
-
-/* 药柜尺寸 */
-#define CABINET_HEIGHT  420
-#define CABINET_WIDTH   420
-#define CABINET_FIRST_FLOOR   0
-#define CABINET_SECOND_FLOOR  160
-#define CABINET_THIRD_FLOOR   320
-
-/* DMA通道 (UART0 RX, 使用通道1, 通道0已被ADC占用) */
-#define GIMBAL_UART_RX_DMA_CHAN  1
-
-/* 电机完成标志 */
-extern volatile bool g_gimbal_x_done;
-extern volatile bool g_gimbal_y_done;
+/* 脉冲参数 (32细分, 1.8°步进电机: 200步/圈 × 32 = 6400脉冲/圈) */
+#define PULSE_PER_REV      6400.0f
 
 /* ========== 初始化 ========== */
 void Gimbal_Init(void);
@@ -48,16 +32,8 @@ void Gimbal_Gozero(uint8_t addr, bool sync);
 void Gimbal_MovePosition(uint8_t addr, int32_t pos, uint16_t speed, uint8_t acc, bool sync);
 void Gimbal_Stop(uint8_t addr);
 
-/* ========== 命令超时 ========== */
-#define GIMBAL_CMD_TIMEOUT_MS  1000
-bool Gimbal_CheckTimeout(uint32_t timeout_ms);
-
-/* ========== 方向判断 ========== */
-int8_t Gimbal_GetPanDirection(void);
-
 /* ========== 应用层接口 ========== */
 void Gimbal_Enable_All(void);
 void Gimbal_Gozero_All(void);
-void Gimbal_MoveXY_To_mm(float x_mm, float y_mm, uint16_t speed, uint8_t acc, bool sync);
 
 #endif

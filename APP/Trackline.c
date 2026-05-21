@@ -28,14 +28,16 @@ static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 #define PIVOT_GUIDE_SPEED     600   /* 传感器引导旋转速度（2/4号弯） */
 #define LINE_NORM_TRESHOLD   2400     /* 归一化中线判断阈值 0~4096，<此值视为黑线 */
 #define YAW_STRAIGHT_MIN_ENC  170   /* 进入YAW_STRAIGHT后最小距离(脉冲)，防假角 */
+#define PIVOT_ENCODER_PULSES  358   /* 90°原地旋转单轮脉冲数 (132mm轮距×2.708) */
 
 uint8_t g_laps = 1;
 
 static uint8_t     g_turnDir   = 0;     /* 1=左转, 2=右转 */
+static int32_t      g_pivotStartEncA;     /* pos1/3/5进入pivot时的编码器起点 */
 static float       g_approachTargetYaw = 0.0f;/* 靠近阶段目标yaw */
 
 Trackline_Controller_t g_Trackline = {
-    .base_speed = 650,//负载750，空载650
+    .base_speed = 750,//负载750，空载650
     .max_correction = 500,
     .pid = { .Kp = 3.3f, .Ki = 0.02f, .Kd = 0.36f },
     .last_error = 0,   
@@ -139,6 +141,43 @@ static uint8_t line_mask_from_normal(unsigned short *normal)
     return mask;
 }
 
+static void trackline_pid_apply(unsigned short *norm)
+{
+    int32_t numerator = 0, denominator = 0;
+    for (int i = 0; i < 8; i++) {
+        numerator += (int32_t)norm[i] * WEIGHTS[i];
+        denominator += norm[i];
+    }
+
+    int16_t error;
+    if (denominator != 0)
+        error = (int16_t)(numerator / denominator);
+    else
+        error = g_Trackline.last_error;
+
+    int16_t P = (int16_t)(g_Trackline.pid.Kp * error);
+    g_Trackline.integral += error;
+    if (g_Trackline.integral > 5000)  g_Trackline.integral = 5000;
+    if (g_Trackline.integral < -5000) g_Trackline.integral = -5000;
+    int16_t I = (int16_t)(g_Trackline.pid.Ki * g_Trackline.integral);
+    int16_t D = (int16_t)(g_Trackline.pid.Kd * (error - g_Trackline.last_error));
+    g_Trackline.last_error = error;
+
+    int16_t correction = P + I + D;
+    if (correction > g_Trackline.max_correction) correction = g_Trackline.max_correction;
+    if (correction < -g_Trackline.max_correction) correction = -g_Trackline.max_correction;
+
+    int16_t speedL = g_Trackline.base_speed - correction;
+    int16_t speedR = g_Trackline.base_speed + correction;
+
+    if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
+    if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
+    if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
+    if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
+
+    Motor_SetSpeed(speedL, speedR);
+}
+
 void Trackline_Task(void)
 {
     /* ==================== 阶段5：完成停车 ==================== */
@@ -183,10 +222,11 @@ void Trackline_Task(void)
             /* 中间传感器见线 → 切回PID */
             if (line_mask & 0x18) {
                 if (++g_lineDebounce >= 1) {
-                    g_phase = PHASE_TRACK;
-                    g_lineDebounce = 0;
                     g_Trackline.integral = 0;
                     g_Trackline.last_error = 0;
+                    trackline_pid_apply(Normal);
+                    g_lineDebounce = 0;
+                    g_phase = PHASE_TRACK;
                 }
             } else {
                 g_lineDebounce = 0;
@@ -238,9 +278,13 @@ void Trackline_Task(void)
             }
         }
 
-        /* 弯道1/3/5：高速yaw闭环旋转到目标角度 */
+        /* 弯道1/3/5：高速yaw + 编码器双保险 */
         Motor_YawControl(PIVOT_SPEED);
-        if (Motor_YawIsAtTarget()) {
+
+        int32_t pivotDist = Motor_A_GetEncoderCnt() - g_pivotStartEncA;
+        if (pivotDist < 0) pivotDist = -pivotDist;
+
+        if (Motor_YawIsAtTarget() || pivotDist >= PIVOT_ENCODER_PULSES) {
             Motor_Brake();
             delay_ms(50);
             if (g_cornerCount >= (g_laps * 4 + 1)) {
@@ -273,6 +317,7 @@ void Trackline_Task(void)
             delay_ms(50);
             
             Motor_ResetSpeedControl();
+            g_pivotStartEncA = Motor_A_GetEncoderCnt();
             g_phase = PHASE_PIVOT;
         }
         return;
@@ -304,39 +349,6 @@ void Trackline_Task(void)
 
     uint8_t line_mask = line_mask_from_normal(Normal);
 
-    int32_t numerator = 0;
-    int32_t denominator = 0;
-    for (int i = 0; i < 8; i++) {
-        numerator += (int32_t)Normal[i] * WEIGHTS[i];
-        denominator += Normal[i];
-    }
-
-    int16_t error;
-    if (denominator != 0)
-        error = (int16_t)(numerator / denominator);
-    else
-        error = g_Trackline.last_error;
-
-    int16_t P = (int16_t)(g_Trackline.pid.Kp * error);
-    g_Trackline.integral += error;
-    if (g_Trackline.integral > 5000)  g_Trackline.integral = 5000;
-    if (g_Trackline.integral < -5000) g_Trackline.integral = -5000;
-    int16_t I = (int16_t)(g_Trackline.pid.Ki * g_Trackline.integral);
-    int16_t D = (int16_t)(g_Trackline.pid.Kd * (error - g_Trackline.last_error));
-    g_Trackline.last_error = error;
-
-    int16_t correction = P + I + D;
-    if (correction > g_Trackline.max_correction) correction = g_Trackline.max_correction;
-    if (correction < -g_Trackline.max_correction) correction = -g_Trackline.max_correction;
-
-    int16_t speedL = g_Trackline.base_speed - correction;
-    int16_t speedR = g_Trackline.base_speed + correction;
-
-    if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
-    if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
-    if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
-    if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
-
     /* ==================== 直角特征识别（仅左转） ==================== */
     if ((line_mask & 0x01) && (line_mask & 0x18)) {
         if (g_cornerCount >= g_laps * 4) {
@@ -351,5 +363,5 @@ void Trackline_Task(void)
         return;
     }
 
-    Motor_SetSpeed(speedL, speedR);
+    trackline_pid_apply(Normal);
 }

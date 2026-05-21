@@ -146,9 +146,9 @@ GPIO6.associatedPins[1].pin.$assign       = "PA13";
 
 GPIO7.$name                              = "GPIO_Laser";
 GPIO7.associatedPins[0].$name            = "ctrl";
+GPIO7.associatedPins[0].assignedPort     = "PORTB";
 GPIO7.associatedPins[0].internalResistor = "PULL_UP";
 GPIO7.associatedPins[0].initialValue     = "SET";
-GPIO7.associatedPins[0].assignedPort     = "PORTB";
 GPIO7.associatedPins[0].pin.$assign      = "PB9";
 
 PWM1.$name                      = "PWM_0";
@@ -199,9 +199,10 @@ UART1.rxPinConfig.$name                = "ti_driverlib_gpio_GPIOPinGeneric2";
 UART2.$name                            = "UART_0";
 UART2.targetBaudRate                   = 115200;
 UART2.enabledDMARXTriggers             = "DL_UART_DMA_INTERRUPT_RX";
+UART2.enableDMARX                      = false;
 UART2.peripheral.$assign               = "UART0";
-UART2.peripheral.rxPin.$assign         = "PA11";
-UART2.peripheral.txPin.$assign         = "PA10";
+UART2.peripheral.rxPin.$assign         = "PA31";
+UART2.peripheral.txPin.$assign         = "PA28";
 UART2.txPinConfig.direction            = scripting.forceWrite("OUTPUT");
 UART2.txPinConfig.hideOutputInversion  = scripting.forceWrite(false);
 UART2.txPinConfig.onlyInternalResistor = scripting.forceWrite(false);

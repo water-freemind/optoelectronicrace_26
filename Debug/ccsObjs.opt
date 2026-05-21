@@ -5,6 +5,7 @@
 "./APP/Laser.o"
 "./APP/Trackline.o"
 "./APP/gimbal.o"
+"./APP/k230_track.o"
 "./BSP/Uart.o"
 "./BSP/delay.o"
 "./Drive/Beep/Beep.o"

@@ -27,24 +27,24 @@ extern volatile uint8_t g_k230_new_frame;
 
 /* 追踪死区 (脉冲) */
 #define AIM_DEADBAND_X  20
-#define AIM_DEADBAND_Y  12
+#define AIM_DEADBAND_Y  15
 
 /* 指令更新间隔 (帧数, 每N帧发一次) */
-#define UPDATE_INTERVAL  5
+#define UPDATE_INTERVAL  6
 
 /* 追踪增益 (百分比, 越小越不超调) */
 #define X_TRACK_GAIN  30
-#define Y_TRACK_GAIN  100
+#define Y_TRACK_GAIN  35
 
 /* 追踪 PID (pulse空间, 定标×10) */
 #define TRACK_KP  5
 #define TRACK_KI  0
-#define TRACK_KD  30
+#define TRACK_KD  80
 #define TRACK_I_MAX  200
 
 /* 追踪速度/加速度 */
-#define AIM_SPEED  200
-#define AIM_ACC    15
+#define AIM_SPEED  400
+#define AIM_ACC    25
 
 /* Y轴限位 (脉冲) */
 #define Y_MIN_PULSE  -190

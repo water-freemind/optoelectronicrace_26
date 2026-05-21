@@ -46,7 +46,8 @@ void Gimbal_Gozero(uint8_t addr, bool sync)
 }
 
 void Gimbal_MovePosition(uint8_t addr, int32_t pos,
-                         uint16_t speed, uint8_t acc, bool sync)
+                         uint16_t speed, uint8_t acc, bool sync,
+                         uint8_t mode)
 {
     uint32_t abs_pos = (pos >= 0) ? (uint32_t)pos : (uint32_t)(-pos);
     uint8_t dir = (pos >= 0) ? 0x00 : 0x01;
@@ -61,7 +62,7 @@ void Gimbal_MovePosition(uint8_t addr, int32_t pos,
         (uint8_t)((abs_pos >> 16) & 0xFF),
         (uint8_t)((abs_pos >> 8) & 0xFF),
         (uint8_t)(abs_pos & 0xFF),
-        0x01,
+        mode,
         sync ? 0x01 : 0x00
     };
 

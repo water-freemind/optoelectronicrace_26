@@ -118,12 +118,7 @@ void Trackline__Round_Callback(void *data) // *((unsigned char*)data)
 void Still_Aim_Callback(unsigned char data)
 {
     /* USER CODE BEGIN */
-    if (!data) {
-        Gimbal_Stop(GIMBAL_ADDR_X);
-        Gimbal_Stop(GIMBAL_ADDR_Y);
-        Laser_Off();
-        K230_Aim_Reset();
-    }
+    /* cleanup 已移至 main.c 主循环边沿检测 */
     /* USER CODE END */
 }
 

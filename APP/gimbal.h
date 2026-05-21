@@ -16,6 +16,10 @@
 #define GIMBAL_SUB_STOP      0x98
 #define GIMBAL_CMD_GOZERO    0x9A
 
+/* 位置模式 */
+#define GIMBAL_MODE_REL      0x00
+#define GIMBAL_MODE_ABS      0x01
+
 /* 帧结尾 */
 #define GIMBAL_FRAME_END     0x6B
 
@@ -29,7 +33,7 @@ void Gimbal_Init(void);
 void Gimbal_Enable(uint8_t addr, bool enable);
 void Gimbal_SetZero(uint8_t addr);
 void Gimbal_Gozero(uint8_t addr, bool sync);
-void Gimbal_MovePosition(uint8_t addr, int32_t pos, uint16_t speed, uint8_t acc, bool sync);
+void Gimbal_MovePosition(uint8_t addr, int32_t pos, uint16_t speed, uint8_t acc, bool sync, uint8_t mode);
 void Gimbal_Stop(uint8_t addr);
 
 /* ========== 应用层接口 ========== */

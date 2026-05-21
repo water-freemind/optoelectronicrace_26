@@ -9,6 +9,9 @@ volatile Knob_Event_t g_KnobEvent = KNOB_EVENT_NONE;
 static uint16_t s_press_cnt = 0;
 static bool s_long_pressed = false;
 static uint8_t  s_debounce_cnt = 0;   /* 旋钮去抖计数器 */
+static uint8_t  s_release_cnt = 0;    /* 释放防抖计数器 */
+#define KNOB_SHORT_PRESS_MIN  60       /* 短按最小时间(ms) */
+#define KNOB_RELEASE_MIN      10       /* 释放防抖时间(ms) */
 Easy_Menu_Input_TYPE menu_move = EASY_MENU_NONE;
 // 初始化
 void Knob_Init(void) {
@@ -31,7 +34,7 @@ void Knob_EXTI_Handler(void) {
             } else {
                 g_KnobEvent = KNOB_EVENT_CW; // B为低电平，逆时针
             }
-            s_debounce_cnt = 5;  /* 锁定5ms去抖 */
+            s_debounce_cnt = 15;  /* 锁定15ms去抖 */
         }
         
         // 清除中断标志位
@@ -46,22 +49,27 @@ void Knob_Tick_1ms(void) {
 
     // 直接读取 S 相按键状态 (按下为低电平 0)
     if (DL_GPIO_readPins(GPIO_KNOB_PORT, GPIO_KNOB_S_PIN) == 0) {
-        s_press_cnt++; // 按下时直接开始累加时间
-        
+        s_press_cnt++;          // 按下时直接开始累加时间
+        s_release_cnt = 0;      // 释放防抖清零
+
         if (s_press_cnt >= 400 && !s_long_pressed) {
             g_KnobEvent = KNOB_EVENT_LONG_PRESS;
             s_long_pressed = true; // 标记已触发长按
         }
     } else {
-        // 松开按键时
-        if (s_press_cnt > 0 && !s_long_pressed) {
-            // 如果按下了，且没达到长按标准，直接判定为短按
-            g_KnobEvent = KNOB_EVENT_SHORT_PRESS;
+        // 松开按键时，防抖确认
+        if (s_press_cnt > 0) {
+            if (++s_release_cnt >= KNOB_RELEASE_MIN) {
+                // 释放稳定，判断短按
+                if (!s_long_pressed && s_press_cnt >= KNOB_SHORT_PRESS_MIN) {
+                    g_KnobEvent = KNOB_EVENT_SHORT_PRESS;
+                }
+                // 状态清零
+                s_press_cnt = 0;
+                s_long_pressed = false;
+                s_release_cnt = 0;
+            }
         }
-        
-        // 状态清零
-        s_press_cnt = 0;
-        s_long_pressed = false;
     }
 }
 void Knob_get(void)

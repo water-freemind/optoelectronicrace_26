@@ -79,11 +79,10 @@ void UART0_IRQHandler(void)
 }
 
 /* ================= 追踪闭环任务 ================= */
-static int32_t g_target_pan  = 0;
-static int32_t g_target_pitch = 0;
 static uint8_t  g_aim_started = 0;
 static uint8_t  g_laser_latched = 0;
 static uint8_t  g_update_cnt = 0;
+static int32_t  g_pitch_pos = 0;        /* Y轴累计位置(仅用于限位) */
 
 /* PID 状态 */
 static int32_t g_i_x = 0, g_i_y = 0;
@@ -94,6 +93,7 @@ void K230_Aim_Reset(void)
     g_aim_started = 0;
     g_laser_latched = 0;
     g_update_cnt = 0;
+    g_pitch_pos = 0;
     g_i_x = 0;  g_i_y = 0;
     g_last_x = 0; g_last_y = 0;
 }
@@ -102,8 +102,6 @@ void K230_Aim_Task(void)
 {
     if (!g_aim_started) {
         Gimbal_Enable_All();
-        g_target_pan  = 0;
-        g_target_pitch = 0;
         g_aim_started = 1;
     }
 
@@ -159,18 +157,15 @@ void K230_Aim_Task(void)
         return;
     }
 
-    /* 指令限速: 每 UPDATE_INTERVAL 帧发一次 */
+    /* 指令限速: 每 UPDATE_INTERVAL 帧发一次相对增量 */
     if (++g_update_cnt < UPDATE_INTERVAL) return;
     g_update_cnt = 0;
 
-    /* 累计绝对位置 */
-    g_target_pan  += adj_x;
-    g_target_pitch += adj_y;
-
     /* Y轴限位 */
-    if (g_target_pitch < Y_MIN_PULSE) g_target_pitch = Y_MIN_PULSE;
-    if (g_target_pitch > Y_MAX_PULSE) g_target_pitch = Y_MAX_PULSE;
+    g_pitch_pos += adj_y;
+    if (g_pitch_pos < Y_MIN_PULSE) { adj_y -= (g_pitch_pos - Y_MIN_PULSE); g_pitch_pos = Y_MIN_PULSE; }
+    if (g_pitch_pos > Y_MAX_PULSE) { adj_y -= (g_pitch_pos - Y_MAX_PULSE); g_pitch_pos = Y_MAX_PULSE; }
 
-    Gimbal_MovePosition(GIMBAL_ADDR_X, g_target_pan,  AIM_SPEED, AIM_ACC, false);
-    Gimbal_MovePosition(GIMBAL_ADDR_Y, g_target_pitch, AIM_SPEED, AIM_ACC, false);
+    Gimbal_MovePosition(GIMBAL_ADDR_X, adj_x,  AIM_SPEED, AIM_ACC, false, GIMBAL_MODE_REL);
+    Gimbal_MovePosition(GIMBAL_ADDR_Y, adj_y,  AIM_SPEED, AIM_ACC, false, GIMBAL_MODE_REL);
 }

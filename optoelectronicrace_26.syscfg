@@ -147,8 +147,7 @@ GPIO6.associatedPins[1].pin.$assign       = "PA13";
 GPIO7.$name                              = "GPIO_Laser";
 GPIO7.associatedPins[0].$name            = "ctrl";
 GPIO7.associatedPins[0].assignedPort     = "PORTB";
-GPIO7.associatedPins[0].internalResistor = "PULL_UP";
-GPIO7.associatedPins[0].initialValue     = "SET";
+GPIO7.associatedPins[0].internalResistor = "PULL_DOWN";
 GPIO7.associatedPins[0].pin.$assign      = "PB9";
 
 PWM1.$name                      = "PWM_0";

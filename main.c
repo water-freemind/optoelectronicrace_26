@@ -8,6 +8,7 @@
 #include "APP/JY62.h"
 #include "APP/Laser.h"
 #include "APP/k230_track.h"
+#include "APP/gimbal.h"
 #include "Beep.h"
 #include <stdint.h>
 
@@ -28,6 +29,8 @@ extern struct {
 int main(void)
 {
     static uint8_t last_start = 0;
+    static uint8_t prev_aim = 0;
+    static uint8_t aim_off_cnt = 0;
 
     SYSCFG_DL_init();
     JY62_Init();
@@ -54,7 +57,18 @@ int main(void)
             last_start = 0;
         }
         if (Easy_Menu_Ui_Data.still_aim) {
+            prev_aim = 1;
+            aim_off_cnt = 0;
             K230_Aim_Task();
+        } else if (prev_aim) {
+            if (++aim_off_cnt >= 10) {
+                prev_aim = 0;
+                aim_off_cnt = 0;
+                Gimbal_Stop(GIMBAL_ADDR_X);
+                Gimbal_Stop(GIMBAL_ADDR_Y);
+                Laser_Off();
+                K230_Aim_Reset();
+            }
         }
     }
 }

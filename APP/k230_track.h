@@ -29,22 +29,20 @@ extern volatile uint8_t g_k230_new_frame;
 #define AIM_DEADBAND_X  20
 #define AIM_DEADBAND_Y  15
 
-/* 指令更新间隔 (帧数, 每N帧发一次) */
-#define UPDATE_INTERVAL  6
+/* === 搜索扫描: 分段45°旋转 === */
+#define SCAN_STEP_PULSES   800    /* 45°脉冲数 */
+#define SCAN_STEP_WAIT      15    /* 等K230识别帧数 (~500ms) */
+#define SCAN_STEP_SPEED   2000
 
-/* 追踪增益 (百分比, 越小越不超调) */
-#define X_TRACK_GAIN  30
-#define Y_TRACK_GAIN  35
+/* === 两阶段锁定 === */
+#define COARSE_WAIT_FRAMES  15    /* 粗调等待帧数 (~500ms) */
+#define FINE_WAIT_FRAMES     5    /* 精调等待帧数 (~165ms) */
+#define FINE_MAX_ATTEMPTS    3    /* 精调最大次数 */
 
-/* 追踪 PID (pulse空间, 定标×10) */
-#define TRACK_KP  5
-#define TRACK_KI  0
-#define TRACK_KD  80
-#define TRACK_I_MAX  200
-
-/* 追踪速度/加速度 */
-#define AIM_SPEED  400
-#define AIM_ACC    25
+#define COARSE_SPEED  600
+#define COARSE_ACC     25
+#define FINE_SPEED    300
+#define FINE_ACC       20
 
 /* Y轴限位 (脉冲) */
 #define Y_MIN_PULSE  -190

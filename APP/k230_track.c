@@ -132,6 +132,8 @@ void K230_Aim_Task(void)
         } else {
             if (g_wait_cnt == 0) {
                 Gimbal_Enable_All();
+                Gimbal_MovePosition(GIMBAL_ADDR_Y, 0,
+                                    SCAN_STEP_SPEED, FINE_ACC, false, GIMBAL_MODE_ABS);
                 Gimbal_MovePosition(GIMBAL_ADDR_X, SCAN_STEP_PULSES,
                                     SCAN_STEP_SPEED, FINE_ACC, false, GIMBAL_MODE_REL);
                 g_wait_cnt = 1;
@@ -205,7 +207,6 @@ void K230_Aim_Task(void)
         }
         g_stable_cnt = 0;
 
-        /* 超出死区 → 精调 */
         if (g_fine_tries >= FINE_MAX_ATTEMPTS) {
             if (!g_laser_latched) {
                 Laser_On();
@@ -215,7 +216,6 @@ void K230_Aim_Task(void)
             return;
         }
 
-        /* Y轴限位 */
         g_pitch_pos += err_y;
         if (g_pitch_pos < Y_MIN_PULSE) {
             err_y -= (g_pitch_pos - Y_MIN_PULSE);
@@ -249,4 +249,144 @@ void K230_Aim_Task(void)
         }
         return;
     }
+}
+
+/* ================= 画矩形任务 ================= */
+enum { DR_CENTER_AIM, DR_CENTER_DONE, DR_BOUNDARY };
+
+static uint8_t  g_dr_state = DR_CENTER_AIM;
+static uint8_t  g_dr_laser = 0;
+static uint8_t  g_dr_wait = 0;
+static uint8_t  g_dr_stable = 0;
+static uint8_t  g_dr_tries = 0;
+static int32_t  g_dr_pitch = 0;
+
+void K230_DrawRect_Reset(void)
+{
+    g_dr_state = DR_CENTER_AIM;
+    g_dr_laser = 0;
+    g_dr_wait = 0;
+    g_dr_stable = 0;
+    g_dr_tries = 0;
+    g_dr_pitch = 0;
+    Laser_Off();
+    Gimbal_Stop(GIMBAL_ADDR_X);
+    Gimbal_Stop(GIMBAL_ADDR_Y);
+}
+
+void K230_DrawRect_Task(void)
+{
+    if (!g_k230_new_frame) return;
+    g_k230_new_frame = 0;
+
+    if (g_k230_data.flag != 0xBB) {
+        g_dr_stable = 0;
+        g_dr_tries = 0;
+        g_dr_wait = 0;
+        return;
+    }
+
+    if (g_dr_state == DR_CENTER_AIM) {
+        /* 先瞄准中心(复用中心坐标, 不开激光) */
+        int32_t ex = pixel_to_pulse(g_k230_data.s_dx, g_k230_data.dx,
+                                    PULSE_PER_PX_X, GIMBAL_X_POLARITY);
+        int32_t ey = pixel_to_pulse(g_k230_data.s_dy, g_k230_data.dy,
+                                    PULSE_PER_PX_Y, GIMBAL_Y_POLARITY);
+        int32_t ax = ex < 0 ? -ex : ex;
+        int32_t ay = ey < 0 ? -ey : ey;
+
+        if (ax <= AIM_DEADBAND_X && ay <= AIM_DEADBAND_Y) {
+            if (++g_dr_stable >= 5) {
+                g_dr_stable = 0;
+                g_dr_state = DR_CENTER_DONE;
+                /* 中心锁定, fall through */
+            } else {
+                return;
+            }
+        } else {
+            g_dr_stable = 0;
+            g_dr_tries = 0;
+            g_dr_wait = 0;
+
+            /* 两阶段: coarse */
+            if (g_dr_tries == 0) {
+                g_dr_pitch += ey;
+                if (g_dr_pitch < Y_MIN_PULSE) { ey -= (g_dr_pitch - Y_MIN_PULSE); g_dr_pitch = Y_MIN_PULSE; }
+                if (g_dr_pitch > Y_MAX_PULSE) { ey -= (g_dr_pitch - Y_MAX_PULSE); g_dr_pitch = Y_MAX_PULSE; }
+                Gimbal_MovePosition(GIMBAL_ADDR_X, ex, COARSE_SPEED, COARSE_ACC, false, GIMBAL_MODE_REL);
+                Gimbal_MovePosition(GIMBAL_ADDR_Y, ey, COARSE_SPEED, COARSE_ACC, false, GIMBAL_MODE_REL);
+                g_dr_wait = 0;
+                g_dr_tries = 1;
+                return;
+            }
+            /* 等 COARSE_WAIT 帧 */
+            if (g_dr_wait < COARSE_WAIT_FRAMES) {
+                g_dr_wait++;
+                return;
+            }
+            /* fine */
+            g_dr_wait = 0;
+            g_dr_tries++;
+            if (g_dr_tries > FINE_MAX_ATTEMPTS + 1) g_dr_tries = 1;
+            g_dr_pitch += ey;
+            if (g_dr_pitch < Y_MIN_PULSE) { ey -= (g_dr_pitch - Y_MIN_PULSE); g_dr_pitch = Y_MIN_PULSE; }
+            if (g_dr_pitch > Y_MAX_PULSE) { ey -= (g_dr_pitch - Y_MAX_PULSE); g_dr_pitch = Y_MAX_PULSE; }
+            Gimbal_MovePosition(GIMBAL_ADDR_X, ex, FINE_SPEED, FINE_ACC, false, GIMBAL_MODE_REL);
+            Gimbal_MovePosition(GIMBAL_ADDR_Y, ey, FINE_SPEED, FINE_ACC, false, GIMBAL_MODE_REL);
+        }
+        return;
+    }
+
+    /* DR_CENTER_DONE → 初始化边界跟踪 */
+    if (g_dr_state == DR_CENTER_DONE) {
+        Gimbal_Enable_All();
+        g_dr_pitch = 0;
+        g_dr_wait = 0;
+        g_dr_tries = 0;
+        g_dr_stable = 0;
+        g_dr_state = DR_BOUNDARY;
+    }
+
+    /* 边界跟踪: 用 dx_b/dy_b */
+    int32_t ex = pixel_to_pulse(g_k230_data.s_dx_b, g_k230_data.dx_b,
+                                PULSE_PER_PX_X, GIMBAL_X_POLARITY);
+    int32_t ey = pixel_to_pulse(g_k230_data.s_dy_b, g_k230_data.dy_b,
+                                PULSE_PER_PX_Y, GIMBAL_Y_POLARITY);
+    int32_t ax = ex < 0 ? -ex : ex;
+    int32_t ay = ey < 0 ? -ey : ey;
+
+    /* 瞄准当前边界点 → 首次瞄准即开激光 */
+    if (ax <= AIM_DEADBAND_X && ay <= AIM_DEADBAND_Y) {
+        if (g_dr_laser == 0) {
+            Laser_On();
+            g_dr_laser = 1;
+        }
+        g_dr_tries = 0;
+        g_dr_wait = 0;
+        return;
+    }
+
+    /* 两阶段跟踪边界点 */
+    if (g_dr_tries == 0) {
+        g_dr_pitch += ey;
+        if (g_dr_pitch < Y_MIN_PULSE) { ey -= (g_dr_pitch - Y_MIN_PULSE); g_dr_pitch = Y_MIN_PULSE; }
+        if (g_dr_pitch > Y_MAX_PULSE) { ey -= (g_dr_pitch - Y_MAX_PULSE); g_dr_pitch = Y_MAX_PULSE; }
+        Gimbal_MovePosition(GIMBAL_ADDR_X, ex, COARSE_SPEED, COARSE_ACC, false, GIMBAL_MODE_REL);
+        Gimbal_MovePosition(GIMBAL_ADDR_Y, ey, COARSE_SPEED, COARSE_ACC, false, GIMBAL_MODE_REL);
+        g_dr_wait = 0;
+        g_dr_tries = 1;
+        return;
+    }
+    if (g_dr_wait < COARSE_WAIT_FRAMES) {
+        g_dr_wait++;
+        return;
+    }
+    g_dr_wait = 0;
+    g_dr_tries++;
+    if (g_dr_tries > FINE_MAX_ATTEMPTS + 1) g_dr_tries = 1;
+    g_dr_pitch += ey;
+    if (g_dr_pitch < Y_MIN_PULSE) { ey -= (g_dr_pitch - Y_MIN_PULSE); g_dr_pitch = Y_MIN_PULSE; }
+    if (g_dr_pitch > Y_MAX_PULSE) { ey -= (g_dr_pitch - Y_MAX_PULSE); g_dr_pitch = Y_MAX_PULSE; }
+    Gimbal_MovePosition(GIMBAL_ADDR_X, ex, FINE_SPEED, FINE_ACC, false, GIMBAL_MODE_REL);
+    Gimbal_MovePosition(GIMBAL_ADDR_Y, ey, FINE_SPEED, FINE_ACC, false, GIMBAL_MODE_REL);
 }

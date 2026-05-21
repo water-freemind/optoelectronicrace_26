@@ -23,9 +23,14 @@ static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 
 /* ---------- 用户可调参数（直角转弯） ---------- */
 #define APPROACH_PULSES   425    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
-#define APPROACH_SPEED    250    /* 直行靠近速度 */
-#define PIVOT_SPEED          1500   /* 原地旋转最高速度（角度环maxSpeed） */
-#define PIVOT_GUIDE_SPEED     600   /* 传感器引导旋转速度（2/4号弯） */
+#define APPROACH_SPEED    320    /* 直行靠近速度 (降低35%) */
+#define YAW_STRAIGHT_SPEED 320   /* 空白直线速度 */
+#define APPROACH_RAMP_UP   24    /* 加速帧数 */
+#define APPROACH_RAMP_DOWN 350   /* 减速起始脉冲 */
+#define APPROACH_MIN_SPEED  80   /* 减速最低速度 */
+#define PIVOT_SPEED          280   /* 原地旋转最高速度（角度环maxSpeed） */
+#define PIVOT_RAMP_UP       12    /* 旋转加速帧数 */
+#define PIVOT_GUIDE_SPEED     180   /* 传感器引导旋转速度（2/4号弯） */
 #define LINE_NORM_TRESHOLD   2400     /* 归一化中线判断阈值 0~4096，<此值视为黑线 */
 #define YAW_STRAIGHT_MIN_ENC  170   /* 进入YAW_STRAIGHT后最小距离(脉冲)，防假角 */
 #define PIVOT_ENCODER_PULSES  358   /* 90°原地旋转单轮脉冲数 (132mm轮距×2.708) */
@@ -115,6 +120,7 @@ static float    g_initialYaw        = 0.0f;
 static float    g_straightTargetYaw = 0.0f;
 static uint8_t  g_cornerCount       = 0;
 static uint8_t  g_lineDebounce      = 0;
+static uint8_t  g_ramp_cnt          = 0;     /* 加速计数器 */
 
 void Trackline_Reset(void)
 {
@@ -127,6 +133,7 @@ void Trackline_Reset(void)
     g_straightTargetYaw = g_initialYaw;
     g_cornerCount       = 0;
     g_lineDebounce      = 0;
+    g_ramp_cnt          = 0;
     Motor_SetSpeed(0, 0);
 }
 
@@ -188,6 +195,11 @@ void Trackline_Task(void)
 
     /* ==================== 阶段4：yaw-hold直行过空白段 ==================== */
     if (g_phase == PHASE_YAW_STRAIGHT) {
+        /* 缓加速 */
+        if (g_ramp_cnt < APPROACH_RAMP_UP) g_ramp_cnt++;
+        int16_t baseSpeed = (int16_t)(YAW_STRAIGHT_SPEED * g_ramp_cnt / APPROACH_RAMP_UP);
+        if (baseSpeed > YAW_STRAIGHT_SPEED) baseSpeed = YAW_STRAIGHT_SPEED;
+
         No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
         if (Get_Normalize_For_User(&sensor, Normal)) {
             uint8_t line_mask = line_mask_from_normal(Normal);
@@ -198,8 +210,8 @@ void Trackline_Task(void)
             if (yawError > -YAW_HOLD_DEADBAND && yawError < YAW_HOLD_DEADBAND)
                 yawError = 0.0f;
             int16_t yawCorr = (int16_t)(yawError * 11.0f);
-            int16_t speedL = APPROACH_SPEED - yawCorr;
-            int16_t speedR = APPROACH_SPEED + yawCorr;
+            int16_t speedL = baseSpeed - yawCorr;
+            int16_t speedR = baseSpeed + yawCorr;
             if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
             if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
             if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
@@ -237,11 +249,16 @@ void Trackline_Task(void)
 
     /* ==================== 阶段3：yaw闭环原地旋转 ==================== */
     if (g_phase == PHASE_PIVOT) {
+        /* 缓加速 */
+        if (g_ramp_cnt < PIVOT_RAMP_UP) g_ramp_cnt++;
         /* 弯道2/4：低速传感器引导旋转；弯道1/3/5：高速yaw闭环旋转 */
         {
             uint8_t pos = (g_cornerCount - 1) % 5 + 1;
             if (pos == 2 || pos == 4) {
-                Motor_YawControl(PIVOT_GUIDE_SPEED);
+                int16_t guideSpeed = (int16_t)(PIVOT_GUIDE_SPEED * g_ramp_cnt / PIVOT_RAMP_UP);
+                if (guideSpeed < PIVOT_GUIDE_SPEED/4) guideSpeed = PIVOT_GUIDE_SPEED/4;
+                if (guideSpeed > PIVOT_GUIDE_SPEED) guideSpeed = PIVOT_GUIDE_SPEED;
+                Motor_SpeedControl(-guideSpeed, guideSpeed);
 
                 float yawErr = g_straightTargetYaw - yaw_angle;
                 while (yawErr > 180.0f) yawErr -= 360.0f;
@@ -272,6 +289,7 @@ void Trackline_Task(void)
                     Motor_A_ResetEncoder();
                     Motor_B_ResetEncoder();
                     Motor_ResetSpeedControl();
+                    g_ramp_cnt = 0;
                     g_phase = PHASE_YAW_STRAIGHT;
                 }
                 return;
@@ -279,7 +297,12 @@ void Trackline_Task(void)
         }
 
         /* 弯道1/3/5：高速yaw + 编码器双保险 */
-        Motor_YawControl(PIVOT_SPEED);
+        {
+            int16_t pivotSpeed = (int16_t)(PIVOT_SPEED * g_ramp_cnt / PIVOT_RAMP_UP);
+            if (pivotSpeed < PIVOT_SPEED/4) pivotSpeed = PIVOT_SPEED/4;
+            if (pivotSpeed > PIVOT_SPEED) pivotSpeed = PIVOT_SPEED;
+            Motor_SpeedControl(-pivotSpeed, pivotSpeed);
+        }
 
         int32_t pivotDist = Motor_A_GetEncoderCnt() - g_pivotStartEncA;
         if (pivotDist < 0) pivotDist = -pivotDist;
@@ -293,6 +316,7 @@ void Trackline_Task(void)
                 Motor_A_ResetEncoder();
                 Motor_B_ResetEncoder();
                 Motor_ResetSpeedControl();
+                g_ramp_cnt = 0;
                 g_phase = PHASE_YAW_STRAIGHT;
             }
         }
@@ -301,25 +325,43 @@ void Trackline_Task(void)
 
     /* ==================== 阶段2：yaw航向保持直行120mm ==================== */
     if (g_phase == PHASE_APPROACH) {
+        /* 缓加速 */
+        if (g_ramp_cnt < APPROACH_RAMP_UP) g_ramp_cnt++;
+        int16_t baseSpeed;
+        int32_t enc = Motor_A_GetEncoderCnt();
+        int32_t remain = g_approachPulses - enc;
+
+        /* 缓减速段 */
+        if (remain <= APPROACH_RAMP_DOWN) {
+            int32_t speedRange = APPROACH_SPEED - APPROACH_MIN_SPEED;
+            baseSpeed = (remain < 0) ? 0 :
+                (int16_t)(APPROACH_MIN_SPEED + speedRange * remain / APPROACH_RAMP_DOWN);
+        } else {
+            baseSpeed = (int16_t)(APPROACH_SPEED * g_ramp_cnt / APPROACH_RAMP_UP);
+            if (baseSpeed > APPROACH_SPEED) baseSpeed = APPROACH_SPEED;
+        }
+
+        if (enc >= g_approachPulses) {
+            Motor_SetSpeed(0, 0);
+            delay_ms(30);
+            Motor_ResetSpeedControl();
+            g_pivotStartEncA = Motor_A_GetEncoderCnt();
+            g_ramp_cnt = 0;
+            g_phase = PHASE_PIVOT;
+            return;
+        }
+
         float yawError = yaw_angle - g_approachTargetYaw;
         if (yawError > -YAW_HOLD_DEADBAND && yawError < YAW_HOLD_DEADBAND)
             yawError = 0.0f;
         int16_t yawCorr = (int16_t)(yawError * YAW_HOLD_KP);
-        int16_t speedL = APPROACH_SPEED - yawCorr;
-        int16_t speedR = APPROACH_SPEED + yawCorr;
+        int16_t speedL = baseSpeed - yawCorr;
+        int16_t speedR = baseSpeed + yawCorr;
         if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
         if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
         if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
         if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
         Motor_SpeedControl(speedL, speedR);
-        if (Motor_A_GetEncoderCnt() >= g_approachPulses) {
-            Motor_SetSpeed(0, 0);
-            delay_ms(50);
-            
-            Motor_ResetSpeedControl();
-            g_pivotStartEncA = Motor_A_GetEncoderCnt();
-            g_phase = PHASE_PIVOT;
-        }
         return;
     }
 
@@ -337,6 +379,7 @@ void Trackline_Task(void)
         Motor_B_ResetEncoder();
         Motor_ResetSpeedControl();
         g_approachPulses = APPROACH_PULSES;
+        g_ramp_cnt = 0;
         g_phase = PHASE_APPROACH;
         return;
     }

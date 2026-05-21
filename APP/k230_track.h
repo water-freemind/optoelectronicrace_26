@@ -29,8 +29,8 @@ extern volatile uint8_t g_k230_new_frame;
 #define AIM_DEADBAND_X  20
 #define AIM_DEADBAND_Y  15
 
-/* === 搜索扫描: 分段45°旋转 === */
-#define SCAN_STEP_PULSES   800    /* 45°脉冲数 */
+/* === 搜索扫描: 分段55°旋转 === */
+#define SCAN_STEP_PULSES   890    /* 50°脉冲数 */
 #define SCAN_STEP_WAIT      15    /* 等K230识别帧数 (~500ms) */
 #define SCAN_STEP_SPEED   2000
 
@@ -39,9 +39,9 @@ extern volatile uint8_t g_k230_new_frame;
 #define FINE_WAIT_FRAMES     5    /* 精调等待帧数 (~165ms) */
 #define FINE_MAX_ATTEMPTS    3    /* 精调最大次数 */
 
-#define COARSE_SPEED  600
+#define COARSE_SPEED  720
 #define COARSE_ACC     25
-#define FINE_SPEED    300
+#define FINE_SPEED    360
 #define FINE_ACC       20
 
 /* Y轴限位 (脉冲) */
@@ -51,5 +51,7 @@ extern volatile uint8_t g_k230_new_frame;
 void K230_Track_Init(void);
 void K230_Aim_Task(void);
 void K230_Aim_Reset(void);
+void K230_DrawRect_Task(void);
+void K230_DrawRect_Reset(void);
 
 #endif

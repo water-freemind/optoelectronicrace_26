@@ -18,6 +18,9 @@ extern struct {
     unsigned char trackline__start_flag;
     unsigned char trackline__round;
     unsigned char still_aim;
+    unsigned char still_aim_draw_Rectangle__data;
+    unsigned char move_aim_center_round;
+    unsigned char centeraim__start__data;
     float speed_pid__kp;
     float speed_pid__ki;
     float jy62_yaw_data;
@@ -31,9 +34,10 @@ int main(void)
     static uint8_t last_start = 0;
     static uint8_t prev_aim = 0;
     static uint8_t aim_off_cnt = 0;
+    static uint8_t prev_dr = 0;
+    static uint8_t dr_off_cnt = 0;
 
     SYSCFG_DL_init();
-    JY62_Init();
     OLED_Init();
     Knob_Init();
     Easy_Menu_Init(Display_Char, Display_Char_Line, NULL, NULL);
@@ -41,6 +45,8 @@ int main(void)
     Trackline_Init();
     Laser_Init();
     K230_Track_Init();
+    JY62_Init();
+    delay_ms(50);
 
     Easy_Menu_Ui_Data.speed_pid__kp = g_Trackline.pid.Kp;
     Easy_Menu_Ui_Data.speed_pid__ki = g_Trackline.pid.Kd;
@@ -55,6 +61,17 @@ int main(void)
             Trackline_Task();
         } else {
             last_start = 0;
+        }
+        if (Easy_Menu_Ui_Data.still_aim_draw_Rectangle__data) {
+            prev_dr = 1;
+            dr_off_cnt = 0;
+            K230_DrawRect_Task();
+        } else if (prev_dr) {
+            if (++dr_off_cnt >= 10) {
+                prev_dr = 0;
+                dr_off_cnt = 0;
+                K230_DrawRect_Reset();
+            }
         }
         if (Easy_Menu_Ui_Data.still_aim) {
             prev_aim = 1;

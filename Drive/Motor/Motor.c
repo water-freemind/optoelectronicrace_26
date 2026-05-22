@@ -180,7 +180,7 @@ void Motor_ResetSpeedControl(void)
 #define YAW_KP        11.0f
 #define YAW_KD        1.5f
 #define YAW_DEADBAND  1.0f
-#define YAW_SPEED_MIN 220
+#define YAW_SPEED_MIN 250
 
 static float g_yawTarget    = 0.0f;
 static float g_yawLastError = 0.0f;

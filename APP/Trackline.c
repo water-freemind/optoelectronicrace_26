@@ -22,10 +22,12 @@ static unsigned char Digtal;
 static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 
 /* ---------- 用户可调参数（直角转弯） ---------- */
-#define APPROACH_PULSES   425    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
-#define APPROACH_SPEED    250    /* 直行靠近速度 */
-#define PIVOT_SPEED          1500   /* 原地旋转最高速度（角度环maxSpeed） */
-#define PIVOT_GUIDE_SPEED     600   /* 传感器引导旋转速度（2/4号弯） */
+#define APPROACH_PULSES   340    /* 直行靠近脉冲数  115mm ÷ 0.29mm/pulse */
+#define APPROACH_SPEED    200    /* 直行靠近速度 */
+#define APPROACH_RAMP_DOWN 120   /* 减速起始脉冲 */
+#define APPROACH_MIN_SPEED  60   /* 减速最低速度 */
+#define PIVOT_SPEED          1700   /* 原地旋转最高速度（角度环maxSpeed） */
+#define PIVOT_GUIDE_SPEED     800   /* 传感器引导旋转速度（2/4号弯） */
 #define LINE_NORM_TRESHOLD   2400     /* 归一化中线判断阈值 0~4096，<此值视为黑线 */
 #define YAW_STRAIGHT_MIN_ENC  170   /* 进入YAW_STRAIGHT后最小距离(脉冲)，防假角 */
 
@@ -35,7 +37,7 @@ static uint8_t     g_turnDir   = 0;     /* 1=左转, 2=右转 */
 static float       g_approachTargetYaw = 0.0f;/* 靠近阶段目标yaw */
 
 Trackline_Controller_t g_Trackline = {
-    .base_speed = 650,//负载750，空载650
+    .base_speed = 700,//负载750，空载650
     .max_correction = 500,
     .pid = { .Kp = 3.3f, .Ki = 0.02f, .Kd = 0.36f },
     .last_error = 0,   
@@ -238,11 +240,18 @@ void Trackline_Task(void)
             }
         }
 
-        /* 弯道1/3/5：高速yaw闭环旋转到目标角度 */
-        Motor_YawControl(PIVOT_SPEED);
+        /* 弯道1/3/5：高速yaw闭环旋转 */
+        {
+            float yawErr = g_straightTargetYaw - yaw_angle;
+            while (yawErr > 180.0f) yawErr -= 360.0f;
+            while (yawErr < -180.0f) yawErr += 360.0f;
+            float absErr = yawErr > 0 ? yawErr : -yawErr;
+            int16_t maxSpeed = (absErr < 25.0f) ? 300 : PIVOT_SPEED;
+            Motor_YawControl(maxSpeed);
+        }
         if (Motor_YawIsAtTarget()) {
-            Motor_Brake();
-            delay_ms(50);
+            Motor_SetSpeed(0, 0);
+            delay_ms(80);
             if (g_cornerCount >= (g_laps * 4 + 1)) {
                 g_phase = PHASE_DONE;
             } else {
@@ -257,32 +266,47 @@ void Trackline_Task(void)
 
     /* ==================== 阶段2：yaw航向保持直行120mm ==================== */
     if (g_phase == PHASE_APPROACH) {
+        int32_t enc = Motor_A_GetEncoderCnt();
+        int32_t remain = g_approachPulses - enc;
+        int16_t baseSpeed;
+
+        if (remain <= APPROACH_RAMP_DOWN) {
+            int32_t speedRange = APPROACH_SPEED - APPROACH_MIN_SPEED;
+            baseSpeed = (remain < 0) ? 0 :
+                (int16_t)(APPROACH_MIN_SPEED + speedRange * remain / APPROACH_RAMP_DOWN);
+        } else {
+            baseSpeed = APPROACH_SPEED;
+        }
+
+        if (enc >= g_approachPulses) {
+            Motor_SetSpeed(0, 0);
+            delay_ms(80);
+            Motor_ResetSpeedControl();
+            g_phase = PHASE_PIVOT;
+            return;
+        }
+
         float yawError = yaw_angle - g_approachTargetYaw;
         if (yawError > -YAW_HOLD_DEADBAND && yawError < YAW_HOLD_DEADBAND)
             yawError = 0.0f;
         int16_t yawCorr = (int16_t)(yawError * YAW_HOLD_KP);
-        int16_t speedL = APPROACH_SPEED - yawCorr;
-        int16_t speedR = APPROACH_SPEED + yawCorr;
+        int16_t speedL = baseSpeed - yawCorr;
+        int16_t speedR = baseSpeed + yawCorr;
         if (speedL > MOTOR_PWM_PERIOD)  speedL = MOTOR_PWM_PERIOD;
         if (speedL < -MOTOR_PWM_PERIOD) speedL = -MOTOR_PWM_PERIOD;
         if (speedR > MOTOR_PWM_PERIOD)  speedR = MOTOR_PWM_PERIOD;
         if (speedR < -MOTOR_PWM_PERIOD) speedR = -MOTOR_PWM_PERIOD;
         Motor_SpeedControl(speedL, speedR);
-        if (Motor_A_GetEncoderCnt() >= g_approachPulses) {
-            Motor_SetSpeed(0, 0);
-            delay_ms(50);
-            
-            Motor_ResetSpeedControl();
-            g_phase = PHASE_PIVOT;
-        }
         return;
     }
 
-    /* ==================== 阶段1：刚检测到直角，主动刹车稳住车身 ==================== */
+    /* ==================== 阶段1：检测直角，线性减速停车 ==================== */
     if (g_phase == PHASE_STOP) {
         g_cornerCount++;
-        Motor_SetSpeed(0, 0);
-        delay_ms(80);
+        Motor_SetSpeed(100, 100); delay_ms(15);
+        Motor_SetSpeed( 60,  60); delay_ms(15);
+        Motor_SetSpeed( 20,  20); delay_ms(15);
+        Motor_SetSpeed(  0,   0); delay_ms(35);
         g_approachTargetYaw = yaw_angle;
         g_straightTargetYaw += ((g_turnDir == 1) ? 90.0f : -90.0f);
         while (g_straightTargetYaw > 180.0f) g_straightTargetYaw -= 360.0f;

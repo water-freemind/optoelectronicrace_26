@@ -1,4 +1,6 @@
 #include "No_Mcu_Ganv_Grayscale_Sensor_Config.h"
+#include <stdint.h>
+#include <sys/cdefs.h>
 
 /* 函数功能：采集8个通道的模拟值并进行均值滤波
    参数说明：result - 存储8个通道处理结果的数组 */
@@ -28,13 +30,16 @@ void Get_Analog_value(unsigned short *result)
    Gray_white - 白色阈值数组
    Gray_black - 黑色阈值数组
    Digital - 输出的数字信号（按位表示） */
+volatile uint8_t digtals[8] = {0};
 void convertAnalogToDigital(unsigned short *adc_value,unsigned short *Gray_white,unsigned short *Gray_black,unsigned char *Digital)
 {
     for (int i = 0; i < 8; i++) {
         if (adc_value[i] > Gray_white[i]) {
             *Digital |= (1 << i);   // 超过白阈值置1（白色）
+            digtals[i] = 0;
         } else if (adc_value[i] < Gray_black[i]) {
             *Digital &= ~(1 << i);  // 低于黑阈值置0（黑色）
+            digtals[i] = 1;
         }
         // 中间灰度值保持原有状态
     }

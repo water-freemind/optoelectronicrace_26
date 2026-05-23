@@ -6,6 +6,7 @@
 
 /* USER CODE PUBLIC BEGIN */
 
+#include "OLED.h"
 #include "Trackline.h"
 #include "JY62.h"
 #include "gimbal.h"
@@ -54,6 +55,7 @@ Ordinary_Page home_page;
     Goto_Item goto__mov_aim;
     Goto_Item goto__trackline_pid__page;
     Goto_Item goto__JY62_page;
+    Goto_Item goto__show__1__page;
     Ordinary_Page Cal_page;
         Switch_Item Cal_white;
         Switch_Item Cal_black;
@@ -76,6 +78,7 @@ Ordinary_Page home_page;
         Show_Item jy62_yaw_acc;
         Show_Item Lspeed;
         Show_Item Rspeed;
+    Show_Page show__1__page;
 /* ================================================================= 枚举列表 ================================================================= */
 /* No enum definitions */
 /* ============================================================== 回调函数（条目） ============================================================ */
@@ -193,15 +196,37 @@ void Rspeed_Callback(void)
 }
 
 /* ============================================================== 回调函数（页面） ============================================================ */
-/* No page callbacks */
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE VALUE BEGIN */
+/* USER CODE VALUE END */
+/* Private function ----------------------------------------------------------*/
+void Show__1__Page_Period_Callback(void* temp, Easy_Menu_Input_TYPE user_input)
+{
+    /* USER CODE BEGIN */
+    char buf[26];
+    //OLED_Clear();
+    sprintf(buf, "%d %d %d %d %2d %2d %d %d",digtals[7],digtals[6],digtals[5],digtals[4],digtals[3],digtals[2],digtals[1],digtals[0]);
+    //sprintf(buf, "%d %2d %2d %2d",sensor.Analog_value[0],sensor.Analog_value[7],sensor.Normal_value[0],sensor.Normal_value[7]);
+    OLED_ShowString(4, 0, buf, 8);
+    /* USER CODE END */
+}
+
+void Show__1__Page_Exit_Callback(void)
+{
+    /* USER CODE BEGIN */
+    OLED_Clear();
+    /* USER CODE END */
+}
+
 /* =========================================================== 设置列表（普通页面） =========================================================== */
-Item *home_page_items[6] = {
+Item *home_page_items[7] = {
     ITEM(goto__Cal_page),
     ITEM(goto__trackline),
     ITEM(goto__still_aim_task),
     ITEM(goto__mov_aim),
     ITEM(goto__trackline_pid__page),
-    ITEM(goto__JY62_page)
+    ITEM(goto__JY62_page),
+    ITEM(goto__show__1__page)
 };
 
 Item *Cal_page_items[2] = {
@@ -244,13 +269,14 @@ Item *JY62_page_items[4] = {
 void Easy_Menu_Ui_Init(void)
 {
 
-    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 6);
+    Ordinary_Page_Init(NULL, PAGE(home_page), "Home", home_page_items, 7);
         Goto_Item_Init(PAGE(home_page), ITEM(goto__Cal_page), "Cal_sensor", PAGE(Cal_page));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__trackline), "trackline", PAGE(trackline));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__still_aim_task), "still_aim", PAGE(still_aim_task));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__mov_aim), "mov_aim", PAGE(mov_aim));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__trackline_pid__page), "trackline_pid", PAGE(trackline_pid__page));
         Goto_Item_Init(PAGE(home_page), ITEM(goto__JY62_page), "JY62", PAGE(JY62_page));
+        Goto_Item_Init(PAGE(home_page), ITEM(goto__show__1__page), "show__1__page", PAGE(show__1__page));
 
     Ordinary_Page_Init(PAGE(home_page), PAGE(Cal_page), "Cal_sensor", Cal_page_items, 2);
         Switch_Item_Init(PAGE(Cal_page), ITEM(Cal_white), "Cal_white", &Easy_Menu_Ui_Data.Cal_white_flag, Cal_White_Callback);
@@ -280,6 +306,8 @@ void Easy_Menu_Ui_Init(void)
         Show_Item_Init(PAGE(JY62_page), ITEM(jy62_yaw_acc), "yaw_acc", FLOAT, &Easy_Menu_Ui_Data.jy62_yaw_acc_data, 100, Jy62_Yaw_Acc_Callback);
         Show_Item_Init(PAGE(JY62_page), ITEM(Lspeed), "Lspeed", SIGNED_SHORT_INT, &Easy_Menu_Ui_Data.Lspeed, 100, Lspeed_Callback);
         Show_Item_Init(PAGE(JY62_page), ITEM(Rspeed), "Rspeed", SIGNED_SHORT_INT, &Easy_Menu_Ui_Data.Rspeed, 100, Rspeed_Callback);
+
+    Show_Page_Init(PAGE(home_page), PAGE(show__1__page), "show__1__page", 100, NULL, Show__1__Page_Period_Callback, Show__1__Page_Exit_Callback);
     
     Easy_Menu_Goto_Page(PAGE(home_page));
 }

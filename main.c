@@ -11,6 +11,9 @@
 #include "APP/gimbal.h"
 #include "Beep.h"
 #include <stdint.h>
+#include "No_Mcu_Ganv_Grayscale_Sensor_Config.h"
+
+extern No_MCU_Sensor sensor;
 
 extern struct {
     unsigned char Cal_white_flag;
@@ -50,11 +53,11 @@ int main(void)
 
     Easy_Menu_Ui_Data.speed_pid__kp = g_Trackline.pid.Kp;
     Easy_Menu_Ui_Data.speed_pid__ki = g_Trackline.pid.Kd;
-
     while (1) {
         Knob_get();
         JY62_Task();
         Easy_Menu_Display(g_SystemTick);
+        No_Mcu_Ganv_Sensor_Task_Without_tick(&sensor);
         if (Easy_Menu_Ui_Data.trackline__start_flag){
             if (!last_start) { Trackline_Reset(); }
             last_start = 1;

@@ -91,7 +91,9 @@ main.o: ../main.c \
  ../Drive/Knob/Knob_drv.h ../Drive/Motor/Motor.h ../APP/Trackline.h \
  D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h \
  ../APP/JY62.h ../APP/Laser.h ../APP/k230_track.h ../APP/gimbal.h \
- D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Beep/Beep.h
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Beep/Beep.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/No_Mcu_Ganv_Grayscale_Sensor_Config.h \
+ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/ADC.h
 ti_msp_dl_config.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/msp/msp.h:
 D:/MSP-SDK/mspm0_sdk_2_10_00_04/source/ti/devices/DeviceFamily.h:
@@ -188,3 +190,5 @@ D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Motor/Motor.h:
 ../APP/k230_track.h:
 ../APP/gimbal.h:
 D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Beep/Beep.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/No_Mcu_Ganv_Grayscale_Sensor_Config.h:
+D:/MSP-SDK/CCS_project/optoelectronicrace_26/Drive/Grayscale_Sensor/ADC.h:

@@ -31,8 +31,8 @@ extern volatile uint8_t g_k230_new_frame;
 
 /* === 搜索扫描: 分段55°旋转 === */
 #define SCAN_STEP_PULSES   890    /* 50°脉冲数 */
-#define SCAN_STEP_WAIT      15    /* 等K230识别帧数 (~500ms) */
-#define SCAN_STEP_SPEED   2000
+#define SCAN_STEP_WAIT      11    /* 等K230识别帧数 (~365ms) */
+#define SCAN_STEP_SPEED   4500
 
 /* === 两阶段锁定 === */
 #define COARSE_WAIT_FRAMES  15    /* 粗调等待帧数 (~500ms) */

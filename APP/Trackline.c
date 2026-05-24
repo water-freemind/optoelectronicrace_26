@@ -26,10 +26,12 @@ static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 
 /* ==================== 参数定义 ==================== */
 /* 旋转 */
-#define TURN_SPEED           600
+#define TURN_SPEED_12        500     /* 弯1/2旋转速度 */
+#define TURN_SPEED_34        450     /* 弯3/4旋转速度(降低防超调) */
 #define APPROACH_TIME_MS     220
-#define APPROACH_PULSES      320     /* 越过弯口的编码器脉冲数(约93mm) */
-#define APPROACH_SPEED       80      /* 越过弯口速度环目标速度 */ //延时靠经时间
+#define APPROACH_PULSES_ODD  310     /* 奇数弯(1/3/5)越过弯口脉冲数(约64mm) */
+#define APPROACH_PULSES_EVEN 320     /* 偶数弯(2/4)越过弯口脉冲数(约93mm) */
+#define APPROACH_SPEED       75      /* 越过弯口速度环目标速度 */
 
 /* 直行(YAW_HOLD) */
 #define YAW_HOLD_SPEED       160//100
@@ -53,7 +55,7 @@ static const int16_t WEIGHTS[8] = {-300, -200, -150, -50, 50, 150, 200, 300};
 Trackline_Controller_t g_Trackline = {
     .base_speed = NORMAL_SPEED,
     .max_correction = 500,
-    .pid = { .Kp = 3.3f, .Ki = 0.02f, .Kd = 0.36f },
+    .pid = { .Kp = 3.3f, .Ki = 0.02f, .Kd = 0.40f },
     .last_error = 0,
     .integral = 0
 };
@@ -219,8 +221,9 @@ void Trackline_Reset(void)
 
 static void corner_action(void)
 {
+    Motor_Brake();
+    delay_ms(80);   /* 刹车停稳 */
     Motor_SetSpeed(0, 0);
-    delay_ms(50);
     g_cornerCount++;
 
     /* 到达目标弯道数: 直接停车不转 */
@@ -238,9 +241,12 @@ static void corner_action(void)
     Motor_YawReset();
 
     /* 速度环闭环 + 编码器计距离越过弯口 */
+    uint8_t corner_mod = (g_cornerCount - 1) % 4;
+    int32_t pulses = (corner_mod == 0 || corner_mod == 2)
+                     ? APPROACH_PULSES_ODD : APPROACH_PULSES_EVEN;
     Motor_A_ResetEncoder();
     Motor_ResetSpeedControl();
-    while (Motor_A_GetEncoderCnt() < APPROACH_PULSES) {
+    while (Motor_A_GetEncoderCnt() < pulses) {
         Motor_SpeedControl(APPROACH_SPEED, APPROACH_SPEED);
         delay_ms(5);
     }
@@ -270,30 +276,23 @@ void Trackline_Task(void)
 
     /* ---------- 旋转中 ---------- */
     case PHASE_TURN: {
-        Motor_YawControl(TURN_SPEED);
-
         /* 弯道类型: corner_mod 0=弯1, 1=弯2, 2=弯3, 3=弯4 (每圈循环) */
         uint8_t corner_mod = (g_cornerCount - 1) % 4;
 
-        /* 偶数弯(弯2/4): 旋转中检测到digtals[3]有线 或 角度到位 就切回循迹 */
-        if (corner_mod == 1 || corner_mod == 3) {
-            uint8_t line_hit = digtals[3];
-            uint8_t angle_done = Motor_YawIsAtTarget();
+        /* 弯3/4用低速旋转防超调 */
+        int16_t turn_spd = (corner_mod >= 2) ? TURN_SPEED_34 : TURN_SPEED_12;
+        Motor_YawControl(turn_spd);
 
-            if (line_hit || angle_done) {
-                if (line_hit) g_lineConfirmCnt++;
-                if (g_lineConfirmCnt >= LINE_CONFIRM_THRESH || angle_done) {
-                    g_lineConfirmCnt = 0;
-                    Motor_Brake();
-                    delay_ms(30);
-                    Beep_Trigger(BEEP_MODE_LONG);
-                    g_Trackline.integral = 0;
-                    g_Trackline.last_error = 0;
-                    g_Trackline.base_speed = NORMAL_SPEED;
-                    g_phase = PHASE_TRACK;
-                }
-            } else {
-                g_lineConfirmCnt = 0;
+        /* 偶数弯(弯2/4): 检测到digtals[3]有线立刻停 或 角度到位兜底 */
+        if (corner_mod == 1 || corner_mod == 3) {
+            if (digtals[3] || Motor_YawIsAtTarget()) {
+                Motor_Brake();
+                delay_ms(50);
+                Beep_Trigger(BEEP_MODE_LONG);
+                g_Trackline.integral = 0;
+                g_Trackline.last_error = 0;
+                g_Trackline.base_speed = NORMAL_SPEED;
+                g_phase = PHASE_TRACK;
             }
             return;
         }
@@ -301,7 +300,7 @@ void Trackline_Task(void)
         /* 奇数弯(弯1/3): 到达目标角度后进入直行 */
         if (Motor_YawIsAtTarget()) {
             Motor_Brake();
-            delay_ms(30);
+            delay_ms(50);
             Beep_Trigger(BEEP_MODE_LONG);
             Motor_A_ResetEncoder();
             Motor_B_ResetEncoder();

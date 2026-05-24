@@ -1,17 +1,17 @@
 ******************************************************************************
             TI ARM Clang Linker PC v4.0.4                      
 ******************************************************************************
->> Linked Sun May 24 05:59:08 2026
+>> Linked Sun May 24 07:57:10 2026
 
 OUTPUT FILE NAME:   <optoelectronicrace_26.out>
-ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 0000860d
+ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 000086b9
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00020000  00009ce8  00016318  R  X
+  FLASH                 00000000   00020000  00009d98  00016268  R  X
   SRAM                  20200000   00008000  000009b1  0000764f  RW X
   BCR_CONFIG            41c00000   000000ff  00000000  000000ff  R   
   BSL_CONFIG            41c00100   00000080  00000000  00000080  R   
@@ -21,11 +21,11 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    00009ce8   00009ce8    r-x
+00000000    00000000    00009d98   00009d98    r-x
   00000000    00000000    000000c0   000000c0    r-- .intvecs
-  000000c0    000000c0    000090b0   000090b0    r-x .text
-  00009170    00009170    00000ac0   00000ac0    r-- .rodata
-  00009c30    00009c30    000000b8   000000b8    r-- .cinit
+  000000c0    000000c0    00009160   00009160    r-x .text
+  00009220    00009220    00000ac0   00000ac0    r-- .rodata
+  00009ce0    00009ce0    000000b8   000000b8    r-- .cinit
 20200000    20200000    000007b4   00000000    rw-
   20200000    20200000    0000063d   00000000    rw- .bss
   20200640    20200640    00000174   00000000    rw- .data
@@ -41,412 +41,413 @@ section   page    origin      length       input sections
 .intvecs   0    00000000    000000c0     
                   00000000    000000c0     startup_mspm0g350x_ticlang.o (.intvecs)
 
-.text      0    000000c0    000090b0     
+.text      0    000000c0    00009160     
                   000000c0    000009d0     libc.a : _printfi.c.obj (.text:__TI_printfi)
                   00000a90    000007d0     Easy_Menu_Page.o (.text.Ordinary_Page_Input)
                   00001260    000007c4     Easy_Menu_Item.o (.text.Data_Item_Input)
-                  00001a24    000004cc     Trackline.o (.text.Trackline_Task)
-                  00001ef0    000004a0     Easy_Menu.o (.text.Easy_Menu_All_Update)
-                  00002390    00000434     k230_track.o (.text.K230_DrawRect_Task)
-                  000027c4    0000042c     Easy_Menu_Page.o (.text.Ordinary_Page_Enter)
-                  00002bf0    0000040c     Easy_Menu_User.o (.text.Easy_Menu_Ui_Init)
-                  00002ffc    0000039c     k230_track.o (.text.K230_Aim_Task)
-                  00003398    00000364     Easy_Menu_Page.o (.text.Ordinary_Page_Refresh)
-                  000036fc    000002b0     JY62.o (.text.JY62_ProcessData)
-                  000039ac    00000220     libc.a : _printfi.c.obj (.text._pconv_a)
-                  00003bcc    000001dc            : _printfi.c.obj (.text._pconv_g)
-                  00003da8    000001d8     Easy_Menu_Page.o (.text.Ordinary_Page_Display)
-                  00003f80    000001d0     Motor.o (.text.Motor_SpeedControl)
-                  00004150    000001ac     ti_msp_dl_config.o (.text.SYSCFG_DL_GPIO_init)
-                  000042fc    00000192     libclang_rt.builtins.a : adddf3.S.obj (.text.adddf3_subdf3)
-                  0000448e    00000002                            : aeabi_div0.c.obj (.text.__aeabi_idiv0)
-                  00004490    00000188     No_Mcu_Ganv_Grayscale_Sensor.o (.text.No_MCU_Ganv_Sensor_Init)
-                  00004618    00000180     Motor.o (.text.Motor_YawControl)
-                  00004798    00000160     main.o (.text.main)
-                  000048f8    0000013c     libc.a : _printfi.c.obj (.text.fcvt)
-                  00004a34    00000130     k230_track.o (.text.UART0_IRQHandler)
-                  00004b64    00000124     Trackline.o (.text.corner_action)
-                  00004c88    00000120     libc.a : _printfi.c.obj (.text._pconv_e)
-                  00004da8    00000118     OLED.o (.text.OLED_ShowChar)
-                  00004ec0    0000010c     libclang_rt.builtins.a : divdf3.S.obj (.text.__divdf3)
-                  00004fcc    00000104     driverlib.a : dl_timer.o (.text.DL_Timer_initFourCCPWMMode)
-                  000050d0    000000fa     OLED.o (.text.OLED_Init)
-                  000051ca    00000002     libclang_rt.builtins.a : aeabi_div0.c.obj (.text.__aeabi_ldiv0)
-                  000051cc    000000ec     Trackline.o (.text.is_corner_detected)
-                  000052b8    000000e4     libclang_rt.builtins.a : muldf3.S.obj (.text.__muldf3)
-                  0000539c    000000e0     JY62.o (.text.JY62_ConfigMode)
-                  0000547c    000000d8     libc.a : s_scalbn.c.obj (.text.scalbn)
-                  00005554    000000d8     libclang_rt.builtins.a : addsf3.S.obj (.text)
-                  0000562c    000000cc     Beep.o (.text.Beep_Tick_1ms)
-                  000056f8    000000cc     Easy_Menu_Item.o (.text.Data_Item_Init)
-                  000057c4    000000c4     Knob_drv.o (.text.Knob_Tick_1ms)
-                  00005888    000000bc     No_Mcu_Ganv_Grayscale_Sensor.o (.text.Get_Analog_value)
-                  00005944    000000b8     Easy_Menu_User.o (.text.Jy62_Yaw_Acc_Callback)
-                  000059fc    000000b4     Beep.o (.text.Beep_Trigger)
-                  00005ab0    000000aa     No_Mcu_Ganv_Grayscale_Sensor.o (.text.normalizeAnalogValues)
-                  00005b5a    00000002     --HOLE-- [fill = 0]
-                  00005b5c    000000a2     libclang_rt.builtins.a : udivmoddi4.S.obj (.text)
-                  00005bfe    00000002     --HOLE-- [fill = 0]
-                  00005c00    000000a0     Knob_drv.o (.text.Knob_get)
-                  00005ca0    0000009c     Motor.o (.text.Motor_A_SetSpeed)
-                  00005d3c    0000009c     Motor.o (.text.Motor_B_SetSpeed)
-                  00005dd8    0000009c     ti_msp_dl_config.o (.text.SYSCFG_DL_initPower)
-                  00005e74    00000098     gimbal.o (.text.Gimbal_MovePosition)
-                  00005f0c    00000098     Motor.o (.text.Motor_YawIsAtTarget)
-                  00005fa4    00000090     Easy_Menu.o (.text.Easy_Menu_Area_Clear)
-                  00006034    00000090     Easy_Menu_Core.o (.text.Easy_Menu_Goto_Page)
-                  000060c4    00000090     ti_msp_dl_config.o (.text.SYSCFG_DL_PWM_0_init)
-                  00006154    00000090     Easy_Menu_Page.o (.text.Show_Page_Input)
-                  000061e4    0000008c     libclang_rt.builtins.a : mulsf3.S.obj (.text.__mulsf3)
-                  00006270    00000086     Easy_Menu.o (.text.Easy_Menu_Display_String)
-                  000062f6    00000002     --HOLE-- [fill = 0]
-                  000062f8    00000084     ti_msp_dl_config.o (.text.__NVIC_SetPriority)
-                  0000637c    00000082     libclang_rt.builtins.a : divsf3.S.obj (.text.__divsf3)
-                  000063fe    00000002     --HOLE-- [fill = 0]
-                  00006400    00000080     Motor.o (.text.Motor_B_EncoderIRQHandler)
-                  00006480    00000080     No_Mcu_Ganv_Grayscale_Sensor.o (.text.convertAnalogToDigital)
-                  00006500    0000007c     Easy_Menu_Page.o (.text.Ordinary_Page_Init)
-                  0000657c    0000007c     libc.a : copy_decompress_lzss.c.obj (.text:decompress:lzss)
-                  000065f8    00000078     JY62.o (.text.JY62_Init)
-                  00006670    00000074     Easy_Menu_Core.o (.text.Easy_Menu_Display)
-                  000066e4    00000074     OLED.o (.text.Send_Byte)
-                  00006758    00000074     Easy_Menu_Page.o (.text.Show_Page_Init)
-                  000067cc    00000074     libclang_rt.builtins.a : comparedf2.c.obj (.text.__gedf2)
-                  00006840    00000074     Motor.o (.text.clampSpeed)
-                  000068b4    00000072     No_Mcu_Ganv_Grayscale_Sensor.o (.text.No_MCU_Ganv_Sensor_Init_Frist)
-                  00006926    00000070     OLED.o (.text.OLED_ShowString)
-                  00006996    00000002     --HOLE-- [fill = 0]
-                  00006998    0000006c     Knob_drv.o (.text.Knob_EXTI_Handler)
-                  00006a04    0000006c     ti_msp_dl_config.o (.text.SYSCFG_DL_ADC_line_detector_init)
-                  00006a70    0000006a     OLED.o (.text.OLED_Clear)
-                  00006ada    00000002     --HOLE-- [fill = 0]
-                  00006adc    00000068     Trackline.o (.text.Trackline_Calibrate_Black)
-                  00006b44    00000068     Trackline.o (.text.Trackline_Reset)
-                  00006bac    00000068     libclang_rt.builtins.a : comparedf2.c.obj (.text.__ledf2)
-                  00006c14    00000066     libc.a : _printfi.c.obj (.text._mcpy)
-                  00006c7a    00000002     --HOLE-- [fill = 0]
-                  00006c7c    00000064     ti_msp_dl_config.o (.text.DL_ADC12_initSingleSample)
-                  00006ce0    00000062     libclang_rt.builtins.a : aeabi_dcmp.S.obj (.text.__aeabi_dcmp)
-                  00006d42    00000002     --HOLE-- [fill = 0]
-                  00006d44    00000062                            : aeabi_fcmp.S.obj (.text.__aeabi_fcmp)
-                  00006da6    00000002     --HOLE-- [fill = 0]
-                  00006da8    0000005c     Easy_Menu.o (.text.Easy_Menu_All_Clear)
-                  00006e04    0000005c     ADC.o (.text.adc_getValue)
-                  00006e60    0000005c     libc.a : s_frexp.c.obj (.text.frexp)
-                  00006ebc    00000058     Easy_Menu_Item.o (.text.Switch_Item_Input)
-                  00006f14    00000058     libc.a : _ltoa.c.obj (.text.__TI_ltoa)
-                  00006f6c    00000058            : _printfi.c.obj (.text._pconv_f)
-                  00006fc4    00000056     libclang_rt.builtins.a : aeabi_idivmod.S.obj (.text.__aeabi_idivmod)
-                  0000701a    00000054     Easy_Menu.o (.text.Compare_String)
-                  0000706e    00000002     --HOLE-- [fill = 0]
-                  00007070    00000054     ti_msp_dl_config.o (.text.DL_Timer_configQEI)
-                  000070c4    00000054     Trackline.o (.text.Trackline_Calibrate_White)
-                  00007118    00000054     Trackline.o (.text.Trackline_Init)
-                  0000716c    00000052     Easy_Menu_Item.o (.text.Show_Item_Init)
-                  000071be    00000052     libc.a : _printfi.c.obj (.text._ecpy)
-                  00007210    00000050     ti_msp_dl_config.o (.text.SYSCFG_DL_QEI_0_init)
-                  00007260    00000050     ti_msp_dl_config.o (.text.SysTick_Config)
-                  000072b0    00000050     Trackline.o (.text.any_line_detected)
-                  00007300    0000004e     OLED.o (.text.OLED_WR_Byte)
-                  0000734e    00000002     --HOLE-- [fill = 0]
-                  00007350    0000004c     driverlib.a : dl_dma.o (.text.DL_DMA_initChannel)
-                  0000739c    0000004c     ti_msp_dl_config.o (.text.DL_GPIO_initDigitalInputFeatures)
-                  000073e8    0000004c     JY62.o (.text.DL_UART_setBaudRateDivisor)
-                  00007434    0000004c     ti_msp_dl_config.o (.text.DL_UART_setBaudRateDivisor)
-                  00007480    0000004c     Easy_Menu_User.o (.text.Show__1__Page_Period_Callback)
-                  000074cc    0000004a     ti_msp_dl_config.o (.text.DL_ADC12_configConversionMem)
-                  00007516    00000002     --HOLE-- [fill = 0]
-                  00007518    0000004a     libclang_rt.builtins.a : fixdfsi.S.obj (.text.__fixdfsi)
-                  00007562    00000002     --HOLE-- [fill = 0]
-                  00007564    00000048     driverlib.a : dl_uart.o (.text.DL_UART_init)
-                  000075ac    00000048     k230_track.o (.text.K230_DrawRect_Reset)
-                  000075f4    00000048     Easy_Menu_Page.o (.text.Show_Page_Diaplsy)
-                  0000763c    00000048     gimbal.o (.text.gimbal_send_frame)
-                  00007684    00000044     Easy_Menu.o (.text.Easy_Menu_Display_Char)
-                  000076c8    00000044     Trackline.o (.text.count_active_lines)
-                  0000770c    00000042     No_Mcu_Ganv_Grayscale_Sensor.o (.text.No_Mcu_Ganv_Sensor_Task_Without_tick)
-                  0000774e    00000042     k230_track.o (.text.pixel_to_pulse)
-                  00007790    00000040     driverlib.a : dl_adc12.o (.text.DL_ADC12_setClockConfig)
-                  000077d0    00000040     ti_msp_dl_config.o (.text.SYSCFG_DL_UART_0_init)
-                  00007810    00000040     ti_msp_dl_config.o (.text.SYSCFG_DL_UART_JY62_init)
-                  00007850    00000040     ti_msp_dl_config.o (.text.SYSCFG_DL_UART_UP_init)
-                  00007890    00000040     Easy_Menu_Item.o (.text.Switch_Item_Init)
-                  000078d0    00000040     libclang_rt.builtins.a : aeabi_uidivmod.S.obj (.text.__aeabi_uidivmod)
-                  00007910    00000040                            : extendsfdf2.S.obj (.text.__extendsfdf2)
-                  00007950    00000040     libc.a : atoi.c.obj (.text.atoi)
-                  00007990    00000040            : vsnprintf.c.obj (.text.vsnprintf)
-                  000079d0    0000003c     ti_msp_dl_config.o (.text.DL_Timer_setCounterControl)
-                  00007a0c    0000003c     Easy_Menu_Core.o (.text.Easy_Menu_Init)
-                  00007a48    0000003c     Easy_Menu.o (.text.Easy_Menu_Printf)
-                  00007a84    0000003c     gimbal.o (.text.Gimbal_Enable)
-                  00007ac0    0000003c     OLED.o (.text.OLED_Set_Pos)
-                  00007afc    0000003c     ti_msp_dl_config.o (.text.SYSCFG_DL_init)
-                  00007b38    0000003c     libclang_rt.builtins.a : floatsisf.S.obj (.text.__floatsisf)
-                  00007b74    0000003c                            : comparesf2.S.obj (.text.__gtsf2)
-                  00007bb0    0000003c     Beep.o (.text.start_off_phase)
-                  00007bec    0000003c     Beep.o (.text.start_on_phase)
-                  00007c28    0000003c     libc.a : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit)
-                  00007c64    0000003a     libclang_rt.builtins.a : comparesf2.S.obj (.text.__eqsf2)
-                  00007c9e    00000002     --HOLE-- [fill = 0]
-                  00007ca0    0000003a                            : muldsi3.S.obj (.text.__muldsi3)
-                  00007cda    00000038     No_Mcu_Ganv_Grayscale_Sensor.o (.text.Get_Normalize_For_User)
-                  00007d12    00000002     --HOLE-- [fill = 0]
-                  00007d14    00000038     k230_track.o (.text.K230_Aim_Reset)
-                  00007d4c    00000038     Motor.o (.text.Motor_Brake)
-                  00007d84    00000038     Motor.o (.text.Motor_Coast)
-                  00007dbc    00000038     Easy_Menu_Page.o (.text.Show_Page_Enter)
-                  00007df4    00000038     libclang_rt.builtins.a : fixsfsi.S.obj (.text.__fixsfsi)
-                  00007e2c    00000038     libc.a : sprintf.c.obj (.text.sprintf)
-                  00007e64    00000036     No_Mcu_Ganv_Grayscale_Sensor.o (.text.Get_Anolog_Value)
-                  00007e9a    00000002     --HOLE-- [fill = 0]
-                  00007e9c    00000034     Easy_Menu_Item.o (.text.Goto_Item_Init)
-                  00007ed0    00000034     OLED.o (.text.I2C_Start)
-                  00007f04    00000034     ti_msp_dl_config.o (.text.SYSCFG_DL_SYSCTL_init)
-                  00007f38    00000030     ti_msp_dl_config.o (.text.DL_DMA_setTransferSize)
-                  00007f68    00000030     ti_msp_dl_config.o (.text.DL_GPIO_initDigitalOutputFeatures)
-                  00007f98    00000030     Easy_Menu.o (.text.Display_Char_Line)
-                  00007fc8    00000030     gimbal.o (.text.Gimbal_Stop)
-                  00007ff8    00000030     k230_track.o (.text.K230_Track_Init)
-                  00008028    00000030     Motor.o (.text.Motor_Init)
-                  00008058    00000030     Motor.o (.text.Motor_ResetSpeedControl)
-                  00008088    00000030     Easy_Menu_Page.o (.text.Show_Page_Exit)
-                  000080b8    00000030     delay.o (.text.SysTick_Handler)
-                  000080e8    00000030     JY62.o (.text.UART1_IRQHandler)
-                  00008118    00000030     libc.a : _printfi.c.obj (.text._fcpy)
-                  00008148    00000030            : vsnprintf.c.obj (.text._outs)
-                  00008178    0000002e     Easy_Menu_Item.o (.text.Goto_Item_Input)
-                  000081a6    00000002     --HOLE-- [fill = 0]
-                  000081a8    0000002c     ti_msp_dl_config.o (.text.DL_ADC12_setDMASamplesCnt)
-                  000081d4    0000002c     Knob_drv.o (.text.GROUP1_IRQHandler)
-                  00008200    0000002c     JY62.o (.text.__NVIC_ClearPendingIRQ)
-                  0000822c    0000002c     k230_track.o (.text.__NVIC_ClearPendingIRQ)
-                  00008258    0000002c     JY62.o (.text.__NVIC_EnableIRQ)
-                  00008284    0000002c     Knob_drv.o (.text.__NVIC_EnableIRQ)
-                  000082b0    0000002c     Motor.o (.text.__NVIC_EnableIRQ)
-                  000082dc    0000002c     k230_track.o (.text.__NVIC_EnableIRQ)
-                  00008308    0000002c     libclang_rt.builtins.a : floatsidf.S.obj (.text.__floatsidf)
-                  00008334    0000002c     Uart.o (.text.uart0_send_char)
-                  00008360    0000002a     Easy_Menu.o (.text.Display_Char)
-                  0000838a    00000002     --HOLE-- [fill = 0]
-                  0000838c    00000028     Easy_Menu_User.o (.text.Cal_Black_Callback)
-                  000083b4    00000028     Easy_Menu_User.o (.text.Cal_White_Callback)
-                  000083dc    00000028     JY62.o (.text.DL_Common_updateReg)
-                  00008404    00000028     ti_msp_dl_config.o (.text.DL_Common_updateReg)
-                  0000842c    00000028     Trackline.o (.text.DL_DMA_setDestAddr)
-                  00008454    00000028     Trackline.o (.text.DL_DMA_setSrcAddr)
-                  0000847c    00000028     Easy_Menu_Core.o (.text.Easy_Menu_Input)
-                  000084a4    00000028     OLED.o (.text.I2C_Stop)
-                  000084cc    00000028     OLED.o (.text.I2C_WaitAck)
-                  000084f4    00000028     JY62.o (.text.JY62_Task)
-                  0000851c    00000028     Easy_Menu_User.o (.text.Lspeed_Callback)
-                  00008544    00000028     Motor.o (.text.Motor_SetSpeed)
-                  0000856c    00000028     Easy_Menu_User.o (.text.Rspeed_Callback)
-                  00008594    00000028     ti_msp_dl_config.o (.text.SYSCFG_DL_DMA_detector_out_init)
-                  000085bc    00000028     Easy_Menu_User.o (.text.Trackline__Round_Callback)
-                  000085e4    00000028     libclang_rt.builtins.a : floatunsisf.S.obj (.text.__floatunsisf)
-                  0000860c    00000028     libc.a : boot_cortex_m.c.obj (.text:_c_int00_noargs)
-                  00008634    00000026     Trackline.o (.text.DL_DMA_enableChannel)
-                  0000865a    00000002     --HOLE-- [fill = 0]
-                  0000865c    00000024     Beep.o (.text.Beep_Stop)
-                  00008680    00000024     Laser.o (.text.Laser_Init)
-                  000086a4    00000024     Motor.o (.text.Motor_A_GetEncoderCnt)
-                  000086c8    00000024     libclang_rt.builtins.a : floatunsidf.S.obj (.text.__floatunsidf)
-                  000086ec    00000024                            : muldi3.S.obj (.text.__muldi3)
-                  00008710    00000022     libc.a : memccpy.c.obj (.text.memccpy)
-                  00008732    00000002     --HOLE-- [fill = 0]
-                  00008734    00000020     JY62.o (.text.DL_GPIO_initPeripheralInputFunction)
-                  00008754    00000020     ti_msp_dl_config.o (.text.DL_GPIO_initPeripheralInputFunction)
-                  00008774    00000020     Easy_Menu_User.o (.text.Trackline_Start_Callback)
-                  00008794    00000020     delay.o (.text.delay_ms)
-                  000087b4    0000001e     JY62.o (.text.DL_UART_setOversampling)
-                  000087d2    0000001e     ti_msp_dl_config.o (.text.DL_UART_setOversampling)
-                  000087f0    0000001e     libclang_rt.builtins.a : ashldi3.S.obj (.text.__ashldi3)
-                  0000880e    00000002     --HOLE-- [fill = 0]
-                  00008810    0000001c     ti_msp_dl_config.o (.text.DL_ADC12_enableDMA)
-                  0000882c    0000001c     ti_msp_dl_config.o (.text.DL_ADC12_enableDMATrigger)
-                  00008848    0000001c     Trackline.o (.text.DL_ADC12_startConversion)
-                  00008864    0000001c     Knob_drv.o (.text.DL_GPIO_clearInterruptStatus)
-                  00008880    0000001c     Motor.o (.text.DL_GPIO_clearInterruptStatus)
-                  0000889c    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_clearInterruptStatus)
-                  000088b8    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_enableInterrupt)
-                  000088d4    0000001c     JY62.o (.text.DL_GPIO_initPeripheralOutputFunction)
-                  000088f0    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_initPeripheralOutputFunction)
-                  0000890c    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_setLowerPinsPolarity)
-                  00008928    0000001c     Knob_drv.o (.text.DL_Interrupt_getPendingGroup)
-                  00008944    0000001c     ti_msp_dl_config.o (.text.DL_SYSCTL_setSYSOSCFreq)
-                  00008960    0000001c     driverlib.a : dl_timer.o (.text.DL_Timer_setCaptCompUpdateMethod)
-                  0000897c    0000001c                 : dl_timer.o (.text.DL_Timer_setClockConfig)
-                  00008998    0000001c     k230_track.o (.text.DL_UART_disableDMAReceiveEvent)
-                  000089b4    0000001c     JY62.o (.text.DL_UART_enableInterrupt)
-                  000089d0    0000001c     k230_track.o (.text.DL_UART_enableInterrupt)
-                  000089ec    0000001c     driverlib.a : dl_uart.o (.text.DL_UART_receiveDataCheck)
-                  00008a08    0000001c     Motor.o (.text.Motor_YawSetTarget)
-                  00008a24    0000001a     gimbal.o (.text.Gimbal_Enable_All)
-                  00008a3e    00000002     --HOLE-- [fill = 0]
-                  00008a40    00000018     ti_msp_dl_config.o (.text.DL_ADC12_enablePower)
-                  00008a58    00000018     ti_msp_dl_config.o (.text.DL_ADC12_reset)
-                  00008a70    00000018     ti_msp_dl_config.o (.text.DL_ADC12_setSampleTime0)
-                  00008a88    00000018     Laser.o (.text.DL_GPIO_enableOutput)
-                  00008aa0    00000018     ti_msp_dl_config.o (.text.DL_GPIO_enableOutput)
-                  00008ab8    00000018     ti_msp_dl_config.o (.text.DL_GPIO_enablePower)
-                  00008ad0    00000018     Knob_drv.o (.text.DL_GPIO_getEnabledInterruptStatus)
-                  00008ae8    00000018     Motor.o (.text.DL_GPIO_getEnabledInterruptStatus)
-                  00008b00    00000018     ti_msp_dl_config.o (.text.DL_GPIO_initDigitalOutput)
-                  00008b18    00000018     ti_msp_dl_config.o (.text.DL_GPIO_reset)
-                  00008b30    00000018     Beep.o (.text.DL_GPIO_setPins)
-                  00008b48    00000018     Laser.o (.text.DL_GPIO_setPins)
-                  00008b60    00000018     Motor.o (.text.DL_GPIO_setPins)
-                  00008b78    00000018     No_Mcu_Ganv_Grayscale_Sensor.o (.text.DL_GPIO_setPins)
-                  00008b90    00000018     OLED.o (.text.DL_GPIO_setPins)
-                  00008ba8    00000018     ti_msp_dl_config.o (.text.DL_GPIO_setPins)
-                  00008bc0    00000018     ti_msp_dl_config.o (.text.DL_GPIO_setUpperPinsPolarity)
-                  00008bd8    00000018     ti_msp_dl_config.o (.text.DL_SYSCTL_setBORThreshold)
-                  00008bf0    00000018     ti_msp_dl_config.o (.text.DL_Timer_enablePower)
-                  00008c08    00000018     ti_msp_dl_config.o (.text.DL_Timer_reset)
-                  00008c20    00000018     driverlib.a : dl_timer.o (.text.DL_Timer_setCaptureCompareOutCtl)
-                  00008c38    00000018     ti_msp_dl_config.o (.text.DL_Timer_setLoadValue)
-                  00008c50    00000018     ti_msp_dl_config.o (.text.DL_Timer_startCounter)
-                  00008c68    00000018     JY62.o (.text.DL_UART_enablePower)
-                  00008c80    00000018     ti_msp_dl_config.o (.text.DL_UART_enablePower)
-                  00008c98    00000018     JY62.o (.text.DL_UART_isBusy)
-                  00008cb0    00000018     Uart.o (.text.DL_UART_isBusy)
-                  00008cc8    00000018     ti_msp_dl_config.o (.text.DL_UART_reset)
-                  00008ce0    00000018     ti_msp_dl_config.o (.text.SYSCFG_DL_DMA_CH0_init)
-                  00008cf8    00000018     libc.a : vsnprintf.c.obj (.text._outc)
-                  00008d10    00000018            : sprintf.c.obj (.text._outs)
-                  00008d28    00000016     ti_msp_dl_config.o (.text.DL_ADC12_enableConversions)
-                  00008d3e    00000016     Knob_drv.o (.text.DL_GPIO_readPins)
-                  00008d54    00000016     Motor.o (.text.DL_GPIO_readPins)
-                  00008d6a    00000016     JY62.o (.text.DL_UART_enable)
-                  00008d80    00000016     ti_msp_dl_config.o (.text.DL_UART_enable)
-                  00008d96    00000016     JY62.o (.text.DL_UART_transmitData)
-                  00008dac    00000016     Uart.o (.text.DL_UART_transmitData)
-                  00008dc2    00000014     Beep.o (.text.DL_GPIO_clearPins)
-                  00008dd6    00000014     Laser.o (.text.DL_GPIO_clearPins)
-                  00008dea    00000014     Motor.o (.text.DL_GPIO_clearPins)
-                  00008dfe    00000014     No_Mcu_Ganv_Grayscale_Sensor.o (.text.DL_GPIO_clearPins)
-                  00008e12    00000014     OLED.o (.text.DL_GPIO_clearPins)
-                  00008e26    00000014     ti_msp_dl_config.o (.text.DL_GPIO_clearPins)
-                  00008e3a    00000002     --HOLE-- [fill = 0]
-                  00008e3c    00000014     ti_msp_dl_config.o (.text.DL_SYSCTL_disableSYSPLL)
-                  00008e50    00000014     ti_msp_dl_config.o (.text.DL_SYSCTL_enableMFCLK)
-                  00008e64    00000014     ti_msp_dl_config.o (.text.DL_Timer_enableClock)
-                  00008e78    00000014     ti_msp_dl_config.o (.text.DL_Timer_setCCPDirection)
-                  00008e8c    00000014     Motor.o (.text.DL_Timer_setTimerCount)
-                  00008ea0    00000014     JY62.o (.text.DL_UART_receiveData)
-                  00008eb4    00000014     k230_track.o (.text.DL_UART_receiveData)
-                  00008ec8    00000014     Easy_Menu_User.o (.text.Jy62_Yaw_Callback)
-                  00008edc    00000014     Laser.o (.text.Laser_Off)
-                  00008ef0    00000014     Laser.o (.text.Laser_On)
-                  00008f04    00000014     Motor.o (.text.Motor_B_EncoderInit)
-                  00008f18    00000014     Easy_Menu_Page.o (.text.Ordinary_Page_Exit)
-                  00008f2c    00000014     Easy_Menu_User.o (.text.Track_Pid__Kd_Callback)
-                  00008f40    00000014     Easy_Menu_User.o (.text.Track_Pid__Kp_Callback)
-                  00008f54    00000014     libclang_rt.builtins.a : aeabi_uldivmod.S.obj (.text.__aeabi_uldivmod)
-                  00008f68    00000014     libc.a : _printfi.c.obj (.text.strchr)
-                  00008f7c    00000012     JY62.o (.text.DL_UART_getPendingInterrupt)
-                  00008f8e    00000012     k230_track.o (.text.DL_UART_getPendingInterrupt)
-                  00008fa0    00000012     driverlib.a : dl_uart.o (.text.DL_UART_setClockConfig)
-                  00008fb2    00000012     libc.a : memcpy16.S.obj (.text:TI_memcpy_small)
-                  00008fc4    00000012            : copy_decompress_none.c.obj (.text:decompress:none)
-                  00008fd6    00000002     --HOLE-- [fill = 0]
-                  00008fd8    00000010     ti_msp_dl_config.o (.text.DL_SYSCTL_disableHFXT)
-                  00008fe8    00000010     Motor.o (.text.DL_Timer_getTimerCount)
-                  00008ff8    00000010     driverlib.a : dl_timer.o (.text.DL_Timer_setCaptureCompareValue)
-                  00009008    00000010     Motor.o (.text.Motor_A_ResetEncoder)
-                  00009018    00000010     Trackline.o (.text.sensor_update)
-                  00009028    00000010     libc.a : wcslen.c.obj (.text.wcslen)
-                  00009038    00000010            : copy_zero_init.c.obj (.text:decompress:ZI)
-                  00009048    0000000e     libclang_rt.builtins.a : aeabi_memset.S.obj (.text.__aeabi_memset)
-                  00009056    0000000e     libc.a : _printfi.c.obj (.text.strlen)
-                  00009064    0000000e            : strlen.c.obj (.text.strlen)
-                  00009072    0000000e            : memset16.S.obj (.text:TI_memset_small)
-                  00009080    0000000c     Motor.o (.text.Motor_B_GetEncoderCnt)
-                  0000908c    0000000c     Motor.o (.text.Motor_B_ResetEncoder)
-                  00009098    0000000c     Motor.o (.text.Motor_YawReset)
-                  000090a4    0000000c     ti_msp_dl_config.o (.text.SYSCFG_DL_DMA_init)
-                  000090b0    0000000c     ti_msp_dl_config.o (.text.SYSCFG_DL_SYSTICK_init)
-                  000090bc    0000000c     libclang_rt.builtins.a : aeabi_memset.S.obj (.text.__aeabi_memclr)
-                  000090c8    0000000a     Easy_Menu_User.o (.text.Centeraim__Start_Callback)
-                  000090d2    0000000a     driverlib.a : dl_common.o (.text.DL_Common_delayCycles)
-                  000090dc    0000000a     Knob_drv.o (.text.Knob_Init)
-                  000090e6    0000000a     libc.a : _printfi.c.obj (.text.OUTLINED_FUNCTION_0)
-                  000090f0    00000010     libclang_rt.builtins.a : adddf3.S.obj (.tramp.__aeabi_dsub.1)
-                  00009100    0000000a     libc.a : _printfi.c.obj (.text.OUTLINED_FUNCTION_1)
-                  0000910a    0000000a     Easy_Menu_User.o (.text.Still_Aim_Callback)
-                  00009114    0000000a     Easy_Menu_User.o (.text.Still_Aim_Draw_Rectangle_Callback)
-                  0000911e    0000000a     libc.a : sprintf.c.obj (.text._outc)
-                  00009128    00000008     Easy_Menu_User.o (.text.Center_Aim_Round_Callback)
-                  00009130    00000008     Easy_Menu_User.o (.text.Show__1__Page_Exit_Callback)
-                  00009138    00000008     libc.a : aeabi_portable.c.obj (.text.__aeabi_errno_addr)
-                  00009140    00000008     libclang_rt.builtins.a : aeabi_memcpy.S.obj (.text.__aeabi_memcpy)
-                  00009148    00000006     libc.a : exit.c.obj (.text:abort)
-                  0000914e    00000004     startup_mspm0g350x_ticlang.o (.text.Default_Handler)
-                  00009152    00000004     libsysbm.a : hostexit.c.obj (.text.HOSTexit)
-                  00009156    00000004     startup_mspm0g350x_ticlang.o (.text.Reset_Handler)
-                  0000915a    00000002     --HOLE-- [fill = 0]
-                  0000915c    00000010     libc.a : boot_cortex_m.c.obj (.tramp._c_int00_noargs.1)
-                  0000916c    00000004            : pre_init.c.obj (.text._system_pre_init)
+                  00001a24    000004c0     k230_track.o (.text.K230_DrawRect_Task)
+                  00001ee4    000004a0     Easy_Menu.o (.text.Easy_Menu_All_Update)
+                  00002384    000004a0     Trackline.o (.text.Trackline_Task)
+                  00002824    0000042c     Easy_Menu_Page.o (.text.Ordinary_Page_Enter)
+                  00002c50    0000040c     Easy_Menu_User.o (.text.Easy_Menu_Ui_Init)
+                  0000305c    0000039c     k230_track.o (.text.K230_Aim_Task)
+                  000033f8    00000364     Easy_Menu_Page.o (.text.Ordinary_Page_Refresh)
+                  0000375c    000002b0     JY62.o (.text.JY62_ProcessData)
+                  00003a0c    00000220     libc.a : _printfi.c.obj (.text._pconv_a)
+                  00003c2c    000001dc            : _printfi.c.obj (.text._pconv_g)
+                  00003e08    000001d8     Easy_Menu_Page.o (.text.Ordinary_Page_Display)
+                  00003fe0    000001d0     Motor.o (.text.Motor_SpeedControl)
+                  000041b0    000001ac     ti_msp_dl_config.o (.text.SYSCFG_DL_GPIO_init)
+                  0000435c    00000192     libclang_rt.builtins.a : adddf3.S.obj (.text.adddf3_subdf3)
+                  000044ee    00000002                            : aeabi_div0.c.obj (.text.__aeabi_idiv0)
+                  000044f0    00000188     No_Mcu_Ganv_Grayscale_Sensor.o (.text.No_MCU_Ganv_Sensor_Init)
+                  00004678    00000180     Motor.o (.text.Motor_YawControl)
+                  000047f8    00000170     Trackline.o (.text.corner_action)
+                  00004968    00000160     main.o (.text.main)
+                  00004ac8    0000013c     libc.a : _printfi.c.obj (.text.fcvt)
+                  00004c04    00000130     k230_track.o (.text.UART0_IRQHandler)
+                  00004d34    00000120     libc.a : _printfi.c.obj (.text._pconv_e)
+                  00004e54    00000118     OLED.o (.text.OLED_ShowChar)
+                  00004f6c    0000010c     libclang_rt.builtins.a : divdf3.S.obj (.text.__divdf3)
+                  00005078    00000104     driverlib.a : dl_timer.o (.text.DL_Timer_initFourCCPWMMode)
+                  0000517c    000000fa     OLED.o (.text.OLED_Init)
+                  00005276    00000002     libclang_rt.builtins.a : aeabi_div0.c.obj (.text.__aeabi_ldiv0)
+                  00005278    000000ec     Trackline.o (.text.is_corner_detected)
+                  00005364    000000e4     libclang_rt.builtins.a : muldf3.S.obj (.text.__muldf3)
+                  00005448    000000e0     JY62.o (.text.JY62_ConfigMode)
+                  00005528    000000d8     libc.a : s_scalbn.c.obj (.text.scalbn)
+                  00005600    000000d8     libclang_rt.builtins.a : addsf3.S.obj (.text)
+                  000056d8    000000cc     Beep.o (.text.Beep_Tick_1ms)
+                  000057a4    000000cc     Easy_Menu_Item.o (.text.Data_Item_Init)
+                  00005870    000000c4     Knob_drv.o (.text.Knob_Tick_1ms)
+                  00005934    000000bc     No_Mcu_Ganv_Grayscale_Sensor.o (.text.Get_Analog_value)
+                  000059f0    000000b8     Easy_Menu_User.o (.text.Jy62_Yaw_Acc_Callback)
+                  00005aa8    000000b4     Beep.o (.text.Beep_Trigger)
+                  00005b5c    000000aa     No_Mcu_Ganv_Grayscale_Sensor.o (.text.normalizeAnalogValues)
+                  00005c06    00000002     --HOLE-- [fill = 0]
+                  00005c08    000000a2     libclang_rt.builtins.a : udivmoddi4.S.obj (.text)
+                  00005caa    00000002     --HOLE-- [fill = 0]
+                  00005cac    000000a0     Knob_drv.o (.text.Knob_get)
+                  00005d4c    0000009c     Motor.o (.text.Motor_A_SetSpeed)
+                  00005de8    0000009c     Motor.o (.text.Motor_B_SetSpeed)
+                  00005e84    0000009c     ti_msp_dl_config.o (.text.SYSCFG_DL_initPower)
+                  00005f20    00000098     gimbal.o (.text.Gimbal_MovePosition)
+                  00005fb8    00000098     Motor.o (.text.Motor_YawIsAtTarget)
+                  00006050    00000090     Easy_Menu.o (.text.Easy_Menu_Area_Clear)
+                  000060e0    00000090     Easy_Menu_Core.o (.text.Easy_Menu_Goto_Page)
+                  00006170    00000090     ti_msp_dl_config.o (.text.SYSCFG_DL_PWM_0_init)
+                  00006200    00000090     Easy_Menu_Page.o (.text.Show_Page_Input)
+                  00006290    0000008c     libclang_rt.builtins.a : mulsf3.S.obj (.text.__mulsf3)
+                  0000631c    00000086     Easy_Menu.o (.text.Easy_Menu_Display_String)
+                  000063a2    00000002     --HOLE-- [fill = 0]
+                  000063a4    00000084     ti_msp_dl_config.o (.text.__NVIC_SetPriority)
+                  00006428    00000082     libclang_rt.builtins.a : divsf3.S.obj (.text.__divsf3)
+                  000064aa    00000002     --HOLE-- [fill = 0]
+                  000064ac    00000080     Motor.o (.text.Motor_B_EncoderIRQHandler)
+                  0000652c    00000080     No_Mcu_Ganv_Grayscale_Sensor.o (.text.convertAnalogToDigital)
+                  000065ac    0000007c     Easy_Menu_Page.o (.text.Ordinary_Page_Init)
+                  00006628    0000007c     libc.a : copy_decompress_lzss.c.obj (.text:decompress:lzss)
+                  000066a4    00000078     JY62.o (.text.JY62_Init)
+                  0000671c    00000074     Easy_Menu_Core.o (.text.Easy_Menu_Display)
+                  00006790    00000074     OLED.o (.text.Send_Byte)
+                  00006804    00000074     Easy_Menu_Page.o (.text.Show_Page_Init)
+                  00006878    00000074     libclang_rt.builtins.a : comparedf2.c.obj (.text.__gedf2)
+                  000068ec    00000074     Motor.o (.text.clampSpeed)
+                  00006960    00000072     No_Mcu_Ganv_Grayscale_Sensor.o (.text.No_MCU_Ganv_Sensor_Init_Frist)
+                  000069d2    00000070     OLED.o (.text.OLED_ShowString)
+                  00006a42    00000002     --HOLE-- [fill = 0]
+                  00006a44    0000006c     Knob_drv.o (.text.Knob_EXTI_Handler)
+                  00006ab0    0000006c     ti_msp_dl_config.o (.text.SYSCFG_DL_ADC_line_detector_init)
+                  00006b1c    0000006a     OLED.o (.text.OLED_Clear)
+                  00006b86    00000002     --HOLE-- [fill = 0]
+                  00006b88    00000068     Trackline.o (.text.Trackline_Calibrate_Black)
+                  00006bf0    00000068     Trackline.o (.text.Trackline_Reset)
+                  00006c58    00000068     libclang_rt.builtins.a : comparedf2.c.obj (.text.__ledf2)
+                  00006cc0    00000066     libc.a : _printfi.c.obj (.text._mcpy)
+                  00006d26    00000002     --HOLE-- [fill = 0]
+                  00006d28    00000064     ti_msp_dl_config.o (.text.DL_ADC12_initSingleSample)
+                  00006d8c    00000062     libclang_rt.builtins.a : aeabi_dcmp.S.obj (.text.__aeabi_dcmp)
+                  00006dee    00000002     --HOLE-- [fill = 0]
+                  00006df0    00000062                            : aeabi_fcmp.S.obj (.text.__aeabi_fcmp)
+                  00006e52    00000002     --HOLE-- [fill = 0]
+                  00006e54    0000005c     Easy_Menu.o (.text.Easy_Menu_All_Clear)
+                  00006eb0    0000005c     ADC.o (.text.adc_getValue)
+                  00006f0c    0000005c     libc.a : s_frexp.c.obj (.text.frexp)
+                  00006f68    00000058     Easy_Menu_Item.o (.text.Switch_Item_Input)
+                  00006fc0    00000058     libc.a : _ltoa.c.obj (.text.__TI_ltoa)
+                  00007018    00000058            : _printfi.c.obj (.text._pconv_f)
+                  00007070    00000056     libclang_rt.builtins.a : aeabi_idivmod.S.obj (.text.__aeabi_idivmod)
+                  000070c6    00000054     Easy_Menu.o (.text.Compare_String)
+                  0000711a    00000002     --HOLE-- [fill = 0]
+                  0000711c    00000054     ti_msp_dl_config.o (.text.DL_Timer_configQEI)
+                  00007170    00000054     Trackline.o (.text.Trackline_Calibrate_White)
+                  000071c4    00000054     Trackline.o (.text.Trackline_Init)
+                  00007218    00000052     Easy_Menu_Item.o (.text.Show_Item_Init)
+                  0000726a    00000052     libc.a : _printfi.c.obj (.text._ecpy)
+                  000072bc    00000050     ti_msp_dl_config.o (.text.SYSCFG_DL_QEI_0_init)
+                  0000730c    00000050     ti_msp_dl_config.o (.text.SysTick_Config)
+                  0000735c    00000050     Trackline.o (.text.any_line_detected)
+                  000073ac    0000004e     OLED.o (.text.OLED_WR_Byte)
+                  000073fa    00000002     --HOLE-- [fill = 0]
+                  000073fc    0000004c     driverlib.a : dl_dma.o (.text.DL_DMA_initChannel)
+                  00007448    0000004c     ti_msp_dl_config.o (.text.DL_GPIO_initDigitalInputFeatures)
+                  00007494    0000004c     JY62.o (.text.DL_UART_setBaudRateDivisor)
+                  000074e0    0000004c     ti_msp_dl_config.o (.text.DL_UART_setBaudRateDivisor)
+                  0000752c    0000004c     Easy_Menu_User.o (.text.Show__1__Page_Period_Callback)
+                  00007578    0000004a     ti_msp_dl_config.o (.text.DL_ADC12_configConversionMem)
+                  000075c2    00000002     --HOLE-- [fill = 0]
+                  000075c4    0000004a     libclang_rt.builtins.a : fixdfsi.S.obj (.text.__fixdfsi)
+                  0000760e    00000002     --HOLE-- [fill = 0]
+                  00007610    00000048     driverlib.a : dl_uart.o (.text.DL_UART_init)
+                  00007658    00000048     k230_track.o (.text.K230_DrawRect_Reset)
+                  000076a0    00000048     Easy_Menu_Page.o (.text.Show_Page_Diaplsy)
+                  000076e8    00000048     gimbal.o (.text.gimbal_send_frame)
+                  00007730    00000044     Easy_Menu.o (.text.Easy_Menu_Display_Char)
+                  00007774    00000044     Trackline.o (.text.count_active_lines)
+                  000077b8    00000042     No_Mcu_Ganv_Grayscale_Sensor.o (.text.No_Mcu_Ganv_Sensor_Task_Without_tick)
+                  000077fa    00000042     k230_track.o (.text.pixel_to_pulse)
+                  0000783c    00000040     driverlib.a : dl_adc12.o (.text.DL_ADC12_setClockConfig)
+                  0000787c    00000040     ti_msp_dl_config.o (.text.SYSCFG_DL_UART_0_init)
+                  000078bc    00000040     ti_msp_dl_config.o (.text.SYSCFG_DL_UART_JY62_init)
+                  000078fc    00000040     ti_msp_dl_config.o (.text.SYSCFG_DL_UART_UP_init)
+                  0000793c    00000040     Easy_Menu_Item.o (.text.Switch_Item_Init)
+                  0000797c    00000040     libclang_rt.builtins.a : aeabi_uidivmod.S.obj (.text.__aeabi_uidivmod)
+                  000079bc    00000040                            : extendsfdf2.S.obj (.text.__extendsfdf2)
+                  000079fc    00000040     libc.a : atoi.c.obj (.text.atoi)
+                  00007a3c    00000040            : vsnprintf.c.obj (.text.vsnprintf)
+                  00007a7c    0000003c     ti_msp_dl_config.o (.text.DL_Timer_setCounterControl)
+                  00007ab8    0000003c     Easy_Menu_Core.o (.text.Easy_Menu_Init)
+                  00007af4    0000003c     Easy_Menu.o (.text.Easy_Menu_Printf)
+                  00007b30    0000003c     gimbal.o (.text.Gimbal_Enable)
+                  00007b6c    0000003c     OLED.o (.text.OLED_Set_Pos)
+                  00007ba8    0000003c     ti_msp_dl_config.o (.text.SYSCFG_DL_init)
+                  00007be4    0000003c     libclang_rt.builtins.a : floatsisf.S.obj (.text.__floatsisf)
+                  00007c20    0000003c                            : comparesf2.S.obj (.text.__gtsf2)
+                  00007c5c    0000003c     Beep.o (.text.start_off_phase)
+                  00007c98    0000003c     Beep.o (.text.start_on_phase)
+                  00007cd4    0000003c     libc.a : autoinit.c.obj (.text:__TI_auto_init_nobinit_nopinit)
+                  00007d10    0000003a     libclang_rt.builtins.a : comparesf2.S.obj (.text.__eqsf2)
+                  00007d4a    00000002     --HOLE-- [fill = 0]
+                  00007d4c    0000003a                            : muldsi3.S.obj (.text.__muldsi3)
+                  00007d86    00000038     No_Mcu_Ganv_Grayscale_Sensor.o (.text.Get_Normalize_For_User)
+                  00007dbe    00000002     --HOLE-- [fill = 0]
+                  00007dc0    00000038     k230_track.o (.text.K230_Aim_Reset)
+                  00007df8    00000038     Motor.o (.text.Motor_Brake)
+                  00007e30    00000038     Motor.o (.text.Motor_Coast)
+                  00007e68    00000038     Easy_Menu_Page.o (.text.Show_Page_Enter)
+                  00007ea0    00000038     libclang_rt.builtins.a : fixsfsi.S.obj (.text.__fixsfsi)
+                  00007ed8    00000038     libc.a : sprintf.c.obj (.text.sprintf)
+                  00007f10    00000036     No_Mcu_Ganv_Grayscale_Sensor.o (.text.Get_Anolog_Value)
+                  00007f46    00000002     --HOLE-- [fill = 0]
+                  00007f48    00000034     Easy_Menu_Item.o (.text.Goto_Item_Init)
+                  00007f7c    00000034     OLED.o (.text.I2C_Start)
+                  00007fb0    00000034     ti_msp_dl_config.o (.text.SYSCFG_DL_SYSCTL_init)
+                  00007fe4    00000030     ti_msp_dl_config.o (.text.DL_DMA_setTransferSize)
+                  00008014    00000030     ti_msp_dl_config.o (.text.DL_GPIO_initDigitalOutputFeatures)
+                  00008044    00000030     Easy_Menu.o (.text.Display_Char_Line)
+                  00008074    00000030     gimbal.o (.text.Gimbal_Stop)
+                  000080a4    00000030     k230_track.o (.text.K230_Track_Init)
+                  000080d4    00000030     Motor.o (.text.Motor_Init)
+                  00008104    00000030     Motor.o (.text.Motor_ResetSpeedControl)
+                  00008134    00000030     Easy_Menu_Page.o (.text.Show_Page_Exit)
+                  00008164    00000030     delay.o (.text.SysTick_Handler)
+                  00008194    00000030     JY62.o (.text.UART1_IRQHandler)
+                  000081c4    00000030     libc.a : _printfi.c.obj (.text._fcpy)
+                  000081f4    00000030            : vsnprintf.c.obj (.text._outs)
+                  00008224    0000002e     Easy_Menu_Item.o (.text.Goto_Item_Input)
+                  00008252    00000002     --HOLE-- [fill = 0]
+                  00008254    0000002c     ti_msp_dl_config.o (.text.DL_ADC12_setDMASamplesCnt)
+                  00008280    0000002c     Knob_drv.o (.text.GROUP1_IRQHandler)
+                  000082ac    0000002c     JY62.o (.text.__NVIC_ClearPendingIRQ)
+                  000082d8    0000002c     k230_track.o (.text.__NVIC_ClearPendingIRQ)
+                  00008304    0000002c     JY62.o (.text.__NVIC_EnableIRQ)
+                  00008330    0000002c     Knob_drv.o (.text.__NVIC_EnableIRQ)
+                  0000835c    0000002c     Motor.o (.text.__NVIC_EnableIRQ)
+                  00008388    0000002c     k230_track.o (.text.__NVIC_EnableIRQ)
+                  000083b4    0000002c     libclang_rt.builtins.a : floatsidf.S.obj (.text.__floatsidf)
+                  000083e0    0000002c     Uart.o (.text.uart0_send_char)
+                  0000840c    0000002a     Easy_Menu.o (.text.Display_Char)
+                  00008436    00000002     --HOLE-- [fill = 0]
+                  00008438    00000028     Easy_Menu_User.o (.text.Cal_Black_Callback)
+                  00008460    00000028     Easy_Menu_User.o (.text.Cal_White_Callback)
+                  00008488    00000028     JY62.o (.text.DL_Common_updateReg)
+                  000084b0    00000028     ti_msp_dl_config.o (.text.DL_Common_updateReg)
+                  000084d8    00000028     Trackline.o (.text.DL_DMA_setDestAddr)
+                  00008500    00000028     Trackline.o (.text.DL_DMA_setSrcAddr)
+                  00008528    00000028     Easy_Menu_Core.o (.text.Easy_Menu_Input)
+                  00008550    00000028     OLED.o (.text.I2C_Stop)
+                  00008578    00000028     OLED.o (.text.I2C_WaitAck)
+                  000085a0    00000028     JY62.o (.text.JY62_Task)
+                  000085c8    00000028     Easy_Menu_User.o (.text.Lspeed_Callback)
+                  000085f0    00000028     Motor.o (.text.Motor_SetSpeed)
+                  00008618    00000028     Easy_Menu_User.o (.text.Rspeed_Callback)
+                  00008640    00000028     ti_msp_dl_config.o (.text.SYSCFG_DL_DMA_detector_out_init)
+                  00008668    00000028     Easy_Menu_User.o (.text.Trackline__Round_Callback)
+                  00008690    00000028     libclang_rt.builtins.a : floatunsisf.S.obj (.text.__floatunsisf)
+                  000086b8    00000028     libc.a : boot_cortex_m.c.obj (.text:_c_int00_noargs)
+                  000086e0    00000026     Trackline.o (.text.DL_DMA_enableChannel)
+                  00008706    00000002     --HOLE-- [fill = 0]
+                  00008708    00000024     Beep.o (.text.Beep_Stop)
+                  0000872c    00000024     Laser.o (.text.Laser_Init)
+                  00008750    00000024     Motor.o (.text.Motor_A_GetEncoderCnt)
+                  00008774    00000024     libclang_rt.builtins.a : floatunsidf.S.obj (.text.__floatunsidf)
+                  00008798    00000024                            : muldi3.S.obj (.text.__muldi3)
+                  000087bc    00000022     libc.a : memccpy.c.obj (.text.memccpy)
+                  000087de    00000002     --HOLE-- [fill = 0]
+                  000087e0    00000020     JY62.o (.text.DL_GPIO_initPeripheralInputFunction)
+                  00008800    00000020     ti_msp_dl_config.o (.text.DL_GPIO_initPeripheralInputFunction)
+                  00008820    00000020     Easy_Menu_User.o (.text.Trackline_Start_Callback)
+                  00008840    00000020     delay.o (.text.delay_ms)
+                  00008860    0000001e     JY62.o (.text.DL_UART_setOversampling)
+                  0000887e    0000001e     ti_msp_dl_config.o (.text.DL_UART_setOversampling)
+                  0000889c    0000001e     libclang_rt.builtins.a : ashldi3.S.obj (.text.__ashldi3)
+                  000088ba    00000002     --HOLE-- [fill = 0]
+                  000088bc    0000001c     ti_msp_dl_config.o (.text.DL_ADC12_enableDMA)
+                  000088d8    0000001c     ti_msp_dl_config.o (.text.DL_ADC12_enableDMATrigger)
+                  000088f4    0000001c     Trackline.o (.text.DL_ADC12_startConversion)
+                  00008910    0000001c     Knob_drv.o (.text.DL_GPIO_clearInterruptStatus)
+                  0000892c    0000001c     Motor.o (.text.DL_GPIO_clearInterruptStatus)
+                  00008948    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_clearInterruptStatus)
+                  00008964    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_enableInterrupt)
+                  00008980    0000001c     JY62.o (.text.DL_GPIO_initPeripheralOutputFunction)
+                  0000899c    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_initPeripheralOutputFunction)
+                  000089b8    0000001c     ti_msp_dl_config.o (.text.DL_GPIO_setLowerPinsPolarity)
+                  000089d4    0000001c     Knob_drv.o (.text.DL_Interrupt_getPendingGroup)
+                  000089f0    0000001c     ti_msp_dl_config.o (.text.DL_SYSCTL_setSYSOSCFreq)
+                  00008a0c    0000001c     driverlib.a : dl_timer.o (.text.DL_Timer_setCaptCompUpdateMethod)
+                  00008a28    0000001c                 : dl_timer.o (.text.DL_Timer_setClockConfig)
+                  00008a44    0000001c     k230_track.o (.text.DL_UART_disableDMAReceiveEvent)
+                  00008a60    0000001c     JY62.o (.text.DL_UART_enableInterrupt)
+                  00008a7c    0000001c     k230_track.o (.text.DL_UART_enableInterrupt)
+                  00008a98    0000001c     driverlib.a : dl_uart.o (.text.DL_UART_receiveDataCheck)
+                  00008ab4    0000001c     Motor.o (.text.Motor_YawSetTarget)
+                  00008ad0    0000001a     gimbal.o (.text.Gimbal_Enable_All)
+                  00008aea    00000002     --HOLE-- [fill = 0]
+                  00008aec    00000018     ti_msp_dl_config.o (.text.DL_ADC12_enablePower)
+                  00008b04    00000018     ti_msp_dl_config.o (.text.DL_ADC12_reset)
+                  00008b1c    00000018     ti_msp_dl_config.o (.text.DL_ADC12_setSampleTime0)
+                  00008b34    00000018     Laser.o (.text.DL_GPIO_enableOutput)
+                  00008b4c    00000018     ti_msp_dl_config.o (.text.DL_GPIO_enableOutput)
+                  00008b64    00000018     ti_msp_dl_config.o (.text.DL_GPIO_enablePower)
+                  00008b7c    00000018     Knob_drv.o (.text.DL_GPIO_getEnabledInterruptStatus)
+                  00008b94    00000018     Motor.o (.text.DL_GPIO_getEnabledInterruptStatus)
+                  00008bac    00000018     ti_msp_dl_config.o (.text.DL_GPIO_initDigitalOutput)
+                  00008bc4    00000018     ti_msp_dl_config.o (.text.DL_GPIO_reset)
+                  00008bdc    00000018     Beep.o (.text.DL_GPIO_setPins)
+                  00008bf4    00000018     Laser.o (.text.DL_GPIO_setPins)
+                  00008c0c    00000018     Motor.o (.text.DL_GPIO_setPins)
+                  00008c24    00000018     No_Mcu_Ganv_Grayscale_Sensor.o (.text.DL_GPIO_setPins)
+                  00008c3c    00000018     OLED.o (.text.DL_GPIO_setPins)
+                  00008c54    00000018     ti_msp_dl_config.o (.text.DL_GPIO_setPins)
+                  00008c6c    00000018     ti_msp_dl_config.o (.text.DL_GPIO_setUpperPinsPolarity)
+                  00008c84    00000018     ti_msp_dl_config.o (.text.DL_SYSCTL_setBORThreshold)
+                  00008c9c    00000018     ti_msp_dl_config.o (.text.DL_Timer_enablePower)
+                  00008cb4    00000018     ti_msp_dl_config.o (.text.DL_Timer_reset)
+                  00008ccc    00000018     driverlib.a : dl_timer.o (.text.DL_Timer_setCaptureCompareOutCtl)
+                  00008ce4    00000018     ti_msp_dl_config.o (.text.DL_Timer_setLoadValue)
+                  00008cfc    00000018     ti_msp_dl_config.o (.text.DL_Timer_startCounter)
+                  00008d14    00000018     JY62.o (.text.DL_UART_enablePower)
+                  00008d2c    00000018     ti_msp_dl_config.o (.text.DL_UART_enablePower)
+                  00008d44    00000018     JY62.o (.text.DL_UART_isBusy)
+                  00008d5c    00000018     Uart.o (.text.DL_UART_isBusy)
+                  00008d74    00000018     ti_msp_dl_config.o (.text.DL_UART_reset)
+                  00008d8c    00000018     ti_msp_dl_config.o (.text.SYSCFG_DL_DMA_CH0_init)
+                  00008da4    00000018     libc.a : vsnprintf.c.obj (.text._outc)
+                  00008dbc    00000018            : sprintf.c.obj (.text._outs)
+                  00008dd4    00000016     ti_msp_dl_config.o (.text.DL_ADC12_enableConversions)
+                  00008dea    00000016     Knob_drv.o (.text.DL_GPIO_readPins)
+                  00008e00    00000016     Motor.o (.text.DL_GPIO_readPins)
+                  00008e16    00000016     JY62.o (.text.DL_UART_enable)
+                  00008e2c    00000016     ti_msp_dl_config.o (.text.DL_UART_enable)
+                  00008e42    00000016     JY62.o (.text.DL_UART_transmitData)
+                  00008e58    00000016     Uart.o (.text.DL_UART_transmitData)
+                  00008e6e    00000014     Beep.o (.text.DL_GPIO_clearPins)
+                  00008e82    00000014     Laser.o (.text.DL_GPIO_clearPins)
+                  00008e96    00000014     Motor.o (.text.DL_GPIO_clearPins)
+                  00008eaa    00000014     No_Mcu_Ganv_Grayscale_Sensor.o (.text.DL_GPIO_clearPins)
+                  00008ebe    00000014     OLED.o (.text.DL_GPIO_clearPins)
+                  00008ed2    00000014     ti_msp_dl_config.o (.text.DL_GPIO_clearPins)
+                  00008ee6    00000002     --HOLE-- [fill = 0]
+                  00008ee8    00000014     ti_msp_dl_config.o (.text.DL_SYSCTL_disableSYSPLL)
+                  00008efc    00000014     ti_msp_dl_config.o (.text.DL_SYSCTL_enableMFCLK)
+                  00008f10    00000014     ti_msp_dl_config.o (.text.DL_Timer_enableClock)
+                  00008f24    00000014     ti_msp_dl_config.o (.text.DL_Timer_setCCPDirection)
+                  00008f38    00000014     Motor.o (.text.DL_Timer_setTimerCount)
+                  00008f4c    00000014     JY62.o (.text.DL_UART_receiveData)
+                  00008f60    00000014     k230_track.o (.text.DL_UART_receiveData)
+                  00008f74    00000014     Easy_Menu_User.o (.text.Jy62_Yaw_Callback)
+                  00008f88    00000014     Laser.o (.text.Laser_Off)
+                  00008f9c    00000014     Laser.o (.text.Laser_On)
+                  00008fb0    00000014     Motor.o (.text.Motor_B_EncoderInit)
+                  00008fc4    00000014     Easy_Menu_Page.o (.text.Ordinary_Page_Exit)
+                  00008fd8    00000014     Easy_Menu_User.o (.text.Track_Pid__Kd_Callback)
+                  00008fec    00000014     Easy_Menu_User.o (.text.Track_Pid__Kp_Callback)
+                  00009000    00000014     libclang_rt.builtins.a : aeabi_uldivmod.S.obj (.text.__aeabi_uldivmod)
+                  00009014    00000014     libc.a : _printfi.c.obj (.text.strchr)
+                  00009028    00000012     JY62.o (.text.DL_UART_getPendingInterrupt)
+                  0000903a    00000012     k230_track.o (.text.DL_UART_getPendingInterrupt)
+                  0000904c    00000012     driverlib.a : dl_uart.o (.text.DL_UART_setClockConfig)
+                  0000905e    00000012     libc.a : memcpy16.S.obj (.text:TI_memcpy_small)
+                  00009070    00000012            : copy_decompress_none.c.obj (.text:decompress:none)
+                  00009082    00000002     --HOLE-- [fill = 0]
+                  00009084    00000010     ti_msp_dl_config.o (.text.DL_SYSCTL_disableHFXT)
+                  00009094    00000010     Motor.o (.text.DL_Timer_getTimerCount)
+                  000090a4    00000010     driverlib.a : dl_timer.o (.text.DL_Timer_setCaptureCompareValue)
+                  000090b4    00000010     Motor.o (.text.Motor_A_ResetEncoder)
+                  000090c4    00000010     Trackline.o (.text.sensor_update)
+                  000090d4    00000010     libc.a : wcslen.c.obj (.text.wcslen)
+                  000090e4    00000010            : copy_zero_init.c.obj (.text:decompress:ZI)
+                  000090f4    0000000e     libclang_rt.builtins.a : aeabi_memset.S.obj (.text.__aeabi_memset)
+                  00009102    0000000e     libc.a : _printfi.c.obj (.text.strlen)
+                  00009110    0000000e            : strlen.c.obj (.text.strlen)
+                  0000911e    0000000e            : memset16.S.obj (.text:TI_memset_small)
+                  0000912c    0000000c     Motor.o (.text.Motor_B_GetEncoderCnt)
+                  00009138    0000000c     Motor.o (.text.Motor_B_ResetEncoder)
+                  00009144    0000000c     Motor.o (.text.Motor_YawReset)
+                  00009150    0000000c     ti_msp_dl_config.o (.text.SYSCFG_DL_DMA_init)
+                  0000915c    0000000c     ti_msp_dl_config.o (.text.SYSCFG_DL_SYSTICK_init)
+                  00009168    0000000c     libclang_rt.builtins.a : aeabi_memset.S.obj (.text.__aeabi_memclr)
+                  00009174    0000000a     Easy_Menu_User.o (.text.Centeraim__Start_Callback)
+                  0000917e    0000000a     driverlib.a : dl_common.o (.text.DL_Common_delayCycles)
+                  00009188    0000000a     Knob_drv.o (.text.Knob_Init)
+                  00009192    0000000a     libc.a : _printfi.c.obj (.text.OUTLINED_FUNCTION_0)
+                  0000919c    00000010     libclang_rt.builtins.a : adddf3.S.obj (.tramp.__aeabi_dsub.1)
+                  000091ac    0000000a     libc.a : _printfi.c.obj (.text.OUTLINED_FUNCTION_1)
+                  000091b6    0000000a     Easy_Menu_User.o (.text.Still_Aim_Callback)
+                  000091c0    0000000a     Easy_Menu_User.o (.text.Still_Aim_Draw_Rectangle_Callback)
+                  000091ca    0000000a     libc.a : sprintf.c.obj (.text._outc)
+                  000091d4    00000008     Easy_Menu_User.o (.text.Center_Aim_Round_Callback)
+                  000091dc    00000008     Easy_Menu_User.o (.text.Show__1__Page_Exit_Callback)
+                  000091e4    00000008     libc.a : aeabi_portable.c.obj (.text.__aeabi_errno_addr)
+                  000091ec    00000008     libclang_rt.builtins.a : aeabi_memcpy.S.obj (.text.__aeabi_memcpy)
+                  000091f4    00000006     libc.a : exit.c.obj (.text:abort)
+                  000091fa    00000004     startup_mspm0g350x_ticlang.o (.text.Default_Handler)
+                  000091fe    00000004     libsysbm.a : hostexit.c.obj (.text.HOSTexit)
+                  00009202    00000004     startup_mspm0g350x_ticlang.o (.text.Reset_Handler)
+                  00009206    00000002     --HOLE-- [fill = 0]
+                  00009208    00000010     libc.a : boot_cortex_m.c.obj (.tramp._c_int00_noargs.1)
+                  00009218    00000004            : pre_init.c.obj (.text._system_pre_init)
+                  0000921c    00000004     --HOLE-- [fill = 0]
 
-.cinit     0    00009c30    000000b8     
-                  00009c30    0000008d     (.cinit..data.load) [load image, compression = lzss]
-                  00009cbd    00000003     --HOLE-- [fill = 0]
-                  00009cc0    0000000c     (__TI_handler_table)
-                  00009ccc    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  00009cd4    00000010     (__TI_cinit_table)
-                  00009ce4    00000004     --HOLE-- [fill = 0]
+.cinit     0    00009ce0    000000b8     
+                  00009ce0    0000008d     (.cinit..data.load) [load image, compression = lzss]
+                  00009d6d    00000003     --HOLE-- [fill = 0]
+                  00009d70    0000000c     (__TI_handler_table)
+                  00009d7c    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00009d84    00000010     (__TI_cinit_table)
+                  00009d94    00000004     --HOLE-- [fill = 0]
 
-.rodata    0    00009170    00000ac0     
-                  00009170    000005f0     OLED.o (.rodata.asc2_1608)
-                  00009760    00000228     OLED.o (.rodata.asc2_0806)
-                  00009988    00000008     ti_msp_dl_config.o (.rodata.gADC_line_detectorClockConfig)
-                  00009990    00000101     libc.a : aeabi_ctype.S.obj (.rodata:__aeabi_ctype_table_)
-                  00009a91    0000001a     Easy_Menu_User.o (.rodata.str1.2484268131311446048.1)
-                  00009aab    00000001     --HOLE-- [fill = 0]
-                  00009aac    00000018     ti_msp_dl_config.o (.rodata.gDMA_CH0Config)
-                  00009ac4    00000018     ti_msp_dl_config.o (.rodata.gDMA_detector_outConfig)
-                  00009adc    00000011     libc.a : _printfi.c.obj (.rodata.str1.10348868589481759720.1)
-                  00009aed    00000011            : _printfi.c.obj (.rodata.str1.15363888844622738466.1)
-                  00009afe    00000010     Trackline.o (.rodata.WEIGHTS)
-                  00009b0e    0000000f     Easy_Menu_User.o (.rodata.str1.13332061176481328327.1)
-                  00009b1d    0000000e     Easy_Menu_User.o (.rodata.str1.15320261422703930955.1)
-                  00009b2b    0000000e     Easy_Menu_User.o (.rodata.str1.16980020722660603416.1)
-                  00009b39    0000000b     Easy_Menu_User.o (.rodata.str1.11177260976807265928.1)
-                  00009b44    0000000a     JY62.o (.rodata.gJY62UartConfig)
-                  00009b4e    0000000a     ti_msp_dl_config.o (.rodata.gUART_0Config)
-                  00009b58    0000000a     ti_msp_dl_config.o (.rodata.gUART_JY62Config)
-                  00009b62    0000000a     ti_msp_dl_config.o (.rodata.gUART_UPConfig)
-                  00009b6c    0000000a     Easy_Menu_User.o (.rodata.str1.10308413330439174504.1)
-                  00009b76    0000000a     Easy_Menu_User.o (.rodata.str1.11262980610456716024.1)
-                  00009b80    0000000a     Easy_Menu_User.o (.rodata.str1.1318127491109019352.1)
-                  00009b8a    0000000a     Easy_Menu_User.o (.rodata.str1.14456782623604785242.1)
-                  00009b94    0000000a     Easy_Menu_User.o (.rodata.str1.2853082316097330648.1)
-                  00009b9e    00000009     Easy_Menu_User.o (.rodata.str1.18047220919239444222.1)
-                  00009ba7    00000009     Easy_Menu_User.o (.rodata.str1.4408185141669307452.1)
-                  00009bb0    00000008     ti_msp_dl_config.o (.rodata.gPWM_0Config)
-                  00009bb8    00000008     Easy_Menu_User.o (.rodata.str1.17975632479887315808.1)
-                  00009bc0    00000008     Easy_Menu_User.o (.rodata.str1.8156445364985626389.1)
-                  00009bc8    00000007     Easy_Menu_Page.o (.rodata.str1.10162903526471618397.1)
-                  00009bcf    00000007     Easy_Menu_User.o (.rodata.str1.14517664341077644678.1)
-                  00009bd6    00000007     Easy_Menu_User.o (.rodata.str1.2224424980219509423.1)
-                  00009bdd    00000006     Easy_Menu_Page.o (.rodata.str1.11602794411890177903.1)
-                  00009be3    00000006     Easy_Menu_User.o (.rodata.str1.16881440453266969404.1)
-                  00009be9    00000006     Easy_Menu_User.o (.rodata.str1.8128223861994239923.1)
-                  00009bef    00000005     Easy_Menu_Page.o (.rodata.str1.10541918737141963520.1)
-                  00009bf4    00000005     Easy_Menu_Page.o (.rodata.str1.14526947901870425149.1)
-                  00009bf9    00000005     Easy_Menu_Page.o (.rodata.str1.17342757695734682319.1)
-                  00009bfe    00000005     Easy_Menu_Page.o (.rodata.str1.2927598468843798870.1)
-                  00009c03    00000005     Easy_Menu_User.o (.rodata.str1.3897238317517470892.1)
-                  00009c08    00000005     Easy_Menu_User.o (.rodata.str1.8423479308304406733.1)
-                  00009c0d    00000004     Easy_Menu_User.o (.rodata.str1.3961208515143357932.1)
-                  00009c11    00000003     ti_msp_dl_config.o (.rodata.gPWM_0ClockConfig)
-                  00009c14    00000003     ti_msp_dl_config.o (.rodata.gQEI_0ClockConfig)
-                  00009c17    00000002     JY62.o (.rodata.gJY62UartClockConfig)
-                  00009c19    00000002     ti_msp_dl_config.o (.rodata.gUART_0ClockConfig)
-                  00009c1b    00000002     ti_msp_dl_config.o (.rodata.gUART_JY62ClockConfig)
-                  00009c1d    00000002     ti_msp_dl_config.o (.rodata.gUART_UPClockConfig)
-                  00009c1f    00000002     Easy_Menu_Page.o (.rodata.str1.6187967722562398102.1)
-                  00009c21    0000000f     --HOLE-- [fill = 0]
+.rodata    0    00009220    00000ac0     
+                  00009220    000005f0     OLED.o (.rodata.asc2_1608)
+                  00009810    00000228     OLED.o (.rodata.asc2_0806)
+                  00009a38    00000008     ti_msp_dl_config.o (.rodata.gADC_line_detectorClockConfig)
+                  00009a40    00000101     libc.a : aeabi_ctype.S.obj (.rodata:__aeabi_ctype_table_)
+                  00009b41    0000001a     Easy_Menu_User.o (.rodata.str1.2484268131311446048.1)
+                  00009b5b    00000001     --HOLE-- [fill = 0]
+                  00009b5c    00000018     ti_msp_dl_config.o (.rodata.gDMA_CH0Config)
+                  00009b74    00000018     ti_msp_dl_config.o (.rodata.gDMA_detector_outConfig)
+                  00009b8c    00000011     libc.a : _printfi.c.obj (.rodata.str1.10348868589481759720.1)
+                  00009b9d    00000011            : _printfi.c.obj (.rodata.str1.15363888844622738466.1)
+                  00009bae    00000010     Trackline.o (.rodata.WEIGHTS)
+                  00009bbe    0000000f     Easy_Menu_User.o (.rodata.str1.13332061176481328327.1)
+                  00009bcd    0000000e     Easy_Menu_User.o (.rodata.str1.15320261422703930955.1)
+                  00009bdb    0000000e     Easy_Menu_User.o (.rodata.str1.16980020722660603416.1)
+                  00009be9    0000000b     Easy_Menu_User.o (.rodata.str1.11177260976807265928.1)
+                  00009bf4    0000000a     JY62.o (.rodata.gJY62UartConfig)
+                  00009bfe    0000000a     ti_msp_dl_config.o (.rodata.gUART_0Config)
+                  00009c08    0000000a     ti_msp_dl_config.o (.rodata.gUART_JY62Config)
+                  00009c12    0000000a     ti_msp_dl_config.o (.rodata.gUART_UPConfig)
+                  00009c1c    0000000a     Easy_Menu_User.o (.rodata.str1.10308413330439174504.1)
+                  00009c26    0000000a     Easy_Menu_User.o (.rodata.str1.11262980610456716024.1)
+                  00009c30    0000000a     Easy_Menu_User.o (.rodata.str1.1318127491109019352.1)
+                  00009c3a    0000000a     Easy_Menu_User.o (.rodata.str1.14456782623604785242.1)
+                  00009c44    0000000a     Easy_Menu_User.o (.rodata.str1.2853082316097330648.1)
+                  00009c4e    00000009     Easy_Menu_User.o (.rodata.str1.18047220919239444222.1)
+                  00009c57    00000009     Easy_Menu_User.o (.rodata.str1.4408185141669307452.1)
+                  00009c60    00000008     ti_msp_dl_config.o (.rodata.gPWM_0Config)
+                  00009c68    00000008     Easy_Menu_User.o (.rodata.str1.17975632479887315808.1)
+                  00009c70    00000008     Easy_Menu_User.o (.rodata.str1.8156445364985626389.1)
+                  00009c78    00000007     Easy_Menu_Page.o (.rodata.str1.10162903526471618397.1)
+                  00009c7f    00000007     Easy_Menu_User.o (.rodata.str1.14517664341077644678.1)
+                  00009c86    00000007     Easy_Menu_User.o (.rodata.str1.2224424980219509423.1)
+                  00009c8d    00000006     Easy_Menu_Page.o (.rodata.str1.11602794411890177903.1)
+                  00009c93    00000006     Easy_Menu_User.o (.rodata.str1.16881440453266969404.1)
+                  00009c99    00000006     Easy_Menu_User.o (.rodata.str1.8128223861994239923.1)
+                  00009c9f    00000005     Easy_Menu_Page.o (.rodata.str1.10541918737141963520.1)
+                  00009ca4    00000005     Easy_Menu_Page.o (.rodata.str1.14526947901870425149.1)
+                  00009ca9    00000005     Easy_Menu_Page.o (.rodata.str1.17342757695734682319.1)
+                  00009cae    00000005     Easy_Menu_Page.o (.rodata.str1.2927598468843798870.1)
+                  00009cb3    00000005     Easy_Menu_User.o (.rodata.str1.3897238317517470892.1)
+                  00009cb8    00000005     Easy_Menu_User.o (.rodata.str1.8423479308304406733.1)
+                  00009cbd    00000004     Easy_Menu_User.o (.rodata.str1.3961208515143357932.1)
+                  00009cc1    00000003     ti_msp_dl_config.o (.rodata.gPWM_0ClockConfig)
+                  00009cc4    00000003     ti_msp_dl_config.o (.rodata.gQEI_0ClockConfig)
+                  00009cc7    00000002     JY62.o (.rodata.gJY62UartClockConfig)
+                  00009cc9    00000002     ti_msp_dl_config.o (.rodata.gUART_0ClockConfig)
+                  00009ccb    00000002     ti_msp_dl_config.o (.rodata.gUART_JY62ClockConfig)
+                  00009ccd    00000002     ti_msp_dl_config.o (.rodata.gUART_UPClockConfig)
+                  00009ccf    00000002     Easy_Menu_Page.o (.rodata.str1.6187967722562398102.1)
+                  00009cd1    0000000f     --HOLE-- [fill = 0]
 
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
@@ -600,13 +601,13 @@ MODULE SUMMARY
        Total:                           3332    298       165    
                                                                  
     .\APP\
-       k230_track.o                     2728    0         44     
-       Trackline.o                      2442    16        283    
+       k230_track.o                     2868    0         44     
+       Trackline.o                      2474    16        283    
        JY62.o                           1572    12        54     
        gimbal.o                         358     0         0      
        Laser.o                          144     0         0      
     +--+--------------------------------+-------+---------+---------+
-       Total:                           7244    28        381    
+       Total:                           7416    28        381    
                                                                  
     .\BSP\
        Uart.o                           90      0         0      
@@ -722,19 +723,19 @@ MODULE SUMMARY
        Stack:                           0       0         512    
        Linker Generated:                0       177       0      
     +--+--------------------------------+-------+---------+---------+
-       Grand Total:                     36990   3105      2481   
+       Grand Total:                     37162   3105      2481   
 
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 00009cd4 records: 2, size/record: 8, table size: 16
-	.data: load addr=00009c30, load size=0000008d bytes, run addr=20200640, run size=00000174 bytes, compression=lzss
-	.bss: load addr=00009ccc, load size=00000008 bytes, run addr=20200000, run size=0000063d bytes, compression=zero_init
+__TI_cinit_table @ 00009d84 records: 2, size/record: 8, table size: 16
+	.data: load addr=00009ce0, load size=0000008d bytes, run addr=20200640, run size=00000174 bytes, compression=lzss
+	.bss: load addr=00009d7c, load size=00000008 bytes, run addr=20200000, run size=0000063d bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 00009cc0 records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00009d70 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_lzss
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -746,9 +747,9 @@ callee name               trampoline name
    callee addr  tramp addr   call addr  call info
 --------------  -----------  ---------  ----------------
 __aeabi_dsub              $Tramp$TT$L$PI$$__aeabi_dsub
-   000042fd     000090f0     000090ee   libc.a : _printfi.c.obj (.text.OUTLINED_FUNCTION_0)
+   0000435d     0000919c     0000919a   libc.a : _printfi.c.obj (.text.OUTLINED_FUNCTION_0)
 _c_int00_noargs           $Tramp$TT$L$PI$$_c_int00_noargs
-   0000860d     0000915c     00009156   startup_mspm0g350x_ticlang.o (.text.Reset_Handler)
+   000086b9     00009208     00009202   startup_mspm0g350x_ticlang.o (.text.Reset_Handler)
 
 [2 trampolines]
 [2 trampoline calls]
@@ -758,186 +759,186 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address   name                                
 -------   ----                                
-0000914f  ADC0_IRQHandler                     
-0000914f  ADC1_IRQHandler                     
+000091fb  ADC0_IRQHandler                     
+000091fb  ADC1_IRQHandler                     
 202001f0  ADC_VALUE                           
-0000914f  AES_IRQHandler                      
-0000865d  Beep_Stop                           
-0000562d  Beep_Tick_1ms                       
-000059fd  Beep_Trigger                        
-00009152  C$$EXIT                             
-0000914f  CANFD0_IRQHandler                   
-0000838d  Cal_Black_Callback                  
-000083b5  Cal_White_Callback                  
+000091fb  AES_IRQHandler                      
+00008709  Beep_Stop                           
+000056d9  Beep_Tick_1ms                       
+00005aa9  Beep_Trigger                        
+000091fe  C$$EXIT                             
+000091fb  CANFD0_IRQHandler                   
+00008439  Cal_Black_Callback                  
+00008461  Cal_White_Callback                  
 202004f0  Cal_black                           
 20200320  Cal_page                            
 202006e8  Cal_page_items                      
 20200508  Cal_white                           
-00009129  Center_Aim_Round_Callback           
-000090c9  Centeraim__Start_Callback           
-0000701b  Compare_String                      
-0000914f  DAC0_IRQHandler                     
-00007791  DL_ADC12_setClockConfig             
-000090d3  DL_Common_delayCycles               
-00007351  DL_DMA_initChannel                  
-00004fcd  DL_Timer_initFourCCPWMMode          
-00008961  DL_Timer_setCaptCompUpdateMethod    
-00008c21  DL_Timer_setCaptureCompareOutCtl    
-00008ff9  DL_Timer_setCaptureCompareValue     
-0000897d  DL_Timer_setClockConfig             
-00007565  DL_UART_init                        
-000089ed  DL_UART_receiveDataCheck            
-00008fa1  DL_UART_setClockConfig              
-0000914f  DMA_IRQHandler                      
-000056f9  Data_Item_Init                      
+000091d5  Center_Aim_Round_Callback           
+00009175  Centeraim__Start_Callback           
+000070c7  Compare_String                      
+000091fb  DAC0_IRQHandler                     
+0000783d  DL_ADC12_setClockConfig             
+0000917f  DL_Common_delayCycles               
+000073fd  DL_DMA_initChannel                  
+00005079  DL_Timer_initFourCCPWMMode          
+00008a0d  DL_Timer_setCaptCompUpdateMethod    
+00008ccd  DL_Timer_setCaptureCompareOutCtl    
+000090a5  DL_Timer_setCaptureCompareValue     
+00008a29  DL_Timer_setClockConfig             
+00007611  DL_UART_init                        
+00008a99  DL_UART_receiveDataCheck            
+0000904d  DL_UART_setClockConfig              
+000091fb  DMA_IRQHandler                      
+000057a5  Data_Item_Init                      
 00001261  Data_Item_Input                     
-0000914f  Default_Handler                     
-00008361  Display_Char                        
-00007f99  Display_Char_Line                   
-00006da9  Easy_Menu_All_Clear                 
-00001ef1  Easy_Menu_All_Update                
-00005fa5  Easy_Menu_Area_Clear                
-00006671  Easy_Menu_Display                   
-00007685  Easy_Menu_Display_Char              
-00006271  Easy_Menu_Display_String            
-00006035  Easy_Menu_Goto_Page                 
-00007a0d  Easy_Menu_Init                      
-0000847d  Easy_Menu_Input                     
-00007a49  Easy_Menu_Printf                    
+000091fb  Default_Handler                     
+0000840d  Display_Char                        
+00008045  Display_Char_Line                   
+00006e55  Easy_Menu_All_Clear                 
+00001ee5  Easy_Menu_All_Update                
+00006051  Easy_Menu_Area_Clear                
+0000671d  Easy_Menu_Display                   
+00007731  Easy_Menu_Display_Char              
+0000631d  Easy_Menu_Display_String            
+000060e1  Easy_Menu_Goto_Page                 
+00007ab9  Easy_Menu_Init                      
+00008529  Easy_Menu_Input                     
+00007af5  Easy_Menu_Printf                    
 20200640  Easy_Menu_Ui_Data                   
-00002bf1  Easy_Menu_Ui_Init                   
-0000914f  GROUP0_IRQHandler                   
-000081d5  GROUP1_IRQHandler                   
-00005889  Get_Analog_value                    
-00007e65  Get_Anolog_Value                    
-00007cdb  Get_Normalize_For_User              
-00007a85  Gimbal_Enable                       
-00008a25  Gimbal_Enable_All                   
-00005e75  Gimbal_MovePosition                 
-00007fc9  Gimbal_Stop                         
-00007e9d  Goto_Item_Init                      
-00008179  Goto_Item_Input                     
-00009153  HOSTexit                            
-0000914f  HardFault_Handler                   
-0000914f  I2C0_IRQHandler                     
-0000914f  I2C1_IRQHandler                     
-00007ed1  I2C_Start                           
-000084a5  I2C_Stop                            
-000084cd  I2C_WaitAck                         
-0000539d  JY62_ConfigMode                     
-000065f9  JY62_Init                           
-000036fd  JY62_ProcessData                    
-000084f5  JY62_Task                           
+00002c51  Easy_Menu_Ui_Init                   
+000091fb  GROUP0_IRQHandler                   
+00008281  GROUP1_IRQHandler                   
+00005935  Get_Analog_value                    
+00007f11  Get_Anolog_Value                    
+00007d87  Get_Normalize_For_User              
+00007b31  Gimbal_Enable                       
+00008ad1  Gimbal_Enable_All                   
+00005f21  Gimbal_MovePosition                 
+00008075  Gimbal_Stop                         
+00007f49  Goto_Item_Init                      
+00008225  Goto_Item_Input                     
+000091ff  HOSTexit                            
+000091fb  HardFault_Handler                   
+000091fb  I2C0_IRQHandler                     
+000091fb  I2C1_IRQHandler                     
+00007f7d  I2C_Start                           
+00008551  I2C_Stop                            
+00008579  I2C_WaitAck                         
+00005449  JY62_ConfigMode                     
+000066a5  JY62_Init                           
+0000375d  JY62_ProcessData                    
+000085a1  JY62_Task                           
 20200348  JY62_page                           
 202006a0  JY62_page_items                     
-00005945  Jy62_Yaw_Acc_Callback               
-00008ec9  Jy62_Yaw_Callback                   
-00007d15  K230_Aim_Reset                      
-00002ffd  K230_Aim_Task                       
-000075ad  K230_DrawRect_Reset                 
-00002391  K230_DrawRect_Task                  
-00007ff9  K230_Track_Init                     
-00006999  Knob_EXTI_Handler                   
-000090dd  Knob_Init                           
-000057c5  Knob_Tick_1ms                       
-00005c01  Knob_get                            
-00008681  Laser_Init                          
-00008edd  Laser_Off                           
-00008ef1  Laser_On                            
+000059f1  Jy62_Yaw_Acc_Callback               
+00008f75  Jy62_Yaw_Callback                   
+00007dc1  K230_Aim_Reset                      
+0000305d  K230_Aim_Task                       
+00007659  K230_DrawRect_Reset                 
+00001a25  K230_DrawRect_Task                  
+000080a5  K230_Track_Init                     
+00006a45  Knob_EXTI_Handler                   
+00009189  Knob_Init                           
+00005871  Knob_Tick_1ms                       
+00005cad  Knob_get                            
+0000872d  Laser_Init                          
+00008f89  Laser_Off                           
+00008f9d  Laser_On                            
 20200460  Lspeed                              
-0000851d  Lspeed_Callback                     
-000086a5  Motor_A_GetEncoderCnt               
-00009009  Motor_A_ResetEncoder                
-00005ca1  Motor_A_SetSpeed                    
-00006401  Motor_B_EncoderIRQHandler           
-00008f05  Motor_B_EncoderInit                 
-00009081  Motor_B_GetEncoderCnt               
-0000908d  Motor_B_ResetEncoder                
-00005d3d  Motor_B_SetSpeed                    
-00007d4d  Motor_Brake                         
-00007d85  Motor_Coast                         
-00008029  Motor_Init                          
-00008059  Motor_ResetSpeedControl             
-00008545  Motor_SetSpeed                      
-00003f81  Motor_SpeedControl                  
-00004619  Motor_YawControl                    
-00005f0d  Motor_YawIsAtTarget                 
-00009099  Motor_YawReset                      
-00008a09  Motor_YawSetTarget                  
-0000914f  NMI_Handler                         
-00004491  No_MCU_Ganv_Sensor_Init             
-000068b5  No_MCU_Ganv_Sensor_Init_Frist       
-0000770d  No_Mcu_Ganv_Sensor_Task_Without_tick
-00006a71  OLED_Clear                          
-000050d1  OLED_Init                           
-00007ac1  OLED_Set_Pos                        
-00004da9  OLED_ShowChar                       
-00006927  OLED_ShowString                     
-00007301  OLED_WR_Byte                        
-00003da9  Ordinary_Page_Display               
-000027c5  Ordinary_Page_Enter                 
-00008f19  Ordinary_Page_Exit                  
-00006501  Ordinary_Page_Init                  
+000085c9  Lspeed_Callback                     
+00008751  Motor_A_GetEncoderCnt               
+000090b5  Motor_A_ResetEncoder                
+00005d4d  Motor_A_SetSpeed                    
+000064ad  Motor_B_EncoderIRQHandler           
+00008fb1  Motor_B_EncoderInit                 
+0000912d  Motor_B_GetEncoderCnt               
+00009139  Motor_B_ResetEncoder                
+00005de9  Motor_B_SetSpeed                    
+00007df9  Motor_Brake                         
+00007e31  Motor_Coast                         
+000080d5  Motor_Init                          
+00008105  Motor_ResetSpeedControl             
+000085f1  Motor_SetSpeed                      
+00003fe1  Motor_SpeedControl                  
+00004679  Motor_YawControl                    
+00005fb9  Motor_YawIsAtTarget                 
+00009145  Motor_YawReset                      
+00008ab5  Motor_YawSetTarget                  
+000091fb  NMI_Handler                         
+000044f1  No_MCU_Ganv_Sensor_Init             
+00006961  No_MCU_Ganv_Sensor_Init_Frist       
+000077b9  No_Mcu_Ganv_Sensor_Task_Without_tick
+00006b1d  OLED_Clear                          
+0000517d  OLED_Init                           
+00007b6d  OLED_Set_Pos                        
+00004e55  OLED_ShowChar                       
+000069d3  OLED_ShowString                     
+000073ad  OLED_WR_Byte                        
+00003e09  Ordinary_Page_Display               
+00002825  Ordinary_Page_Enter                 
+00008fc5  Ordinary_Page_Exit                  
+000065ad  Ordinary_Page_Init                  
 00000a91  Ordinary_Page_Input                 
-00003399  Ordinary_Page_Refresh               
-0000914f  PendSV_Handler                      
-0000914f  RTC_IRQHandler                      
-00009157  Reset_Handler                       
+000033f9  Ordinary_Page_Refresh               
+000091fb  PendSV_Handler                      
+000091fb  RTC_IRQHandler                      
+00009203  Reset_Handler                       
 20200484  Rspeed                              
-0000856d  Rspeed_Callback                     
-0000914f  SPI0_IRQHandler                     
-0000914f  SPI1_IRQHandler                     
-0000914f  SVC_Handler                         
-00006a05  SYSCFG_DL_ADC_line_detector_init    
-00008ce1  SYSCFG_DL_DMA_CH0_init              
-00008595  SYSCFG_DL_DMA_detector_out_init     
-000090a5  SYSCFG_DL_DMA_init                  
-00004151  SYSCFG_DL_GPIO_init                 
-000060c5  SYSCFG_DL_PWM_0_init                
-00007211  SYSCFG_DL_QEI_0_init                
-00007f05  SYSCFG_DL_SYSCTL_init               
-000090b1  SYSCFG_DL_SYSTICK_init              
-000077d1  SYSCFG_DL_UART_0_init               
-00007811  SYSCFG_DL_UART_JY62_init            
-00007851  SYSCFG_DL_UART_UP_init              
-00007afd  SYSCFG_DL_init                      
-00005dd9  SYSCFG_DL_initPower                 
-000066e5  Send_Byte                           
-0000716d  Show_Item_Init                      
-000075f5  Show_Page_Diaplsy                   
-00007dbd  Show_Page_Enter                     
-00008089  Show_Page_Exit                      
-00006759  Show_Page_Init                      
-00006155  Show_Page_Input                     
-00009131  Show__1__Page_Exit_Callback         
-00007481  Show__1__Page_Period_Callback       
-0000910b  Still_Aim_Callback                  
-00009115  Still_Aim_Draw_Rectangle_Callback   
-00007891  Switch_Item_Init                    
-00006ebd  Switch_Item_Input                   
-000080b9  SysTick_Handler                     
-0000914f  TIMA0_IRQHandler                    
-0000914f  TIMA1_IRQHandler                    
-0000914f  TIMG0_IRQHandler                    
-0000914f  TIMG12_IRQHandler                   
-0000914f  TIMG6_IRQHandler                    
-0000914f  TIMG7_IRQHandler                    
-0000914f  TIMG8_IRQHandler                    
-00008fb3  TI_memcpy_small                     
-00009073  TI_memset_small                     
-00008f2d  Track_Pid__Kd_Callback              
-00008f41  Track_Pid__Kp_Callback              
-00006add  Trackline_Calibrate_Black           
-000070c5  Trackline_Calibrate_White           
-00007119  Trackline_Init                      
-00006b45  Trackline_Reset                     
-00008775  Trackline_Start_Callback            
-00001a25  Trackline_Task                      
-000085bd  Trackline__Round_Callback           
-00004a35  UART0_IRQHandler                    
-000080e9  UART1_IRQHandler                    
-0000914f  UART2_IRQHandler                    
-0000914f  UART3_IRQHandler                    
+00008619  Rspeed_Callback                     
+000091fb  SPI0_IRQHandler                     
+000091fb  SPI1_IRQHandler                     
+000091fb  SVC_Handler                         
+00006ab1  SYSCFG_DL_ADC_line_detector_init    
+00008d8d  SYSCFG_DL_DMA_CH0_init              
+00008641  SYSCFG_DL_DMA_detector_out_init     
+00009151  SYSCFG_DL_DMA_init                  
+000041b1  SYSCFG_DL_GPIO_init                 
+00006171  SYSCFG_DL_PWM_0_init                
+000072bd  SYSCFG_DL_QEI_0_init                
+00007fb1  SYSCFG_DL_SYSCTL_init               
+0000915d  SYSCFG_DL_SYSTICK_init              
+0000787d  SYSCFG_DL_UART_0_init               
+000078bd  SYSCFG_DL_UART_JY62_init            
+000078fd  SYSCFG_DL_UART_UP_init              
+00007ba9  SYSCFG_DL_init                      
+00005e85  SYSCFG_DL_initPower                 
+00006791  Send_Byte                           
+00007219  Show_Item_Init                      
+000076a1  Show_Page_Diaplsy                   
+00007e69  Show_Page_Enter                     
+00008135  Show_Page_Exit                      
+00006805  Show_Page_Init                      
+00006201  Show_Page_Input                     
+000091dd  Show__1__Page_Exit_Callback         
+0000752d  Show__1__Page_Period_Callback       
+000091b7  Still_Aim_Callback                  
+000091c1  Still_Aim_Draw_Rectangle_Callback   
+0000793d  Switch_Item_Init                    
+00006f69  Switch_Item_Input                   
+00008165  SysTick_Handler                     
+000091fb  TIMA0_IRQHandler                    
+000091fb  TIMA1_IRQHandler                    
+000091fb  TIMG0_IRQHandler                    
+000091fb  TIMG12_IRQHandler                   
+000091fb  TIMG6_IRQHandler                    
+000091fb  TIMG7_IRQHandler                    
+000091fb  TIMG8_IRQHandler                    
+0000905f  TI_memcpy_small                     
+0000911f  TI_memset_small                     
+00008fd9  Track_Pid__Kd_Callback              
+00008fed  Track_Pid__Kp_Callback              
+00006b89  Trackline_Calibrate_Black           
+00007171  Trackline_Calibrate_White           
+000071c5  Trackline_Init                      
+00006bf1  Trackline_Reset                     
+00008821  Trackline_Start_Callback            
+00002385  Trackline_Task                      
+00008669  Trackline__Round_Callback           
+00004c05  UART0_IRQHandler                    
+00008195  UART1_IRQHandler                    
+000091fb  UART2_IRQHandler                    
+000091fb  UART3_IRQHandler                    
 20208000  __STACK_END                         
 00000200  __STACK_SIZE                        
 00000000  __TI_ATRegion0_region_sz            
@@ -949,116 +950,116 @@ address   name
 00000000  __TI_ATRegion2_region_sz            
 00000000  __TI_ATRegion2_src_addr             
 00000000  __TI_ATRegion2_trg_addr             
-00009cd4  __TI_CINIT_Base                     
-00009ce4  __TI_CINIT_Limit                    
-00009ce4  __TI_CINIT_Warm                     
-00009cc0  __TI_Handler_Table_Base             
-00009ccc  __TI_Handler_Table_Limit            
-00007c29  __TI_auto_init_nobinit_nopinit      
-0000657d  __TI_decompress_lzss                
-00008fc5  __TI_decompress_none                
-00006f15  __TI_ltoa                           
+00009d84  __TI_CINIT_Base                     
+00009d94  __TI_CINIT_Limit                    
+00009d94  __TI_CINIT_Warm                     
+00009d70  __TI_Handler_Table_Base             
+00009d7c  __TI_Handler_Table_Limit            
+00007cd5  __TI_auto_init_nobinit_nopinit      
+00006629  __TI_decompress_lzss                
+00009071  __TI_decompress_none                
+00006fc1  __TI_ltoa                           
 ffffffff  __TI_pprof_out_hndl                 
 000000c1  __TI_printfi                        
 ffffffff  __TI_prof_data_size                 
 ffffffff  __TI_prof_data_start                
 00000000  __TI_static_base__                  
-00009039  __TI_zero_init                      
-00004307  __adddf3                            
-0000555f  __addsf3                            
-00009990  __aeabi_ctype_table_                
-00009990  __aeabi_ctype_table_C               
-00007519  __aeabi_d2iz                        
-00004307  __aeabi_dadd                        
-00006ce1  __aeabi_dcmpeq                      
-00006d1d  __aeabi_dcmpge                      
-00006d31  __aeabi_dcmpgt                      
-00006d09  __aeabi_dcmple                      
-00006cf5  __aeabi_dcmplt                      
-00004ec1  __aeabi_ddiv                        
-000052b9  __aeabi_dmul                        
-000042fd  __aeabi_dsub                        
+000090e5  __TI_zero_init                      
+00004367  __adddf3                            
+0000560b  __addsf3                            
+00009a40  __aeabi_ctype_table_                
+00009a40  __aeabi_ctype_table_C               
+000075c5  __aeabi_d2iz                        
+00004367  __aeabi_dadd                        
+00006d8d  __aeabi_dcmpeq                      
+00006dc9  __aeabi_dcmpge                      
+00006ddd  __aeabi_dcmpgt                      
+00006db5  __aeabi_dcmple                      
+00006da1  __aeabi_dcmplt                      
+00004f6d  __aeabi_ddiv                        
+00005365  __aeabi_dmul                        
+0000435d  __aeabi_dsub                        
 20200720  __aeabi_errno                       
-00009139  __aeabi_errno_addr                  
-00007911  __aeabi_f2d                         
-00007df5  __aeabi_f2iz                        
-0000555f  __aeabi_fadd                        
-00006d45  __aeabi_fcmpeq                      
-00006d81  __aeabi_fcmpge                      
-00006d95  __aeabi_fcmpgt                      
-00006d6d  __aeabi_fcmple                      
-00006d59  __aeabi_fcmplt                      
-0000637d  __aeabi_fdiv                        
-000061e5  __aeabi_fmul                        
-00005555  __aeabi_fsub                        
-00008309  __aeabi_i2d                         
-00007b39  __aeabi_i2f                         
-00006fc5  __aeabi_idiv                        
-0000448f  __aeabi_idiv0                       
-00006fc5  __aeabi_idivmod                     
-000051cb  __aeabi_ldiv0                       
-000087f1  __aeabi_llsl                        
-000086ed  __aeabi_lmul                        
-000090bd  __aeabi_memclr                      
-000090bd  __aeabi_memclr4                     
-000090bd  __aeabi_memclr8                     
-00009141  __aeabi_memcpy                      
-00009141  __aeabi_memcpy4                     
-00009141  __aeabi_memcpy8                     
-00009049  __aeabi_memset                      
-00009049  __aeabi_memset4                     
-00009049  __aeabi_memset8                     
-000086c9  __aeabi_ui2d                        
-000085e5  __aeabi_ui2f                        
-000078d1  __aeabi_uidiv                       
-000078d1  __aeabi_uidivmod                    
-00008f55  __aeabi_uldivmod                    
-000087f1  __ashldi3                           
+000091e5  __aeabi_errno_addr                  
+000079bd  __aeabi_f2d                         
+00007ea1  __aeabi_f2iz                        
+0000560b  __aeabi_fadd                        
+00006df1  __aeabi_fcmpeq                      
+00006e2d  __aeabi_fcmpge                      
+00006e41  __aeabi_fcmpgt                      
+00006e19  __aeabi_fcmple                      
+00006e05  __aeabi_fcmplt                      
+00006429  __aeabi_fdiv                        
+00006291  __aeabi_fmul                        
+00005601  __aeabi_fsub                        
+000083b5  __aeabi_i2d                         
+00007be5  __aeabi_i2f                         
+00007071  __aeabi_idiv                        
+000044ef  __aeabi_idiv0                       
+00007071  __aeabi_idivmod                     
+00005277  __aeabi_ldiv0                       
+0000889d  __aeabi_llsl                        
+00008799  __aeabi_lmul                        
+00009169  __aeabi_memclr                      
+00009169  __aeabi_memclr4                     
+00009169  __aeabi_memclr8                     
+000091ed  __aeabi_memcpy                      
+000091ed  __aeabi_memcpy4                     
+000091ed  __aeabi_memcpy8                     
+000090f5  __aeabi_memset                      
+000090f5  __aeabi_memset4                     
+000090f5  __aeabi_memset8                     
+00008775  __aeabi_ui2d                        
+00008691  __aeabi_ui2f                        
+0000797d  __aeabi_uidiv                       
+0000797d  __aeabi_uidivmod                    
+00009001  __aeabi_uldivmod                    
+0000889d  __ashldi3                           
 ffffffff  __binit__                           
-00006bad  __cmpdf2                            
-00007c65  __cmpsf2                            
-00004ec1  __divdf3                            
-0000637d  __divsf3                            
-00006bad  __eqdf2                             
-00007c65  __eqsf2                             
-00007911  __extendsfdf2                       
-00007519  __fixdfsi                           
-00007df5  __fixsfsi                           
-00008309  __floatsidf                         
-00007b39  __floatsisf                         
-000086c9  __floatunsidf                       
-000085e5  __floatunsisf                       
-000067cd  __gedf2                             
-00007b75  __gesf2                             
-000067cd  __gtdf2                             
-00007b75  __gtsf2                             
-00006bad  __ledf2                             
-00007c65  __lesf2                             
-00006bad  __ltdf2                             
-00007c65  __ltsf2                             
+00006c59  __cmpdf2                            
+00007d11  __cmpsf2                            
+00004f6d  __divdf3                            
+00006429  __divsf3                            
+00006c59  __eqdf2                             
+00007d11  __eqsf2                             
+000079bd  __extendsfdf2                       
+000075c5  __fixdfsi                           
+00007ea1  __fixsfsi                           
+000083b5  __floatsidf                         
+00007be5  __floatsisf                         
+00008775  __floatunsidf                       
+00008691  __floatunsisf                       
+00006879  __gedf2                             
+00007c21  __gesf2                             
+00006879  __gtdf2                             
+00007c21  __gtsf2                             
+00006c59  __ledf2                             
+00007d11  __lesf2                             
+00006c59  __ltdf2                             
+00007d11  __ltsf2                             
 UNDEFED   __mpu_init                          
-000052b9  __muldf3                            
-000086ed  __muldi3                            
-00007ca1  __muldsi3                           
-000061e5  __mulsf3                            
-00006bad  __nedf2                             
-00007c65  __nesf2                             
+00005365  __muldf3                            
+00008799  __muldi3                            
+00007d4d  __muldsi3                           
+00006291  __mulsf3                            
+00006c59  __nedf2                             
+00007d11  __nesf2                             
 20207e00  __stack                             
 20200000  __start___llvm_prf_bits             
 20200000  __start___llvm_prf_cnts             
 20200000  __stop___llvm_prf_bits              
 20200000  __stop___llvm_prf_cnts              
-000042fd  __subdf3                            
-00005555  __subsf3                            
-00005b5d  __udivmoddi4                        
-0000860d  _c_int00_noargs                     
+0000435d  __subdf3                            
+00005601  __subsf3                            
+00005c09  __udivmoddi4                        
+000086b9  _c_int00_noargs                     
 UNDEFED   _system_post_cinit                  
-0000916d  _system_pre_init                    
-00009149  abort                               
-00006e05  adc_getValue                        
-00009760  asc2_0806                           
-00009170  asc2_1608                           
-00007951  atoi                                
+00009219  _system_pre_init                    
+000091f5  abort                               
+00006eb1  adc_getValue                        
+00009810  asc2_0806                           
+00009220  asc2_1608                           
+000079fd  atoi                                
 20200724  ax                                  
 20200728  ay                                  
 2020072c  az                                  
@@ -1067,13 +1068,13 @@ ffffffff  binit
 20200370  centeraim                           
 20200520  centeraim__start                    
 202006f0  centeraim_items                     
-00006481  convertAnalogToDigital              
-00008795  delay_ms                            
+0000652d  convertAnalogToDigital              
+00008841  delay_ms                            
 20200730  delay_times                         
 202006f8  digtals                             
 202000b0  easy_menu                           
-00006e61  frexp                               
-00006e61  frexpl                              
+00006f0d  frexp                               
+00006f0d  frexpl                              
 20200150  gQEI_0Backup                        
 20200791  g_KnobEvent                         
 20200734  g_SystemTick                        
@@ -1095,26 +1096,26 @@ ffffffff  binit
 202007a6  jy62_new_data                       
 202004a8  jy62_yaw                            
 202004cc  jy62_yaw_acc                        
-0000547d  ldexp                               
-0000547d  ldexpl                              
-00004799  main                                
-00008711  memccpy                             
+00005529  ldexp                               
+00005529  ldexpl                              
+00004969  main                                
+000087bd  memccpy                             
 202007ac  menu_move                           
 202003c0  mov_aim                             
 20200768  mov_aim_items                       
-00005ab1  normalizeAnalogValues               
+00005b5d  normalizeAnalogValues               
 2020076c  pitch_angle                         
 20200770  roll_angle                          
-0000547d  scalbn                              
-0000547d  scalbnl                             
+00005529  scalbn                              
+00005529  scalbnl                             
 20200000  sensor                              
 20200240  show__1__page                       
-00007e2d  sprintf                             
+00007ed9  sprintf                             
 20200538  still_aim                           
 20200550  still_aim_draw_Rectangle            
 202003e8  still_aim_task                      
 20200700  still_aim_task_items                
-00009065  strlen                              
+00009111  strlen                              
 20200778  temperature                         
 2020029c  track_pid__kd                       
 202002c8  track_pid__kp                       
@@ -1124,9 +1125,9 @@ ffffffff  binit
 20200438  trackline_pid__page                 
 20200710  trackline_pid__page_items           
 20200568  trackline_start                     
-00008335  uart0_send_char                     
-00007991  vsnprintf                           
-00009029  wcslen                              
+000083e1  uart0_send_char                     
+00007a3d  vsnprintf                           
+000090d5  wcslen                              
 2020077c  wx                                  
 20200780  wy                                  
 20200784  wz                                  
@@ -1152,286 +1153,286 @@ address   name
 00000200  __STACK_SIZE                        
 00000a91  Ordinary_Page_Input                 
 00001261  Data_Item_Input                     
-00001a25  Trackline_Task                      
-00001ef1  Easy_Menu_All_Update                
-00002391  K230_DrawRect_Task                  
-000027c5  Ordinary_Page_Enter                 
-00002bf1  Easy_Menu_Ui_Init                   
-00002ffd  K230_Aim_Task                       
-00003399  Ordinary_Page_Refresh               
-000036fd  JY62_ProcessData                    
-00003da9  Ordinary_Page_Display               
-00003f81  Motor_SpeedControl                  
-00004151  SYSCFG_DL_GPIO_init                 
-000042fd  __aeabi_dsub                        
-000042fd  __subdf3                            
-00004307  __adddf3                            
-00004307  __aeabi_dadd                        
-0000448f  __aeabi_idiv0                       
-00004491  No_MCU_Ganv_Sensor_Init             
-00004619  Motor_YawControl                    
-00004799  main                                
-00004a35  UART0_IRQHandler                    
-00004da9  OLED_ShowChar                       
-00004ec1  __aeabi_ddiv                        
-00004ec1  __divdf3                            
-00004fcd  DL_Timer_initFourCCPWMMode          
-000050d1  OLED_Init                           
-000051cb  __aeabi_ldiv0                       
-000052b9  __aeabi_dmul                        
-000052b9  __muldf3                            
-0000539d  JY62_ConfigMode                     
-0000547d  ldexp                               
-0000547d  ldexpl                              
-0000547d  scalbn                              
-0000547d  scalbnl                             
-00005555  __aeabi_fsub                        
-00005555  __subsf3                            
-0000555f  __addsf3                            
-0000555f  __aeabi_fadd                        
-0000562d  Beep_Tick_1ms                       
-000056f9  Data_Item_Init                      
-000057c5  Knob_Tick_1ms                       
-00005889  Get_Analog_value                    
-00005945  Jy62_Yaw_Acc_Callback               
-000059fd  Beep_Trigger                        
-00005ab1  normalizeAnalogValues               
-00005b5d  __udivmoddi4                        
-00005c01  Knob_get                            
-00005ca1  Motor_A_SetSpeed                    
-00005d3d  Motor_B_SetSpeed                    
-00005dd9  SYSCFG_DL_initPower                 
-00005e75  Gimbal_MovePosition                 
-00005f0d  Motor_YawIsAtTarget                 
-00005fa5  Easy_Menu_Area_Clear                
-00006035  Easy_Menu_Goto_Page                 
-000060c5  SYSCFG_DL_PWM_0_init                
-00006155  Show_Page_Input                     
-000061e5  __aeabi_fmul                        
-000061e5  __mulsf3                            
-00006271  Easy_Menu_Display_String            
-0000637d  __aeabi_fdiv                        
-0000637d  __divsf3                            
-00006401  Motor_B_EncoderIRQHandler           
-00006481  convertAnalogToDigital              
-00006501  Ordinary_Page_Init                  
-0000657d  __TI_decompress_lzss                
-000065f9  JY62_Init                           
-00006671  Easy_Menu_Display                   
-000066e5  Send_Byte                           
-00006759  Show_Page_Init                      
-000067cd  __gedf2                             
-000067cd  __gtdf2                             
-000068b5  No_MCU_Ganv_Sensor_Init_Frist       
-00006927  OLED_ShowString                     
-00006999  Knob_EXTI_Handler                   
-00006a05  SYSCFG_DL_ADC_line_detector_init    
-00006a71  OLED_Clear                          
-00006add  Trackline_Calibrate_Black           
-00006b45  Trackline_Reset                     
-00006bad  __cmpdf2                            
-00006bad  __eqdf2                             
-00006bad  __ledf2                             
-00006bad  __ltdf2                             
-00006bad  __nedf2                             
-00006ce1  __aeabi_dcmpeq                      
-00006cf5  __aeabi_dcmplt                      
-00006d09  __aeabi_dcmple                      
-00006d1d  __aeabi_dcmpge                      
-00006d31  __aeabi_dcmpgt                      
-00006d45  __aeabi_fcmpeq                      
-00006d59  __aeabi_fcmplt                      
-00006d6d  __aeabi_fcmple                      
-00006d81  __aeabi_fcmpge                      
-00006d95  __aeabi_fcmpgt                      
-00006da9  Easy_Menu_All_Clear                 
-00006e05  adc_getValue                        
-00006e61  frexp                               
-00006e61  frexpl                              
-00006ebd  Switch_Item_Input                   
-00006f15  __TI_ltoa                           
-00006fc5  __aeabi_idiv                        
-00006fc5  __aeabi_idivmod                     
-0000701b  Compare_String                      
-000070c5  Trackline_Calibrate_White           
-00007119  Trackline_Init                      
-0000716d  Show_Item_Init                      
-00007211  SYSCFG_DL_QEI_0_init                
-00007301  OLED_WR_Byte                        
-00007351  DL_DMA_initChannel                  
-00007481  Show__1__Page_Period_Callback       
-00007519  __aeabi_d2iz                        
-00007519  __fixdfsi                           
-00007565  DL_UART_init                        
-000075ad  K230_DrawRect_Reset                 
-000075f5  Show_Page_Diaplsy                   
-00007685  Easy_Menu_Display_Char              
-0000770d  No_Mcu_Ganv_Sensor_Task_Without_tick
-00007791  DL_ADC12_setClockConfig             
-000077d1  SYSCFG_DL_UART_0_init               
-00007811  SYSCFG_DL_UART_JY62_init            
-00007851  SYSCFG_DL_UART_UP_init              
-00007891  Switch_Item_Init                    
-000078d1  __aeabi_uidiv                       
-000078d1  __aeabi_uidivmod                    
-00007911  __aeabi_f2d                         
-00007911  __extendsfdf2                       
-00007951  atoi                                
-00007991  vsnprintf                           
-00007a0d  Easy_Menu_Init                      
-00007a49  Easy_Menu_Printf                    
-00007a85  Gimbal_Enable                       
-00007ac1  OLED_Set_Pos                        
-00007afd  SYSCFG_DL_init                      
-00007b39  __aeabi_i2f                         
-00007b39  __floatsisf                         
-00007b75  __gesf2                             
-00007b75  __gtsf2                             
-00007c29  __TI_auto_init_nobinit_nopinit      
-00007c65  __cmpsf2                            
-00007c65  __eqsf2                             
-00007c65  __lesf2                             
-00007c65  __ltsf2                             
-00007c65  __nesf2                             
-00007ca1  __muldsi3                           
-00007cdb  Get_Normalize_For_User              
-00007d15  K230_Aim_Reset                      
-00007d4d  Motor_Brake                         
-00007d85  Motor_Coast                         
-00007dbd  Show_Page_Enter                     
-00007df5  __aeabi_f2iz                        
-00007df5  __fixsfsi                           
-00007e2d  sprintf                             
-00007e65  Get_Anolog_Value                    
-00007e9d  Goto_Item_Init                      
-00007ed1  I2C_Start                           
-00007f05  SYSCFG_DL_SYSCTL_init               
-00007f99  Display_Char_Line                   
-00007fc9  Gimbal_Stop                         
-00007ff9  K230_Track_Init                     
-00008029  Motor_Init                          
-00008059  Motor_ResetSpeedControl             
-00008089  Show_Page_Exit                      
-000080b9  SysTick_Handler                     
-000080e9  UART1_IRQHandler                    
-00008179  Goto_Item_Input                     
-000081d5  GROUP1_IRQHandler                   
-00008309  __aeabi_i2d                         
-00008309  __floatsidf                         
-00008335  uart0_send_char                     
-00008361  Display_Char                        
-0000838d  Cal_Black_Callback                  
-000083b5  Cal_White_Callback                  
-0000847d  Easy_Menu_Input                     
-000084a5  I2C_Stop                            
-000084cd  I2C_WaitAck                         
-000084f5  JY62_Task                           
-0000851d  Lspeed_Callback                     
-00008545  Motor_SetSpeed                      
-0000856d  Rspeed_Callback                     
-00008595  SYSCFG_DL_DMA_detector_out_init     
-000085bd  Trackline__Round_Callback           
-000085e5  __aeabi_ui2f                        
-000085e5  __floatunsisf                       
-0000860d  _c_int00_noargs                     
-0000865d  Beep_Stop                           
-00008681  Laser_Init                          
-000086a5  Motor_A_GetEncoderCnt               
-000086c9  __aeabi_ui2d                        
-000086c9  __floatunsidf                       
-000086ed  __aeabi_lmul                        
-000086ed  __muldi3                            
-00008711  memccpy                             
-00008775  Trackline_Start_Callback            
-00008795  delay_ms                            
-000087f1  __aeabi_llsl                        
-000087f1  __ashldi3                           
-00008961  DL_Timer_setCaptCompUpdateMethod    
-0000897d  DL_Timer_setClockConfig             
-000089ed  DL_UART_receiveDataCheck            
-00008a09  Motor_YawSetTarget                  
-00008a25  Gimbal_Enable_All                   
-00008c21  DL_Timer_setCaptureCompareOutCtl    
-00008ce1  SYSCFG_DL_DMA_CH0_init              
-00008ec9  Jy62_Yaw_Callback                   
-00008edd  Laser_Off                           
-00008ef1  Laser_On                            
-00008f05  Motor_B_EncoderInit                 
-00008f19  Ordinary_Page_Exit                  
-00008f2d  Track_Pid__Kd_Callback              
-00008f41  Track_Pid__Kp_Callback              
-00008f55  __aeabi_uldivmod                    
-00008fa1  DL_UART_setClockConfig              
-00008fb3  TI_memcpy_small                     
-00008fc5  __TI_decompress_none                
-00008ff9  DL_Timer_setCaptureCompareValue     
-00009009  Motor_A_ResetEncoder                
-00009029  wcslen                              
-00009039  __TI_zero_init                      
-00009049  __aeabi_memset                      
-00009049  __aeabi_memset4                     
-00009049  __aeabi_memset8                     
-00009065  strlen                              
-00009073  TI_memset_small                     
-00009081  Motor_B_GetEncoderCnt               
-0000908d  Motor_B_ResetEncoder                
-00009099  Motor_YawReset                      
-000090a5  SYSCFG_DL_DMA_init                  
-000090b1  SYSCFG_DL_SYSTICK_init              
-000090bd  __aeabi_memclr                      
-000090bd  __aeabi_memclr4                     
-000090bd  __aeabi_memclr8                     
-000090c9  Centeraim__Start_Callback           
-000090d3  DL_Common_delayCycles               
-000090dd  Knob_Init                           
-0000910b  Still_Aim_Callback                  
-00009115  Still_Aim_Draw_Rectangle_Callback   
-00009129  Center_Aim_Round_Callback           
-00009131  Show__1__Page_Exit_Callback         
-00009139  __aeabi_errno_addr                  
-00009141  __aeabi_memcpy                      
-00009141  __aeabi_memcpy4                     
-00009141  __aeabi_memcpy8                     
-00009149  abort                               
-0000914f  ADC0_IRQHandler                     
-0000914f  ADC1_IRQHandler                     
-0000914f  AES_IRQHandler                      
-0000914f  CANFD0_IRQHandler                   
-0000914f  DAC0_IRQHandler                     
-0000914f  DMA_IRQHandler                      
-0000914f  Default_Handler                     
-0000914f  GROUP0_IRQHandler                   
-0000914f  HardFault_Handler                   
-0000914f  I2C0_IRQHandler                     
-0000914f  I2C1_IRQHandler                     
-0000914f  NMI_Handler                         
-0000914f  PendSV_Handler                      
-0000914f  RTC_IRQHandler                      
-0000914f  SPI0_IRQHandler                     
-0000914f  SPI1_IRQHandler                     
-0000914f  SVC_Handler                         
-0000914f  TIMA0_IRQHandler                    
-0000914f  TIMA1_IRQHandler                    
-0000914f  TIMG0_IRQHandler                    
-0000914f  TIMG12_IRQHandler                   
-0000914f  TIMG6_IRQHandler                    
-0000914f  TIMG7_IRQHandler                    
-0000914f  TIMG8_IRQHandler                    
-0000914f  UART2_IRQHandler                    
-0000914f  UART3_IRQHandler                    
-00009152  C$$EXIT                             
-00009153  HOSTexit                            
-00009157  Reset_Handler                       
-0000916d  _system_pre_init                    
-00009170  asc2_1608                           
-00009760  asc2_0806                           
-00009990  __aeabi_ctype_table_                
-00009990  __aeabi_ctype_table_C               
-00009cc0  __TI_Handler_Table_Base             
-00009ccc  __TI_Handler_Table_Limit            
-00009cd4  __TI_CINIT_Base                     
-00009ce4  __TI_CINIT_Limit                    
-00009ce4  __TI_CINIT_Warm                     
+00001a25  K230_DrawRect_Task                  
+00001ee5  Easy_Menu_All_Update                
+00002385  Trackline_Task                      
+00002825  Ordinary_Page_Enter                 
+00002c51  Easy_Menu_Ui_Init                   
+0000305d  K230_Aim_Task                       
+000033f9  Ordinary_Page_Refresh               
+0000375d  JY62_ProcessData                    
+00003e09  Ordinary_Page_Display               
+00003fe1  Motor_SpeedControl                  
+000041b1  SYSCFG_DL_GPIO_init                 
+0000435d  __aeabi_dsub                        
+0000435d  __subdf3                            
+00004367  __adddf3                            
+00004367  __aeabi_dadd                        
+000044ef  __aeabi_idiv0                       
+000044f1  No_MCU_Ganv_Sensor_Init             
+00004679  Motor_YawControl                    
+00004969  main                                
+00004c05  UART0_IRQHandler                    
+00004e55  OLED_ShowChar                       
+00004f6d  __aeabi_ddiv                        
+00004f6d  __divdf3                            
+00005079  DL_Timer_initFourCCPWMMode          
+0000517d  OLED_Init                           
+00005277  __aeabi_ldiv0                       
+00005365  __aeabi_dmul                        
+00005365  __muldf3                            
+00005449  JY62_ConfigMode                     
+00005529  ldexp                               
+00005529  ldexpl                              
+00005529  scalbn                              
+00005529  scalbnl                             
+00005601  __aeabi_fsub                        
+00005601  __subsf3                            
+0000560b  __addsf3                            
+0000560b  __aeabi_fadd                        
+000056d9  Beep_Tick_1ms                       
+000057a5  Data_Item_Init                      
+00005871  Knob_Tick_1ms                       
+00005935  Get_Analog_value                    
+000059f1  Jy62_Yaw_Acc_Callback               
+00005aa9  Beep_Trigger                        
+00005b5d  normalizeAnalogValues               
+00005c09  __udivmoddi4                        
+00005cad  Knob_get                            
+00005d4d  Motor_A_SetSpeed                    
+00005de9  Motor_B_SetSpeed                    
+00005e85  SYSCFG_DL_initPower                 
+00005f21  Gimbal_MovePosition                 
+00005fb9  Motor_YawIsAtTarget                 
+00006051  Easy_Menu_Area_Clear                
+000060e1  Easy_Menu_Goto_Page                 
+00006171  SYSCFG_DL_PWM_0_init                
+00006201  Show_Page_Input                     
+00006291  __aeabi_fmul                        
+00006291  __mulsf3                            
+0000631d  Easy_Menu_Display_String            
+00006429  __aeabi_fdiv                        
+00006429  __divsf3                            
+000064ad  Motor_B_EncoderIRQHandler           
+0000652d  convertAnalogToDigital              
+000065ad  Ordinary_Page_Init                  
+00006629  __TI_decompress_lzss                
+000066a5  JY62_Init                           
+0000671d  Easy_Menu_Display                   
+00006791  Send_Byte                           
+00006805  Show_Page_Init                      
+00006879  __gedf2                             
+00006879  __gtdf2                             
+00006961  No_MCU_Ganv_Sensor_Init_Frist       
+000069d3  OLED_ShowString                     
+00006a45  Knob_EXTI_Handler                   
+00006ab1  SYSCFG_DL_ADC_line_detector_init    
+00006b1d  OLED_Clear                          
+00006b89  Trackline_Calibrate_Black           
+00006bf1  Trackline_Reset                     
+00006c59  __cmpdf2                            
+00006c59  __eqdf2                             
+00006c59  __ledf2                             
+00006c59  __ltdf2                             
+00006c59  __nedf2                             
+00006d8d  __aeabi_dcmpeq                      
+00006da1  __aeabi_dcmplt                      
+00006db5  __aeabi_dcmple                      
+00006dc9  __aeabi_dcmpge                      
+00006ddd  __aeabi_dcmpgt                      
+00006df1  __aeabi_fcmpeq                      
+00006e05  __aeabi_fcmplt                      
+00006e19  __aeabi_fcmple                      
+00006e2d  __aeabi_fcmpge                      
+00006e41  __aeabi_fcmpgt                      
+00006e55  Easy_Menu_All_Clear                 
+00006eb1  adc_getValue                        
+00006f0d  frexp                               
+00006f0d  frexpl                              
+00006f69  Switch_Item_Input                   
+00006fc1  __TI_ltoa                           
+00007071  __aeabi_idiv                        
+00007071  __aeabi_idivmod                     
+000070c7  Compare_String                      
+00007171  Trackline_Calibrate_White           
+000071c5  Trackline_Init                      
+00007219  Show_Item_Init                      
+000072bd  SYSCFG_DL_QEI_0_init                
+000073ad  OLED_WR_Byte                        
+000073fd  DL_DMA_initChannel                  
+0000752d  Show__1__Page_Period_Callback       
+000075c5  __aeabi_d2iz                        
+000075c5  __fixdfsi                           
+00007611  DL_UART_init                        
+00007659  K230_DrawRect_Reset                 
+000076a1  Show_Page_Diaplsy                   
+00007731  Easy_Menu_Display_Char              
+000077b9  No_Mcu_Ganv_Sensor_Task_Without_tick
+0000783d  DL_ADC12_setClockConfig             
+0000787d  SYSCFG_DL_UART_0_init               
+000078bd  SYSCFG_DL_UART_JY62_init            
+000078fd  SYSCFG_DL_UART_UP_init              
+0000793d  Switch_Item_Init                    
+0000797d  __aeabi_uidiv                       
+0000797d  __aeabi_uidivmod                    
+000079bd  __aeabi_f2d                         
+000079bd  __extendsfdf2                       
+000079fd  atoi                                
+00007a3d  vsnprintf                           
+00007ab9  Easy_Menu_Init                      
+00007af5  Easy_Menu_Printf                    
+00007b31  Gimbal_Enable                       
+00007b6d  OLED_Set_Pos                        
+00007ba9  SYSCFG_DL_init                      
+00007be5  __aeabi_i2f                         
+00007be5  __floatsisf                         
+00007c21  __gesf2                             
+00007c21  __gtsf2                             
+00007cd5  __TI_auto_init_nobinit_nopinit      
+00007d11  __cmpsf2                            
+00007d11  __eqsf2                             
+00007d11  __lesf2                             
+00007d11  __ltsf2                             
+00007d11  __nesf2                             
+00007d4d  __muldsi3                           
+00007d87  Get_Normalize_For_User              
+00007dc1  K230_Aim_Reset                      
+00007df9  Motor_Brake                         
+00007e31  Motor_Coast                         
+00007e69  Show_Page_Enter                     
+00007ea1  __aeabi_f2iz                        
+00007ea1  __fixsfsi                           
+00007ed9  sprintf                             
+00007f11  Get_Anolog_Value                    
+00007f49  Goto_Item_Init                      
+00007f7d  I2C_Start                           
+00007fb1  SYSCFG_DL_SYSCTL_init               
+00008045  Display_Char_Line                   
+00008075  Gimbal_Stop                         
+000080a5  K230_Track_Init                     
+000080d5  Motor_Init                          
+00008105  Motor_ResetSpeedControl             
+00008135  Show_Page_Exit                      
+00008165  SysTick_Handler                     
+00008195  UART1_IRQHandler                    
+00008225  Goto_Item_Input                     
+00008281  GROUP1_IRQHandler                   
+000083b5  __aeabi_i2d                         
+000083b5  __floatsidf                         
+000083e1  uart0_send_char                     
+0000840d  Display_Char                        
+00008439  Cal_Black_Callback                  
+00008461  Cal_White_Callback                  
+00008529  Easy_Menu_Input                     
+00008551  I2C_Stop                            
+00008579  I2C_WaitAck                         
+000085a1  JY62_Task                           
+000085c9  Lspeed_Callback                     
+000085f1  Motor_SetSpeed                      
+00008619  Rspeed_Callback                     
+00008641  SYSCFG_DL_DMA_detector_out_init     
+00008669  Trackline__Round_Callback           
+00008691  __aeabi_ui2f                        
+00008691  __floatunsisf                       
+000086b9  _c_int00_noargs                     
+00008709  Beep_Stop                           
+0000872d  Laser_Init                          
+00008751  Motor_A_GetEncoderCnt               
+00008775  __aeabi_ui2d                        
+00008775  __floatunsidf                       
+00008799  __aeabi_lmul                        
+00008799  __muldi3                            
+000087bd  memccpy                             
+00008821  Trackline_Start_Callback            
+00008841  delay_ms                            
+0000889d  __aeabi_llsl                        
+0000889d  __ashldi3                           
+00008a0d  DL_Timer_setCaptCompUpdateMethod    
+00008a29  DL_Timer_setClockConfig             
+00008a99  DL_UART_receiveDataCheck            
+00008ab5  Motor_YawSetTarget                  
+00008ad1  Gimbal_Enable_All                   
+00008ccd  DL_Timer_setCaptureCompareOutCtl    
+00008d8d  SYSCFG_DL_DMA_CH0_init              
+00008f75  Jy62_Yaw_Callback                   
+00008f89  Laser_Off                           
+00008f9d  Laser_On                            
+00008fb1  Motor_B_EncoderInit                 
+00008fc5  Ordinary_Page_Exit                  
+00008fd9  Track_Pid__Kd_Callback              
+00008fed  Track_Pid__Kp_Callback              
+00009001  __aeabi_uldivmod                    
+0000904d  DL_UART_setClockConfig              
+0000905f  TI_memcpy_small                     
+00009071  __TI_decompress_none                
+000090a5  DL_Timer_setCaptureCompareValue     
+000090b5  Motor_A_ResetEncoder                
+000090d5  wcslen                              
+000090e5  __TI_zero_init                      
+000090f5  __aeabi_memset                      
+000090f5  __aeabi_memset4                     
+000090f5  __aeabi_memset8                     
+00009111  strlen                              
+0000911f  TI_memset_small                     
+0000912d  Motor_B_GetEncoderCnt               
+00009139  Motor_B_ResetEncoder                
+00009145  Motor_YawReset                      
+00009151  SYSCFG_DL_DMA_init                  
+0000915d  SYSCFG_DL_SYSTICK_init              
+00009169  __aeabi_memclr                      
+00009169  __aeabi_memclr4                     
+00009169  __aeabi_memclr8                     
+00009175  Centeraim__Start_Callback           
+0000917f  DL_Common_delayCycles               
+00009189  Knob_Init                           
+000091b7  Still_Aim_Callback                  
+000091c1  Still_Aim_Draw_Rectangle_Callback   
+000091d5  Center_Aim_Round_Callback           
+000091dd  Show__1__Page_Exit_Callback         
+000091e5  __aeabi_errno_addr                  
+000091ed  __aeabi_memcpy                      
+000091ed  __aeabi_memcpy4                     
+000091ed  __aeabi_memcpy8                     
+000091f5  abort                               
+000091fb  ADC0_IRQHandler                     
+000091fb  ADC1_IRQHandler                     
+000091fb  AES_IRQHandler                      
+000091fb  CANFD0_IRQHandler                   
+000091fb  DAC0_IRQHandler                     
+000091fb  DMA_IRQHandler                      
+000091fb  Default_Handler                     
+000091fb  GROUP0_IRQHandler                   
+000091fb  HardFault_Handler                   
+000091fb  I2C0_IRQHandler                     
+000091fb  I2C1_IRQHandler                     
+000091fb  NMI_Handler                         
+000091fb  PendSV_Handler                      
+000091fb  RTC_IRQHandler                      
+000091fb  SPI0_IRQHandler                     
+000091fb  SPI1_IRQHandler                     
+000091fb  SVC_Handler                         
+000091fb  TIMA0_IRQHandler                    
+000091fb  TIMA1_IRQHandler                    
+000091fb  TIMG0_IRQHandler                    
+000091fb  TIMG12_IRQHandler                   
+000091fb  TIMG6_IRQHandler                    
+000091fb  TIMG7_IRQHandler                    
+000091fb  TIMG8_IRQHandler                    
+000091fb  UART2_IRQHandler                    
+000091fb  UART3_IRQHandler                    
+000091fe  C$$EXIT                             
+000091ff  HOSTexit                            
+00009203  Reset_Handler                       
+00009219  _system_pre_init                    
+00009220  asc2_1608                           
+00009810  asc2_0806                           
+00009a40  __aeabi_ctype_table_                
+00009a40  __aeabi_ctype_table_C               
+00009d70  __TI_Handler_Table_Base             
+00009d7c  __TI_Handler_Table_Limit            
+00009d84  __TI_CINIT_Base                     
+00009d94  __TI_CINIT_Limit                    
+00009d94  __TI_CINIT_Warm                     
 20200000  __start___llvm_prf_bits             
 20200000  __start___llvm_prf_cnts             
 20200000  __stop___llvm_prf_bits              

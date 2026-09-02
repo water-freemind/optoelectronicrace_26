@@ -1,3 +1,19 @@
-"Debug/" 
-"*.out" 
-"*.map" 
+# Code Composer Studio / TI ARM Clang generated output
+Debug/
+Release/
+*.out
+*.map
+*_linkInfo.xml
+*.o
+*.d
+*.hex
+*.bin
+
+# Generated analysis and local agent state
+.codegraph/
+.omo/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.log
